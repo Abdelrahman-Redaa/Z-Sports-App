@@ -1,5 +1,6 @@
 import 'package:z_sports_booking/core/network/api_client.dart';
 import 'package:z_sports_booking/features/auth/data/repositories/auth_repository.dart';
+import 'package:z_sports_booking/features/booking/data/repositories/booking_repository.dart';
 import 'package:z_sports_booking/features/home/data/repositories/stadium_repository.dart';
 import 'package:z_sports_booking/features/profile/data/repositories/profile_repository.dart';
 
@@ -8,4 +9,5 @@ class DI {
   static final AuthRepository authRepository = AuthRepository(apiClient);
   static final ProfileRepository profileRepository = ProfileRepository(apiClient);
   static final StadiumRepository stadiumRepository = StadiumRepository(apiClient);
+  static final BookingRepository bookingRepository = BookingRepository(apiClient);
 }

@@ -5,6 +5,7 @@ import 'package:z_sports_booking/core/di.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_theme.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dart';
+import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_cubit.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
 
@@ -18,6 +19,7 @@ class ZSportsApp extends StatelessWidget {
         BlocProvider(create: (_) => AuthCubit(DI.authRepository)),
         BlocProvider(create: (_) => ProfileCubit(DI.profileRepository)),
         BlocProvider(create: (_) => StadiumCubit(DI.stadiumRepository)),
+        BlocProvider(create: (_) => BookingCubit(DI.bookingRepository)),
       ],
       child: MaterialApp.router(
         title: 'Z Sports',
