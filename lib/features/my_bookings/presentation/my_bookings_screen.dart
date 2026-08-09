@@ -31,7 +31,7 @@ class MyBookingsScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'مرحباً، ${MockData.currentUser.name.split(' ').first}',
+                        'مرحباً، ${MockData.currentUser.displayName.split(' ').first}',
                         style: const TextStyle(
                           color: _textSecondary,
                           fontSize: 13,
@@ -51,7 +51,7 @@ class MyBookingsScreen extends StatelessWidget {
                   CircleAvatar(
                     radius: 24,
                     backgroundImage: NetworkImage(
-                      MockData.currentUser.avatarUrl,
+                      MockData.currentUser.profilePictureUrl ?? "",
                     ),
                   ),
                 ],

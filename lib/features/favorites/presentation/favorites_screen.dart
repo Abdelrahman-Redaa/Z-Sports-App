@@ -24,7 +24,7 @@ class FavoritesScreen extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        'مرحباً، ${MockData.currentUser.name}',
+                        'مرحباً، ${MockData.currentUser.displayName}',
                         style: const TextStyle(
                           color: Color(0xFF8A96A3),
                           fontSize: 13,
@@ -46,7 +46,7 @@ class FavoritesScreen extends StatelessWidget {
                     backgroundColor: const Color(0xFF1D2C4D),
                     child: ClipOval(
                       child: CachedNetworkImage(
-                        imageUrl: MockData.currentUser.avatarUrl,
+                        imageUrl: MockData.currentUser.profilePictureUrl ?? "",
                         width: 48,
                         height: 48,
                         fit: BoxFit.cover,

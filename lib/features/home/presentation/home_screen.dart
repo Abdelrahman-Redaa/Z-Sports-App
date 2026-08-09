@@ -56,7 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       child: CircleAvatar(
                         radius: 24,
                         backgroundImage: CachedNetworkImageProvider(
-                          MockData.currentUser.avatarUrl,
+                          MockData.currentUser.profilePictureUrl ?? "",
                         ),
                       ),
                     ),
@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          'مرحباً، ${MockData.currentUser.name.split(' ').first}',
+                          'مرحباً، ${MockData.currentUser.displayName.split(' ').first}',
                           style: Theme.of(context).textTheme.bodySmall
                               ?.copyWith(color: AppColors.textSecondary),
                         ),

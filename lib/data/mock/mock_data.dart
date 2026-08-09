@@ -7,10 +7,10 @@ import 'package:z_sports_booking/data/models/user_model.dart';
 abstract final class MockData {
   static const currentUser = UserModel(
     id: '1',
-    name: 'أحمد',
+    displayName: 'أحمد',
     email: 'abdelrahman@example.com',
-    phone: '+20 100 123 4567',
-    avatarUrl: 'https://i.pravatar.cc/150?u=abdelrahman',
+    phoneNumber: '+20 100 123 4567',
+    profilePictureUrl: 'https://i.pravatar.cc/150?u=abdelrahman',
   );
 
   static const categories = [
