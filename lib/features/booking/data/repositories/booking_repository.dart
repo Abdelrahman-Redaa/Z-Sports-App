@@ -45,8 +45,15 @@ class BookingRepository {
   String _handleError(DioException error) {
     if (error.response != null) {
       final data = error.response?.data;
-      if (data is Map && data['message'] != null) return data['message'];
-      return 'حدث خطأ: ${error.response?.statusCode}';
+      if (data is Map) {
+        if (data['message'] != null && data['message'].toString().isNotEmpty) {
+          if (data['errors'] != null) {
+            return '${data['message']}\n${data['errors']}';
+          }
+          return data['message'];
+        }
+      }
+      return 'حدث خطأ: ${error.response?.statusCode}\n$data';
     }
     return 'لا يوجد اتصال بالإنترنت';
   }
