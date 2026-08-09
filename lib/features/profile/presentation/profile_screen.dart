@@ -41,6 +41,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
           style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 18),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings_outlined, color: Colors.white),
+            onPressed: () => context.push(AppRoutes.settings),
+          ),
+          const SizedBox(width: 8),
+        ],
       ),
       body: BlocBuilder<ProfileCubit, ProfileState>(
         builder: (context, state) {
@@ -87,68 +94,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'لاعب متميز',
                   style: TextStyle(color: _primary, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
-                const SizedBox(height: 32),
-                Row(
-                  children: [
-                    Expanded(child: _StatCard(value: '12', label: 'حجز')),
-                    const SizedBox(width: 12),
-                    Expanded(child: _StatCard(value: '5', label: 'ملاعب')),
-                    const SizedBox(width: 12),
-                    Expanded(child: _StatCard(value: '280', label: 'نقطة', showIcon: true)),
-                  ],
-                ),
-                const SizedBox(height: 40),
-                const Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'الإعدادات',
-                    style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                _SettingsTile(
-                  title: 'تعديل الملف الشخصي',
-                  icon: Icons.person_outline,
-                  onTap: () => context.push(AppRoutes.editProfile),
-                ),
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 4),
-                  child: Divider(color: _border),
-                ),
-                _SettingsTile(
-                  title: 'اللغة',
-                  icon: Icons.language,
-                  trailing: const Text(
-                    'العربية',
-                    style: TextStyle(color: _primary, fontWeight: FontWeight.w700, fontSize: 16),
-                  ),
-                  onTap: () {},
-                ),
-                const SizedBox(height: 64),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                      foregroundColor: const Color(0xFFD66A65),
-                      side: const BorderSide(color: Color(0xFF382023)),
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-                    ),
-                    onPressed: () {
-                      context.read<AuthCubit>().logout();
-                      context.go(AppRoutes.welcome);
-                    },
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.logout, size: 22),
-                        SizedBox(width: 12),
-                        Text('تسجيل الخروج', style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16)),
-                      ],
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 24),
               ],
             ),
           );
@@ -179,56 +124,4 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class _StatCard extends StatelessWidget {
-  const _StatCard({required this.value, required this.label, this.showIcon = false});
 
-  final String value;
-  final String label;
-  final bool showIcon;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 20),
-      decoration: BoxDecoration(
-        color: _surface,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF1B2F22)),
-      ),
-      child: Column(
-        children: [
-          Text(value, style: const TextStyle(color: _primary, fontWeight: FontWeight.w800, fontSize: 22)),
-          const SizedBox(height: 8),
-          Text(label, style: const TextStyle(color: _textSecondary, fontSize: 14)),
-          if (showIcon) ...[
-            const SizedBox(height: 8),
-            const Icon(Icons.monetization_on_outlined, color: Colors.amber, size: 20),
-          ],
-        ],
-      ),
-    );
-  }
-}
-
-class _SettingsTile extends StatelessWidget {
-  const _SettingsTile({required this.title, required this.icon, this.trailing, required this.onTap});
-
-  final String title;
-  final IconData icon;
-  final Widget? trailing;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return ListTile(
-      contentPadding: EdgeInsets.zero,
-      onTap: onTap,
-      leading: Icon(icon, color: _primary, size: 28),
-      trailing: trailing ?? const Icon(Icons.arrow_back_ios_new, size: 16, color: _textSecondary),
-      title: Text(
-        title,
-        style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 16),
-      ),
-    );
-  }
-}
