@@ -94,6 +94,16 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   'لاعب متميز',
                   style: TextStyle(color: _primary, fontWeight: FontWeight.w700, fontSize: 14),
                 ),
+                const SizedBox(height: 32),
+                Row(
+                  children: [
+                    Expanded(child: _StatCard(value: '${user?.bookingsCount ?? 0}', label: 'حجز')),
+                    const SizedBox(width: 12),
+                    Expanded(child: _StatCard(value: '${user?.pitchesCount ?? 0}', label: 'ملاعب')),
+                    const SizedBox(width: 12),
+                    Expanded(child: _StatCard(value: '${user?.points ?? 0}', label: 'نقطة', showIcon: true)),
+                  ],
+                ),
               ],
             ),
           );
@@ -124,4 +134,33 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
+class _StatCard extends StatelessWidget {
+  const _StatCard({required this.value, required this.label, this.showIcon = false});
 
+  final String value;
+  final String label;
+  final bool showIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20),
+      decoration: BoxDecoration(
+        color: _surface,
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: const Color(0xFF1B2F22)),
+      ),
+      child: Column(
+        children: [
+          Text(value, style: const TextStyle(color: _primary, fontWeight: FontWeight.w800, fontSize: 22)),
+          const SizedBox(height: 8),
+          Text(label, style: const TextStyle(color: _textSecondary, fontSize: 14)),
+          if (showIcon) ...[
+            const SizedBox(height: 8),
+            const Icon(Icons.monetization_on_outlined, color: Colors.amber, size: 20),
+          ],
+        ],
+      ),
+    );
+  }
+}

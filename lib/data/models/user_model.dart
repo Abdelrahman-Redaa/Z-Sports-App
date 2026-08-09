@@ -4,6 +4,9 @@ class UserModel {
   final String email;
   final String? phoneNumber;
   final String? profilePictureUrl;
+  final int bookingsCount;
+  final int pitchesCount;
+  final int points;
 
   const UserModel({
     required this.id,
@@ -11,6 +14,9 @@ class UserModel {
     required this.email,
     this.phoneNumber,
     this.profilePictureUrl,
+    this.bookingsCount = 0,
+    this.pitchesCount = 0,
+    this.points = 0,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -20,6 +26,9 @@ class UserModel {
       email: json['email'] ?? '',
       phoneNumber: json['phoneNumber'] ?? json['phone'],
       profilePictureUrl: json['profilePictureUrl'] ?? json['avatarUrl'] ?? json['image'],
+      bookingsCount: json['bookingsCount'] ?? json['bookings_count'] ?? 0,
+      pitchesCount: json['pitchesCount'] ?? json['pitches_count'] ?? json['stadiumsCount'] ?? 0,
+      points: json['points'] ?? 0,
     );
   }
 
@@ -30,6 +39,9 @@ class UserModel {
       'email': email,
       'phoneNumber': phoneNumber,
       'profilePictureUrl': profilePictureUrl,
+      'bookingsCount': bookingsCount,
+      'pitchesCount': pitchesCount,
+      'points': points,
     };
   }
 
@@ -39,6 +51,9 @@ class UserModel {
     String? email,
     String? phoneNumber,
     String? profilePictureUrl,
+    int? bookingsCount,
+    int? pitchesCount,
+    int? points,
   }) {
     return UserModel(
       id: id ?? this.id,
@@ -46,6 +61,9 @@ class UserModel {
       email: email ?? this.email,
       phoneNumber: phoneNumber ?? this.phoneNumber,
       profilePictureUrl: profilePictureUrl ?? this.profilePictureUrl,
+      bookingsCount: bookingsCount ?? this.bookingsCount,
+      pitchesCount: pitchesCount ?? this.pitchesCount,
+      points: points ?? this.points,
     );
   }
 }
