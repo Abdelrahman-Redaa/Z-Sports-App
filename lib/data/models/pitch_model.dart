@@ -1,4 +1,17 @@
 class PitchModel {
+  final String id;
+  final String name;
+  final String imageUrl;
+  final double rating;
+  final int reviewCount;
+  final double pricePerHour;
+  final String location;
+  final String distance;
+  final String category;
+  final List<String> amenities;
+  final String description;
+  final bool isPopular;
+
   const PitchModel({
     required this.id,
     required this.name,
@@ -14,16 +27,31 @@ class PitchModel {
     this.isPopular = false,
   });
 
-  final String id;
-  final String name;
-  final String imageUrl;
-  final double rating;
-  final int reviewCount;
-  final double pricePerHour;
-  final String location;
-  final String distance;
-  final String category;
-  final List<String> amenities;
-  final String description;
-  final bool isPopular;
+  factory PitchModel.fromJson(Map<String, dynamic> json) {
+    final images = json['images'] as List<dynamic>? ?? [];
+    final imageUrl = images.isNotEmpty
+        ? (images.first['url'] ?? images.first['imageUrl'] ?? '').toString()
+        : (json['imageUrl'] ?? json['image'] ?? '').toString();
+
+    final amenitiesRaw = json['amenities'] as List<dynamic>? ?? [];
+    final amenities =
+        amenitiesRaw.map((a) => (a['name'] ?? a.toString()).toString()).toList();
+
+    return PitchModel(
+      id: json['id']?.toString() ?? '',
+      name: json['name'] ?? json['stadiumName'] ?? '',
+      imageUrl: imageUrl,
+      rating: (json['rating'] ?? json['averageRating'] ?? 0).toDouble(),
+      reviewCount: json['reviewCount'] ?? json['reviewsCount'] ?? 0,
+      pricePerHour:
+          (json['pricePerHour'] ?? json['price'] ?? json['pricePerSlot'] ?? 0)
+              .toDouble(),
+      location: json['location'] ?? json['address'] ?? '',
+      distance: json['distance'] ?? '',
+      category: json['category']?['name'] ?? json['categoryName'] ?? json['category'] ?? '',
+      amenities: amenities,
+      description: json['description'] ?? '',
+      isPopular: json['isPopular'] ?? json['isFeatured'] ?? false,
+    );
+  }
 }
