@@ -11,7 +11,8 @@ class BookingRepository {
     try {
       final response = await _apiClient.dio.get(
         ApiEndpoints.stadiumSlots(stadiumId),
-        data: {'date': date},
+        queryParameters: {'date': date}, // Some backends expect it in query
+        data: {'date': date}, // Some backends expect it in body for GET
       );
       final List<dynamic> data = response.data as List<dynamic>;
       return data.map((e) => e.toString()).toList();

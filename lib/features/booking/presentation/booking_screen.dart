@@ -45,7 +45,7 @@ class _BookingScreenState extends State<BookingScreen> {
   }
 
   void _loadSlotsForSelectedDay() {
-    final dateStr = DateFormat('yyyy-MM-ddT00:00:00').format(_days[_selectedDayIndex]);
+    final dateStr = DateFormat('yyyy-MM-dd').format(_days[_selectedDayIndex]);
     context.read<BookingCubit>().loadAvailableSlots(
       int.tryParse(widget.pitchId) ?? 0, 
       dateStr,
