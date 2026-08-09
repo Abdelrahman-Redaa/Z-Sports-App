@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           child: TextField(
             readOnly: true,
-            onTap: () => context.go(AppRoutes.search),
+            onTap: () => context.push(AppRoutes.search),
             style: const TextStyle(color: AppColors.textPrimary),
             decoration: const InputDecoration(
               hintText: AppStrings.searchHint,

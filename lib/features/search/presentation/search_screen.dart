@@ -67,9 +67,20 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
-                  child: Text(
-                    AppStrings.search,
-                    style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                  child: Row(
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.arrow_forward, color: AppColors.textPrimary),
+                        onPressed: () => context.pop(),
+                        padding: EdgeInsets.zero,
+                        alignment: Alignment.centerRight,
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        AppStrings.search,
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(

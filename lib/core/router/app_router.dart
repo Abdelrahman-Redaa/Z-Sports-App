@@ -21,6 +21,7 @@ import 'package:z_sports_booking/features/profile/presentation/edit_profile_scre
 import 'package:z_sports_booking/features/profile/presentation/profile_screen.dart';
 import 'package:z_sports_booking/features/profile/presentation/settings_screen.dart';
 import 'package:z_sports_booking/features/profile/presentation/change_password_screen.dart';
+import 'package:z_sports_booking/features/search/presentation/search_screen.dart';
 import 'package:z_sports_booking/features/shell/presentation/main_shell.dart';
 import 'package:z_sports_booking/features/splash/presentation/splash_screen.dart';
 
@@ -150,6 +151,11 @@ final appRouter = GoRouter(
       parentNavigatorKey: _rootNavigatorKey,
       builder: (_, state) =>
           ChatDetailScreen(conversationId: state.pathParameters['id']!),
+    ),
+    GoRoute(
+      path: AppRoutes.search,
+      parentNavigatorKey: _rootNavigatorKey,
+      builder: (_, __) => const SearchScreen(),
     ),
     StatefulShellRoute.indexedStack(
       builder: (_, __, navigationShell) =>
