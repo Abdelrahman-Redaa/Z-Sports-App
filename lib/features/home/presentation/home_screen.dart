@@ -186,7 +186,7 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: _iconForCategory(cat.name),
               label: cat.name,
               isSelected: selectedId == cat.id,
-              onTap: () => context.read<StadiumCubit>().filterByCategoryFromApi(cat.id),
+              onTap: () => context.read<StadiumCubit>().filterByCategory(cat.id, cat.name),
             );
           },
         ),
