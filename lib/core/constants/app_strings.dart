@@ -1,0 +1,88 @@
+abstract final class AppStrings {
+  static const String appName = 'Z Sports';
+  static const String appFullName = 'Z Sports Booking';
+
+  // Auth
+  static const String login = 'تسجيل الدخول';
+  static const String loginWelcome = 'مرحباً بك مجدداً في منصة Z Sports لحجز الملاعب';
+  static const String register = 'إنشاء حساب';
+  static const String joinTitle = 'انضم إلى Z Sports';
+  static const String joinSubtitle = 'سجل الآن لحجز ملاعبك المفضلة بسهولة';
+  static const String email = 'البريد الإلكتروني';
+  static const String password = 'كلمة المرور';
+  static const String confirmPassword = 'تأكيد كلمة المرور';
+  static const String fullName = 'الاسم';
+  static const String nameHint = 'أدخل اسمك الكامل';
+  static const String phone = 'رقم الهاتف';
+  static const String forgotPassword = 'نسيت كلمة المرور؟';
+  static const String setNewPassword = 'تعيين كلمة مرور جديدة';
+  static const String setNewPasswordDesc =
+      'قم بإنشاء كلمة مرور قوية لحماية حسابك من خلال الخطوات التالية.';
+  static const String noAccount = 'ليس لديك حساب؟';
+  static const String haveAccount = 'لديك حساب بالفعل؟';
+  static const String orVia = 'أو عبر';
+  static const String verifyOtp = 'تحقق من الرمز';
+  static const String otpSent = 'تم إرسال رمز التحقق إلى';
+  static const String resendOtp = 'إعادة إرسال الرمز';
+  static const String resetPassword = 'إعادة تعيين كلمة المرور';
+  static const String sendCode = 'إرسال الرمز';
+  static const String splashSlogan = 'احجز ملعبك المفضل الآن بجودة عالمية';
+  static const String loading = 'جاري التحميل';
+
+  // Home
+  static const String home = 'الرئيسية';
+  static const String search = 'استكشاف';
+  static const String bookings = 'حجوزاتي';
+  static const String profile = 'حسابي';
+  static const String chat = 'المحادثات';
+  static const String notifications = 'الإشعارات';
+  static const String searchHint = 'ابحث عن ملعب أو رياضة';
+  static const String hello = 'مرحباً،';
+  static const String featuredPitches = 'الملاعب المميزة';
+  static const String categories = 'التصنيفات';
+  static const String seeAll = 'الكل';
+  static const String football = 'كرة قدم';
+  static const String basketball = 'كرة سلة';
+  static const String tennis = 'تنس';
+
+  // Pitch
+  static const String bookNow = 'احجز الآن';
+  static const String perHour = 'ج.م / ساعة';
+  static const String perHourShort = 'ج.م /ساعة';
+  static const String aboutPitch = 'عن الملعب';
+  static const String availableTimes = 'المواعيد المتاحة';
+  static const String booked = 'محجوز';
+  static const String pm = 'مساءً';
+  static const String amenities = 'المرافق';
+  static const String location = 'الموقع';
+  static const String reviews = 'تقييم';
+  static const String selectDate = 'اختر التاريخ';
+  static const String selectTime = 'اختر الوقت';
+  static const String confirmBooking = 'تأكيد الحجز';
+  static const String bookingSummary = 'ملخص الحجز';
+  static const String total = 'الإجمالي';
+  static const String payNow = 'ادفع الآن';
+  static const String bookingSuccess = 'تم الحجز بنجاح!';
+  static const String bookingSuccessDesc =
+      'تم تأكيد حجزك. يمكنك متابعة تفاصيل الحجز من صفحة حجوزاتي.';
+  static const String backToHome = 'العودة للرئيسية';
+  static const String viewBooking = 'عرض الحجز';
+
+  // Bookings
+  static const String upcoming = 'القادمة';
+  static const String past = 'السابقة';
+  static const String noBookings = 'لا توجد حجوزات';
+
+  // Profile
+  static const String editProfile = 'تعديل الملف الشخصي';
+  static const String myBookings = 'حجوزاتي';
+  static const String settings = 'الإعدادات';
+  static const String help = 'المساعدة';
+  static const String logout = 'تسجيل الخروج';
+  static const String save = 'حفظ';
+  static const String wallet = 'المحفظة';
+
+  // Chat
+  static const String typeMessage = 'اكتب رسالة...';
+  static const String noMessages = 'لا توجد محادثات';
+}

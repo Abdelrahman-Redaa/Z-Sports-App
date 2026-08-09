@@ -1,0 +1,1326 @@
+{
+  "info": {
+    "_postman_id": "3afbd419-6e5c-4fbd-9886-0d6ed9db8494",
+    "name": "New Collection",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "57071004",
+    "_collection_link": "https://go.postman.co/collection/57071004-3afbd419-6e5c-4fbd-9886-0d6ed9db8494?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "ZsportsAPI",
+      "item": [
+        {
+          "name": "Account",
+          "item": [
+            {
+              "name": "SignUp",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"string\",\r\n  \"email\": \"ashrefahmed820@gmail.com\",\r\n  \"password\": \"Pa$$w0rd\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/SignUp",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "SignUp"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "SignIn",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const user = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Has properties\", function () {\r",
+                      "    pm.expect(user).to.have.property('name');\r",
+                      "    pm.expect(user).to.have.property('email');\r",
+                      "    pm.expect(user).to.have.property('token');\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.test(\"Has properties\")) {\r",
+                      "    pm.collectionVariables.set('Token', user.token);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"ashrefahmed820@gmail.com\",\r\n  \"password\": \"Pa$$w0rd\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/SignIn",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "SignIn"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "confirm email",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const user = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Has properties\", function () {\r",
+                      "    pm.expect(user).to.have.property('name');\r",
+                      "    pm.expect(user).to.have.property('email');\r",
+                      "    pm.expect(user).to.have.property('token');\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.test(\"Has properties\")) {\r",
+                      "    pm.collectionVariables.set('Token', user.token);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"user@example.com\",\r\n  \"otp\": \"string\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/ConfirmEmail",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "ConfirmEmail"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "resendemail",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"user@example.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/ResendEmail",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "ResendEmail"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "forget password",
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"user@example.com\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/ForgetPassword",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "ForgetPassword"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "reset password",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const user = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Has properties\", function () {\r",
+                      "    pm.expect(user).to.have.property('name');\r",
+                      "    pm.expect(user).to.have.property('email');\r",
+                      "    pm.expect(user).to.have.property('token');\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.test(\"Has properties\")) {\r",
+                      "    pm.collectionVariables.set('Token', user.token);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"user@example.com\",\r\n  \"otp\": \"string\",\r\n  \"newPassword\": \"LPSsnO@7ZM|Sa2sOT%%nFKqWNu &n7(+Q\",\r\n  \"confirmNewPassword\": \"string\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/ResetPasword",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "ResetPasword"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Admin",
+          "item": [
+            {
+              "name": "addstadiums",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "ملعب الحريفه",
+                      "type": "text",
+                      "uuid": "334bd261-4d71-4e7c-82dd-1d5d01568e2d"
+                    },
+                    {
+                      "key": "Location",
+                      "value": "مدينه نصر",
+                      "type": "text",
+                      "uuid": "50eef44d-f94d-4f58-bdb1-1e7c45f20c20"
+                    },
+                    {
+                      "key": "PricePerHour",
+                      "value": "70",
+                      "type": "text",
+                      "uuid": "019d770a-ba9e-4e9f-a49a-aa237c5ec9bc"
+                    },
+                    {
+                      "key": "Rating",
+                      "value": "3",
+                      "type": "text",
+                      "uuid": "285dccbd-8b91-49a0-8d1f-5e64589f60ef"
+                    },
+                    {
+                      "key": "Image",
+                      "type": "file",
+                      "uuid": "d150715f-be94-4ffb-b3c5-5b2fbe28aec7",
+                      "src": "/C:/Users/ashre/Downloads/Gemini_Generated_Image_nmgb79nmgb79nmgb.png"
+                    },
+                    {
+                      "key": "Description",
+                      "value": "اجمل ملعب في المجره",
+                      "type": "text",
+                      "uuid": "507d9230-9d65-479c-9ed6-da606d1ab020"
+                    },
+                    {
+                      "key": "CategoryId",
+                      "value": "2",
+                      "type": "text",
+                      "uuid": "babb8eab-12f3-46f4-a91c-e5afc8901d39"
+                    },
+                    {
+                      "key": "OpeningTime",
+                      "value": "14:00:00",
+                      "type": "text",
+                      "uuid": "3bad5f7b-dec1-4af1-804d-a163454f50a3"
+                    },
+                    {
+                      "key": "ClosingTime",
+                      "value": "22:00:00",
+                      "type": "text",
+                      "uuid": "fa3e4ac6-120d-4a8f-83c0-6a5843a1129e"
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "True",
+                      "type": "text",
+                      "uuid": "c9c393fd-8650-4cb4-860e-11cdb24cf5bc"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/stadiums",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "stadiums"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "stadiumbyid",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/stadiums/2",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "stadiums",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "adminlogin",
+              "event": [
+                {
+                  "listen": "test",
+                  "script": {
+                    "exec": [
+                      "const user = pm.response.json();\r",
+                      "\r",
+                      "pm.test(\"Has properties\", function () {\r",
+                      "    pm.expect(user).to.have.property('name');\r",
+                      "    pm.expect(user).to.have.property('email');\r",
+                      "    pm.expect(user).to.have.property('token');\r",
+                      "});\r",
+                      "\r",
+                      "if (pm.test(\"Has properties\")) {\r",
+                      "    pm.collectionVariables.set('Token', user.token);\r",
+                      "}"
+                    ],
+                    "type": "text/javascript",
+                    "packages": {},
+                    "requests": {}
+                  }
+                }
+              ],
+              "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"email\": \"admin@zsports.local\",\r\n  \"password\": \"Admin@12345\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/Api/Account/SignIn",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "Api",
+                    "Account",
+                    "SignIn"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "stadiums",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Name",
+                      "value": "asdasdads",
+                      "type": "text",
+                      "uuid": "a2e68e4c-4036-4801-9fad-0a024d58ed7e"
+                    },
+                    {
+                      "key": "Location",
+                      "value": "asdasdasd",
+                      "type": "text",
+                      "uuid": "7b25ae24-ff1d-4e86-a1c0-50a2218a95df"
+                    },
+                    {
+                      "key": "PricePerHour",
+                      "value": "300",
+                      "type": "text",
+                      "uuid": "b4a0f203-c6c2-4a33-ba76-2a71a33c08cf"
+                    },
+                    {
+                      "key": "Rating",
+                      "value": "4",
+                      "type": "text",
+                      "uuid": "e4acb53c-9b19-4f4f-9cdb-6f48104cc08d"
+                    },
+                    {
+                      "key": "Image",
+                      "type": "file",
+                      "uuid": "48a875fa-8010-4621-b982-9a9875e51682",
+                      "src": "/C:/Users/ashre/Downloads/metasploit (1).jpg",
+                      "disabled": true
+                    },
+                    {
+                      "key": "Description",
+                      "value": "asdasdasd",
+                      "type": "text",
+                      "uuid": "d2cf768f-0bf5-4707-ad02-286891a4d261"
+                    },
+                    {
+                      "key": "CategoryId",
+                      "value": "2",
+                      "type": "text",
+                      "uuid": "04477d0b-eae9-42fd-bd8f-5b697fc0250d"
+                    },
+                    {
+                      "key": "OpeningTime",
+                      "value": "14:00:00",
+                      "type": "text",
+                      "uuid": "3a34ff3a-48fc-4e13-8474-049a0c02827c"
+                    },
+                    {
+                      "key": "ClosingTime",
+                      "value": "22:00:00",
+                      "type": "text",
+                      "uuid": "09d6988f-9fc2-4623-8b7c-553e35804c58"
+                    },
+                    {
+                      "key": "IsActive",
+                      "value": "true",
+                      "type": "text",
+                      "uuid": "c3852330-8995-4dc9-b842-1c6792f296a6"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/stadiums/2",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "stadiums",
+                    "2"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "stadium",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/stadiums/10",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "stadiums",
+                    "10"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"كرة ماء\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/categories",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"name\": \"volleyball\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/categories/5",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/admin/categories/5",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "admin",
+                    "categories",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Bookings",
+          "item": [
+            {
+              "name": "stadiumbyid",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"date\": \"2026-08-03T15:00:00\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/Bookings/slots/4",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Bookings",
+                    "slots",
+                    "4"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "bookstadium",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"stadiumId\": 6,\r\n  \"date\": \"2026-08-03T15:00:00\",\r\n  \"time\": \"18:00:00\",\r\n  \"durationMinutes\": 60\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/Bookings",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Bookings"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "mybookings",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Bookings/my",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Bookings",
+                    "my"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "mybookingbyid",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Bookings/12",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Bookings",
+                    "12"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deletebooking",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"reason\": \"bra7ty\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/Bookings/12",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Bookings",
+                    "12"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Categories",
+          "item": [
+            {
+              "name": "categories",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Categories",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Categories"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "favorites",
+          "item": [
+            {
+              "name": "favorites",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Favorites/6",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Favorites",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "deletefavorites",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "DELETE",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Favorites/6",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Favorites",
+                    "6"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getfavorites",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Favorites",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Favorites"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "payment",
+          "item": [
+            {
+              "name": "payment",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/bookings/6/payments/stripe",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "bookings",
+                    "6",
+                    "payments",
+                    "stripe"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "profile",
+          "item": [
+            {
+              "name": "changepassword",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"currentPassword\": \"Pa$$w0rd\",\r\n  \"newPassword\": \"Pa$$w02rd\",\r\n  \"confirmNewPassword\": \"Pa$$w02rd\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/account/me/change-password",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account",
+                    "me",
+                    "change-password"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "setavatar",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": [
+                    {
+                      "key": "Image",
+                      "type": "file",
+                      "uuid": "0846f9f1-96b0-4805-8664-c824aaced5f7",
+                      "src": "/C:/Users/ashre/Downloads/Screenshot 2026-05-09 222325.png"
+                    }
+                  ]
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/account/me/avatar",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account",
+                    "me",
+                    "avatar"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "getprofile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/account/me",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "editprofile",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "PUT",
+                "header": [],
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\r\n  \"displayName\": \"Admin\",\r\n  \"phoneNumber\": \"123456789\"\r\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/account/me",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "account",
+                    "me"
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        },
+        {
+          "name": "Stadiums",
+          "item": [
+            {
+              "name": "getallstadiums",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Stadiums/all",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Stadiums",
+                    "all"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "stadiumbyid",
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "url": {
+                  "raw": "{{baseurl}}/api/Stadiums/5",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Stadiums",
+                    "5"
+                  ]
+                }
+              },
+              "response": []
+            },
+            {
+              "name": "searchforstadium",
+              "protocolProfileBehavior": {
+                "disableBodyPruning": true
+              },
+              "request": {
+                "auth": {
+                  "type": "bearer",
+                  "bearer": [
+                    {
+                      "key": "token",
+                      "value": "{{Token}}",
+                      "type": "string"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "header": [],
+                "body": {
+                  "mode": "formdata",
+                  "formdata": []
+                },
+                "url": {
+                  "raw": "{{baseurl}}/api/Stadiums?CategoryId=2",
+                  "host": [
+                    "{{baseurl}}"
+                  ],
+                  "path": [
+                    "api",
+                    "Stadiums"
+                  ],
+                  "query": [
+                    {
+                      "key": "Search",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "CategoryId",
+                      "value": "2",
+                      "type": "text"
+                    },
+                    {
+                      "key": "MinPrice",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "MaxPrice",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "MinRating",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "PageSize",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    },
+                    {
+                      "key": "Page",
+                      "value": null,
+                      "type": "text",
+                      "disabled": true
+                    }
+                  ]
+                }
+              },
+              "response": []
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseurl",
+      "value": ""
+    },
+    {
+      "key": "Token",
+      "value": ""
+    }
+  ]
+}
