@@ -7,7 +7,6 @@ import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 
-// Sport types for filter
 enum SportType { all, football, basketball, tennis }
 
 class HomeScreen extends StatefulWidget {
@@ -26,12 +25,18 @@ class _HomeScreenState extends State<HomeScreen> {
         return MockData.pitches;
       case SportType.football:
         return MockData.pitches
-            .where((p) => p.category.contains('قدم') || p.category.contains('ضد'))
+            .where(
+              (p) => p.category.contains('قدم') || p.category.contains('ضد'),
+            )
             .toList();
       case SportType.basketball:
-        return MockData.pitches.where((p) => p.category.contains('سلة')).toList();
+        return MockData.pitches
+            .where((p) => p.category.contains('سلة'))
+            .toList();
       case SportType.tennis:
-        return MockData.pitches.where((p) => p.category.contains('تنس')).toList();
+        return MockData.pitches
+            .where((p) => p.category.contains('تنس'))
+            .toList();
     }
   }
 
@@ -41,7 +46,6 @@ class _HomeScreenState extends State<HomeScreen> {
       body: SafeArea(
         child: CustomScrollView(
           slivers: [
-            // ─── Header ───
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
@@ -51,8 +55,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       onTap: () => context.go(AppRoutes.profile),
                       child: CircleAvatar(
                         radius: 24,
-                        backgroundImage:
-                            CachedNetworkImageProvider(MockData.currentUser.avatarUrl),
+                        backgroundImage: CachedNetworkImageProvider(
+                          MockData.currentUser.avatarUrl,
+                        ),
                       ),
                     ),
                     const Spacer(),
@@ -61,13 +66,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       children: [
                         Text(
                           'مرحباً، ${MockData.currentUser.name.split(' ').first}',
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
                         ),
                         Text(
                           AppStrings.appFullName,
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w800,
                               ),
@@ -78,8 +83,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ),
-
-            // ─── Search Bar ───
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(20),
@@ -96,16 +99,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     decoration: const InputDecoration(
                       hintText: AppStrings.searchHint,
                       hintStyle: TextStyle(color: AppColors.textMuted),
-                      prefixIcon: Icon(Icons.search, color: AppColors.textMuted, size: 22),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: AppColors.textMuted,
+                        size: 22,
+                      ),
                       border: InputBorder.none,
-                      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                      contentPadding: EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                     ),
                   ),
                 ),
               ),
             ),
-
-            // ─── Categories Header ───
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
@@ -114,14 +122,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     AppStrings.categories,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
               ),
             ),
-
-            // ─── Category Cards (tappable filter) ───
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -132,7 +138,8 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icons.sports_soccer,
                         label: 'قدم',
                         isSelected: _selectedSport == SportType.football,
-                        onTap: () => setState(() => _selectedSport = SportType.football),
+                        onTap: () =>
+                            setState(() => _selectedSport = SportType.football),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -141,7 +148,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icons.sports_basketball,
                         label: 'سلة',
                         isSelected: _selectedSport == SportType.basketball,
-                        onTap: () => setState(() => _selectedSport = SportType.basketball),
+                        onTap: () => setState(
+                          () => _selectedSport = SportType.basketball,
+                        ),
                       ),
                     ),
                     const SizedBox(width: 12),
@@ -150,15 +159,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         icon: Icons.sports_tennis,
                         label: 'تنس',
                         isSelected: _selectedSport == SportType.tennis,
-                        onTap: () => setState(() => _selectedSport = SportType.tennis),
+                        onTap: () =>
+                            setState(() => _selectedSport = SportType.tennis),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-
-            // ─── Available Pitches Header ───
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.fromLTRB(20, 28, 20, 8),
@@ -166,33 +174,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     GestureDetector(
-                      onTap: () => setState(() => _selectedSport = SportType.all),
+                      onTap: () =>
+                          setState(() => _selectedSport = SportType.all),
                       child: Text(
                         'الكل',
                         style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                              color: _selectedSport == SportType.all
-                                  ? AppColors.primary
-                                  : AppColors.textSecondary,
-                              fontWeight: FontWeight.w600,
-                              decoration: _selectedSport == SportType.all
-                                  ? TextDecoration.underline
-                                  : null,
-                              decorationColor: AppColors.primary,
-                            ),
+                          color: _selectedSport == SportType.all
+                              ? AppColors.primary
+                              : AppColors.textSecondary,
+                          fontWeight: FontWeight.w600,
+                          decoration: _selectedSport == SportType.all
+                              ? TextDecoration.underline
+                              : null,
+                          decorationColor: AppColors.primary,
+                        ),
                       ),
                     ),
                     Text(
                       'الملاعب المتاحة',
                       style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-
-            // ─── Pitch List ───
             SliverPadding(
               padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
               sliver: SliverList.separated(
@@ -214,7 +221,6 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-// ─── Category Card Widget ───
 class _CategoryCard extends StatelessWidget {
   const _CategoryCard({
     required this.icon,
@@ -261,9 +267,9 @@ class _CategoryCard extends StatelessWidget {
             Text(
               label,
               style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                    fontWeight: FontWeight.w700,
-                    color: isSelected ? AppColors.textPrimary : AppColors.textMuted,
-                  ),
+                fontWeight: FontWeight.w700,
+                color: isSelected ? AppColors.textPrimary : AppColors.textMuted,
+              ),
             ),
           ],
         ),
@@ -272,7 +278,6 @@ class _CategoryCard extends StatelessWidget {
   }
 }
 
-// ─── Compact Pitch Tile ───
 class _CompactPitchTile extends StatelessWidget {
   const _CompactPitchTile({required this.pitch, required this.onTap});
 
@@ -293,7 +298,6 @@ class _CompactPitchTile extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Row(
           children: [
-            // Info (right side – RTL)
             Expanded(
               child: Padding(
                 padding: const EdgeInsets.all(16),
@@ -305,8 +309,8 @@ class _CompactPitchTile extends StatelessWidget {
                       pitch.name,
                       textAlign: TextAlign.right,
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+                        fontWeight: FontWeight.w800,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -314,15 +318,14 @@ class _CompactPitchTile extends StatelessWidget {
                     Text(
                       '${pitch.pricePerHour.toInt()} ج.م',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w800,
-                          ),
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                   ],
                 ),
               ),
             ),
-            // Image (left side)
             SizedBox(
               width: 140,
               height: double.infinity,

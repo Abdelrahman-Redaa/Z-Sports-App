@@ -40,13 +40,19 @@ class PitchCard extends StatelessWidget {
                   placeholder: (_, __) => Container(
                     color: AppColors.surfaceLight,
                     child: const Center(
-                      child: Icon(Icons.sports_soccer, color: AppColors.textMuted),
+                      child: Icon(
+                        Icons.sports_soccer,
+                        color: AppColors.textMuted,
+                      ),
                     ),
                   ),
                   errorWidget: (_, __, ___) => Container(
                     color: AppColors.surfaceLight,
                     child: const Center(
-                      child: Icon(Icons.sports_soccer, color: AppColors.textMuted),
+                      child: Icon(
+                        Icons.sports_soccer,
+                        color: AppColors.textMuted,
+                      ),
                     ),
                   ),
                 ),
@@ -55,7 +61,10 @@ class PitchCard extends StatelessWidget {
                     top: 10,
                     right: 10,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 4,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary,
                         borderRadius: BorderRadius.circular(20),
@@ -63,9 +72,9 @@ class PitchCard extends StatelessWidget {
                       child: Text(
                         'الأكثر حجزاً',
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.background,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          color: AppColors.background,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
                   ),
@@ -79,22 +88,25 @@ class PitchCard extends StatelessWidget {
                   Text(
                     pitch.name,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 4),
                   Row(
                     children: [
-                      const Icon(Icons.location_on_outlined, size: 14, color: AppColors.textMuted),
+                      const Icon(
+                        Icons.location_on_outlined,
+                        size: 14,
+                        color: AppColors.textMuted,
+                      ),
                       const SizedBox(width: 4),
                       Expanded(
                         child: Text(
                           pitch.location,
-                          style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -107,29 +119,31 @@ class PitchCard extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.star, size: 16, color: AppColors.warning),
+                          const Icon(
+                            Icons.star,
+                            size: 16,
+                            color: AppColors.warning,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             pitch.rating.toString(),
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(fontWeight: FontWeight.w600),
                           ),
                           const SizedBox(width: 8),
                           Text(
                             pitch.distance,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textMuted,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textMuted),
                           ),
                         ],
                       ),
                       Text(
                         '${pitch.pricePerHour.toInt()} ${AppStrings.perHour}',
                         style: Theme.of(context).textTheme.labelLarge?.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w700,
-                            ),
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ],
                   ),

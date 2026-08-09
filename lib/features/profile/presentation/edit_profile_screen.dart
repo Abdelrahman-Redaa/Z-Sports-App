@@ -14,8 +14,12 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final _nameController = TextEditingController(text: MockData.currentUser.name);
-  final _emailController = TextEditingController(text: MockData.currentUser.email);
+  final _nameController = TextEditingController(
+    text: MockData.currentUser.name,
+  );
+  final _emailController = TextEditingController(
+    text: MockData.currentUser.email,
+  );
   final _phoneController = TextEditingController(text: '01032280778');
 
   File? _selectedImage;
@@ -74,7 +78,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           children: [
-            // ─── Avatar with Edit ───
             GestureDetector(
               onTap: _pickImage,
               child: Stack(
@@ -85,10 +88,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     height: 120,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF39FF14), width: 2),
+                      border: Border.all(
+                        color: const Color(0xFF39FF14),
+                        width: 2,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF39FF14).withValues(alpha: 0.15),
+                          color: const Color(
+                            0xFF39FF14,
+                          ).withValues(alpha: 0.15),
                           blurRadius: 30,
                           spreadRadius: 5,
                         ),
@@ -96,10 +104,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ),
                     child: ClipOval(
                       child: _selectedImage != null
-                          ? Image.file(
-                              _selectedImage!,
-                              fit: BoxFit.cover,
-                            )
+                          ? Image.file(_selectedImage!, fit: BoxFit.cover)
                           : CachedNetworkImage(
                               imageUrl: MockData.currentUser.avatarUrl,
                               fit: BoxFit.cover,
@@ -116,7 +121,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     decoration: BoxDecoration(
                       color: const Color(0xFF39FF14),
                       shape: BoxShape.circle,
-                      border: Border.all(color: const Color(0xFF182540), width: 2),
+                      border: Border.all(
+                        color: const Color(0xFF182540),
+                        width: 2,
+                      ),
                     ),
                     child: const Icon(
                       Icons.edit,
@@ -129,8 +137,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
 
             const SizedBox(height: 16),
-
-            // ─── Name & Title ───
             Text(
               MockData.currentUser.name,
               style: const TextStyle(
@@ -150,8 +156,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
 
             const SizedBox(height: 40),
-
-            // ─── Fields ───
             _EditableField(
               label: 'الاسم الكامل',
               controller: _nameController,
@@ -174,8 +178,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
 
             const SizedBox(height: 48),
-
-            // ─── Save Button ───
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -211,7 +213,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 }
 
-// ─── Editable Field Widget ───
 class _EditableField extends StatelessWidget {
   const _EditableField({
     required this.label,
@@ -269,11 +270,7 @@ class _EditableField extends StatelessWidget {
               ),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Icon(
-                  Icons.edit,
-                  color: Color(0xFF8A96A3),
-                  size: 20,
-                ),
+                child: Icon(Icons.edit, color: Color(0xFF8A96A3), size: 20),
               ),
             ],
           ),

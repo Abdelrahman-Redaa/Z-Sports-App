@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 
-// ─── Colors ───
 const _bg = Color(0xFF182540);
 const _surface = Color(0xFF1D2C4D);
 const _border = Color(0xFF2A3C60);
@@ -20,7 +19,6 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
-  // Show only once per app session for demo purposes
   static bool _hasShownPointsDialog = false;
 
   @override
@@ -42,7 +40,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Container(
           padding: const EdgeInsets.fromLTRB(24, 40, 24, 32),
           decoration: BoxDecoration(
-            color: const Color(0xFF1A1A1A), // Dark almost black
+            color: const Color(0xFF1A1A1A),
             borderRadius: BorderRadius.circular(32),
             border: Border.all(color: _primary.withValues(alpha: 0.2)),
             boxShadow: [
@@ -56,7 +54,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              // ─── Points Badge ───
               Stack(
                 clipBehavior: Clip.none,
                 children: [
@@ -66,7 +63,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: const Color(0xFF242424),
-                      border: Border.all(color: _primary.withValues(alpha: 0.3), width: 2),
+                      border: Border.all(
+                        color: _primary.withValues(alpha: 0.3),
+                        width: 2,
+                      ),
                       boxShadow: [
                         BoxShadow(
                           color: _primary.withValues(alpha: 0.2),
@@ -90,10 +90,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         SizedBox(height: 4),
                         Text(
                           'نقطة',
-                          style: TextStyle(
-                            color: _primary,
-                            fontSize: 12,
-                          ),
+                          style: TextStyle(color: _primary, fontSize: 12),
                         ),
                       ],
                     ),
@@ -117,8 +114,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-
-              // ─── Text ───
               const Text(
                 'تهانينا!',
                 style: TextStyle(
@@ -141,15 +136,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
               const Text(
                 'عند وصول 1000 نقطة تحصل على حجز مجاني',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: _textSecondary,
-                  fontSize: 12,
-                ),
+                style: TextStyle(color: _textSecondary, fontSize: 12),
               ),
 
               const SizedBox(height: 32),
-
-              // ─── Button ───
               SizedBox(
                 width: double.infinity,
                 height: 50,
@@ -185,7 +175,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
         elevation: 0,
         title: const Text(
           'الملف الشخصي',
-          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 18),
+          style: TextStyle(
+            color: _textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
         ),
         centerTitle: true,
       ),
@@ -193,7 +187,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
         child: Column(
           children: [
-            // Avatar with Glow
             Container(
               width: 120,
               height: 120,
@@ -234,27 +227,23 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 32),
-            
-            // Stats Row
             Row(
               children: [
-                Expanded(child: _StatCard(value: '12', label: 'حجز')),
-                const SizedBox(width: 12),
-                Expanded(child: _StatCard(value: '5', label: 'ملاعب')),
+                Expanded(
+                  child: _StatCard(value: '12', label: 'حجز'),
+                ),
                 const SizedBox(width: 12),
                 Expanded(
-                  child: _StatCard(
-                    value: '280',
-                    label: 'نقطة',
-                    showIcon: true,
-                  ),
+                  child: _StatCard(value: '5', label: 'ملاعب'),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _StatCard(value: '280', label: 'نقطة', showIcon: true),
                 ),
               ],
             ),
-            
+
             const SizedBox(height: 40),
-            
-            // Settings Section
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -267,7 +256,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            
+
             _SettingsTile(
               title: 'تعديل الملف الشخصي',
               icon: Icons.person_outline,
@@ -290,10 +279,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
               onTap: () {},
             ),
-            
+
             const SizedBox(height: 64),
-            
-            // Logout Button
             SizedBox(
               width: double.infinity,
               height: 56,
@@ -301,7 +288,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 style: OutlinedButton.styleFrom(
                   foregroundColor: const Color(0xFFD66A65),
                   side: const BorderSide(color: Color(0xFF382023)),
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
                 ),
                 onPressed: () => context.go(AppRoutes.welcome),
                 child: const Row(
@@ -311,7 +300,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     SizedBox(width: 12),
                     Text(
                       'تسجيل الخروج',
-                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
                     ),
                   ],
                 ),
@@ -343,7 +335,7 @@ class _StatCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _surface,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF1B2F22)), // Dark green border
+        border: Border.all(color: const Color(0xFF1B2F22)),
       ),
       child: Column(
         children: [
@@ -358,16 +350,16 @@ class _StatCard extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             label,
-            style: const TextStyle(
-              color: _textSecondary,
-              fontSize: 14,
-            ),
+            style: const TextStyle(color: _textSecondary, fontSize: 14),
           ),
           if (showIcon) ...[
             const SizedBox(height: 8),
-            // Mock icon for points
-            const Icon(Icons.monetization_on_outlined, color: Colors.amber, size: 20),
-          ]
+            const Icon(
+              Icons.monetization_on_outlined,
+              color: Colors.amber,
+              size: 20,
+            ),
+          ],
         ],
       ),
     );
@@ -393,7 +385,9 @@ class _SettingsTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       onTap: onTap,
       leading: Icon(icon, color: _primary, size: 28),
-      trailing: trailing ?? const Icon(Icons.arrow_back_ios_new, size: 16, color: _textSecondary),
+      trailing:
+          trailing ??
+          const Icon(Icons.arrow_back_ios_new, size: 16, color: _textSecondary),
       title: Text(
         title,
         style: const TextStyle(

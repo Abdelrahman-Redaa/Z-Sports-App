@@ -52,27 +52,17 @@ final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: AppRoutes.splash,
   routes: [
-    GoRoute(
-      path: AppRoutes.splash,
-      builder: (_, __) => const SplashScreen(),
-    ),
-    GoRoute(
-      path: AppRoutes.welcome,
-      builder: (_, __) => const WelcomeScreen(),
-    ),
-    GoRoute(
-      path: AppRoutes.login,
-      builder: (_, __) => const LoginScreen(),
-    ),
+    GoRoute(path: AppRoutes.splash, builder: (_, __) => const SplashScreen()),
+    GoRoute(path: AppRoutes.welcome, builder: (_, __) => const WelcomeScreen()),
+    GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
     GoRoute(
       path: AppRoutes.register,
       builder: (_, __) => const RegisterScreen(),
     ),
     GoRoute(
       path: AppRoutes.otp,
-      builder: (_, state) => OtpScreen(
-        phone: state.uri.queryParameters['phone'] ?? '',
-      ),
+      builder: (_, state) =>
+          OtpScreen(phone: state.uri.queryParameters['phone'] ?? ''),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
@@ -88,16 +78,14 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.pitchDetails,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, state) => PitchDetailsScreen(
-        pitchId: state.pathParameters['id']!,
-      ),
+      builder: (_, state) =>
+          PitchDetailsScreen(pitchId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: AppRoutes.booking,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, state) => BookingScreen(
-        pitchId: state.pathParameters['id']!,
-      ),
+      builder: (_, state) =>
+          BookingScreen(pitchId: state.pathParameters['id']!),
     ),
     GoRoute(
       path: AppRoutes.bookingCheckout,
@@ -146,12 +134,12 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.chatDetail,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, state) => ChatDetailScreen(
-        conversationId: state.pathParameters['id']!,
-      ),
+      builder: (_, state) =>
+          ChatDetailScreen(conversationId: state.pathParameters['id']!),
     ),
     StatefulShellRoute.indexedStack(
-      builder: (_, __, navigationShell) => MainShell(navigationShell: navigationShell),
+      builder: (_, __, navigationShell) =>
+          MainShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
           routes: [

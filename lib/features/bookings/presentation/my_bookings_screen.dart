@@ -127,10 +127,7 @@ class _BookingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.background,
         borderRadius: BorderRadius.circular(32),
-        border: Border.all(
-          color: AppColors.primary,
-          width: 1.5,
-        ), // Green border
+        border: Border.all(color: AppColors.primary, width: 1.5),
       ),
       child: Column(
         children: [
@@ -143,7 +140,7 @@ class _BookingCard extends StatelessWidget {
                   vertical: 6,
                 ),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF2B3A31), // Darkish green background
+                  color: const Color(0xFF2B3A31),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
@@ -178,7 +175,7 @@ class _BookingCard extends StatelessWidget {
                 padding: const EdgeInsets.all(12),
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Color(0xFF1E262B), // Dark circular bg
+                  color: Color(0xFF1E262B),
                 ),
                 child: Icon(icon, color: AppColors.primary, size: 28),
               ),

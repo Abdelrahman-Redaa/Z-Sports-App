@@ -22,15 +22,17 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
   Widget build(BuildContext context) {
     final pitch = MockData.pitchById(widget.pitchId);
     final today = DateFormat('d MMMM', 'ar').format(DateTime.now());
-
-    // Evening times from the design (image 6/7/8)
-    final times = ['08:00\nمساءً', '09:00\nمساءً', '10:00\nمساءً', '11:00\nمساءً'];
-    final bookedIndex = 3; // last one is booked (محجوز)
+    final times = [
+      '08:00\nمساءً',
+      '09:00\nمساءً',
+      '10:00\nمساءً',
+      '11:00\nمساءً',
+    ];
+    final bookedIndex = 3;
 
     return Scaffold(
       body: CustomScrollView(
         slivers: [
-          // Hero Image
           SliverToBoxAdapter(
             child: Stack(
               children: [
@@ -40,9 +42,10 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   width: double.infinity,
                   fit: BoxFit.cover,
                 ),
-                // Gradient overlay at bottom
                 Positioned(
-                  bottom: 0, left: 0, right: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
                     height: 80,
                     decoration: BoxDecoration(
@@ -54,7 +57,6 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     ),
                   ),
                 ),
-                // Back button (arrow right → back in Arabic RTL)
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
                   right: 16,
@@ -63,13 +65,14 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     onTap: () => context.pop(),
                   ),
                 ),
-                // Favorite button
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
                   left: 16,
                   child: _CircleIconButton(
                     icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    iconColor: _isFavorite ? AppColors.favorite : AppColors.textPrimary,
+                    iconColor: _isFavorite
+                        ? AppColors.favorite
+                        : AppColors.textPrimary,
                     onTap: () => setState(() => _isFavorite = !_isFavorite),
                   ),
                 ),
@@ -83,28 +86,29 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   const SizedBox(height: 20),
-                  // Pitch Name
                   Text(
                     pitch.name,
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      fontWeight: FontWeight.w800,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 12),
-                  // Rating + Category Row
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
                         '(${pitch.reviewCount} تقييم)',
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           border: Border.all(color: AppColors.primary),
                           borderRadius: BorderRadius.circular(8),
@@ -113,36 +117,44 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                           children: [
                             Text(
                               pitch.rating.toString(),
-                              style: Theme.of(context).textTheme.labelLarge?.copyWith(
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
                                     color: AppColors.primary,
                                     fontWeight: FontWeight.w700,
                                   ),
                             ),
-                            const Icon(Icons.star, size: 14, color: AppColors.primary),
+                            const Icon(
+                              Icons.star,
+                              size: 14,
+                              color: AppColors.primary,
+                            ),
                           ],
                         ),
                       ),
                       const SizedBox(width: 8),
-                      Text('•', style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.5))),
+                      Text(
+                        '•',
+                        style: TextStyle(
+                          color: AppColors.textSecondary.withValues(alpha: 0.5),
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Text(
                         pitch.category,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textSecondary,
-                            ),
+                          color: AppColors.textSecondary,
+                        ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 32),
-
-                  // About Pitch
                   Align(
                     alignment: AlignmentDirectional.centerEnd,
                     child: Text(
                       'عن الملعب',
                       style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w700,
-                          ),
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 12),
@@ -150,44 +162,42 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     pitch.description,
                     textAlign: TextAlign.right,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: AppColors.textSecondary,
-                          height: 1.7,
-                        ),
+                      color: AppColors.textSecondary,
+                      height: 1.7,
+                    ),
                   ),
                   const SizedBox(height: 32),
-
-                  // Available Times Header
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 6),
                           Text(
                             'اليوم، $today',
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textSecondary),
                           ),
                         ],
                       ),
                       Text(
                         'المواعيد المتاحة',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
                   const SizedBox(height: 16),
-
-                  // Time Slots Row
                   SizedBox(
                     height: 80,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
-                      reverse: true, // RTL order
+                      reverse: true,
                       itemCount: times.length,
                       separatorBuilder: (_, __) => const SizedBox(width: 10),
                       itemBuilder: (_, index) {
@@ -196,7 +206,9 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                         final isSelected = _selectedTime == time;
 
                         return GestureDetector(
-                          onTap: isBooked ? null : () => setState(() => _selectedTime = time),
+                          onTap: isBooked
+                              ? null
+                              : () => setState(() => _selectedTime = time),
                           child: AnimatedContainer(
                             duration: const Duration(milliseconds: 200),
                             width: 72,
@@ -206,7 +218,9 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                                   : AppColors.surfaceLight,
                               borderRadius: BorderRadius.circular(16),
                               border: Border.all(
-                                color: isSelected ? AppColors.primary : AppColors.surfaceBorder,
+                                color: isSelected
+                                    ? AppColors.primary
+                                    : AppColors.surfaceBorder,
                                 width: isSelected ? 1.5 : 1,
                               ),
                             ),
@@ -215,24 +229,30 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                               children: [
                                 Text(
                                   time.split('\n')[0],
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                  style: Theme.of(context).textTheme.titleSmall
+                                      ?.copyWith(
                                         fontWeight: FontWeight.w700,
                                         color: isBooked
                                             ? AppColors.textMuted
                                             : isSelected
-                                                ? AppColors.primary
-                                                : AppColors.textPrimary,
+                                            ? AppColors.primary
+                                            : AppColors.textPrimary,
                                       ),
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  isBooked ? 'محجوز' : (time.split('\n').length > 1 ? time.split('\n')[1] : 'م'),
-                                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                  isBooked
+                                      ? 'محجوز'
+                                      : (time.split('\n').length > 1
+                                            ? time.split('\n')[1]
+                                            : 'م'),
+                                  style: Theme.of(context).textTheme.labelSmall
+                                      ?.copyWith(
                                         color: isBooked
                                             ? AppColors.textMuted
                                             : isSelected
-                                                ? AppColors.primary
-                                                : AppColors.textSecondary,
+                                            ? AppColors.primary
+                                            : AppColors.textSecondary,
                                       ),
                                 ),
                               ],
@@ -249,8 +269,6 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
           ),
         ],
       ),
-
-      // Bottom Bar: Book Now + Price
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
@@ -260,7 +278,6 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
           ),
           child: Row(
             children: [
-              // Book Now Button
               SizedBox(
                 width: 160,
                 height: 52,
@@ -268,18 +285,21 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   icon: const Icon(Icons.bolt, size: 20),
                   label: Text(
                     AppStrings.bookNow,
-                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                    ),
                   ),
                   onPressed: () {
-                    // If time selected → go to booking screen for date/time picker
-                    // Otherwise go to booking screen
                     context.push('/pitch/${widget.pitchId}/book');
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
                     elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ),
@@ -291,14 +311,14 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   Text(
                     'الإجمالي',
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   Text(
                     '${pitch.pricePerHour.toInt()} ج.م/ساعة',
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.w800,
-                        ),
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ],
               ),

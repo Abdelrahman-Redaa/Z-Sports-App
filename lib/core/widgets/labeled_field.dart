@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 
-/// White input style used on Login screen (Figma).
 class WhiteLabeledField extends StatelessWidget {
   const WhiteLabeledField({
     super.key,
@@ -30,9 +29,9 @@ class WhiteLabeledField extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textLabel,
-                fontWeight: FontWeight.w500,
-              ),
+            color: AppColors.textLabel,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -43,11 +42,16 @@ class WhiteLabeledField extends StatelessWidget {
           style: const TextStyle(color: AppColors.inputTextDark),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(color: AppColors.textMuted.withValues(alpha: 0.7)),
+            hintStyle: TextStyle(
+              color: AppColors.textMuted.withValues(alpha: 0.7),
+            ),
             filled: true,
             fillColor: AppColors.inputWhite,
             suffixIcon: suffix,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -58,7 +62,10 @@ class WhiteLabeledField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
             ),
           ),
         ),
@@ -67,7 +74,6 @@ class WhiteLabeledField extends StatelessWidget {
   }
 }
 
-/// Dark bordered input style used on Register screen (Figma).
 class DarkLabeledField extends StatelessWidget {
   const DarkLabeledField({
     super.key,
@@ -98,9 +104,9 @@ class DarkLabeledField extends StatelessWidget {
         Text(
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textLabel,
-                fontWeight: FontWeight.w500,
-              ),
+            color: AppColors.textLabel,
+            fontWeight: FontWeight.w500,
+          ),
         ),
         const SizedBox(height: 8),
         TextFormField(
@@ -118,7 +124,10 @@ class DarkLabeledField extends StatelessWidget {
                 ? Icon(prefixIcon, color: AppColors.primary, size: 20)
                 : null,
             suffixIcon: suffixIcon,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: const BorderSide(color: AppColors.surfaceBorder),
@@ -129,7 +138,10 @@ class DarkLabeledField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.primary, width: 1.5),
+              borderSide: const BorderSide(
+                color: AppColors.primary,
+                width: 1.5,
+              ),
             ),
           ),
         ),
@@ -139,10 +151,7 @@ class DarkLabeledField extends StatelessWidget {
 }
 
 class PasswordLabelRow extends StatelessWidget {
-  const PasswordLabelRow({
-    super.key,
-    required this.onForgotTap,
-  });
+  const PasswordLabelRow({super.key, required this.onForgotTap});
 
   final VoidCallback onForgotTap;
 
@@ -156,17 +165,17 @@ class PasswordLabelRow extends StatelessWidget {
           child: Text(
             'نسيت كلمة المرور؟',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                  color: AppColors.primary,
-                  fontWeight: FontWeight.w600,
-                ),
+              color: AppColors.primary,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ),
         Text(
           'كلمة المرور',
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: AppColors.textLabel,
-                fontWeight: FontWeight.w500,
-              ),
+            color: AppColors.textLabel,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ],
     );

@@ -19,7 +19,6 @@ class AuthSuccess extends AuthState {
   List<Object?> get props => [message];
 }
 
-// Used specifically when OTP confirm succeeds and we need to route to reset password
 class AuthOtpConfirmed extends AuthState {}
 
 class AuthError extends AuthState {

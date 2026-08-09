@@ -1,10 +1,9 @@
 abstract final class AppStrings {
   static const String appName = 'Z Sports';
   static const String appFullName = 'Z Sports Booking';
-
-  // Auth
   static const String login = 'تسجيل الدخول';
-  static const String loginWelcome = 'مرحباً بك مجدداً في منصة Z Sports لحجز الملاعب';
+  static const String loginWelcome =
+      'مرحباً بك مجدداً في منصة Z Sports لحجز الملاعب';
   static const String register = 'إنشاء حساب';
   static const String joinTitle = 'انضم إلى Z Sports';
   static const String joinSubtitle = 'سجل الآن لحجز ملاعبك المفضلة بسهولة';
@@ -28,8 +27,6 @@ abstract final class AppStrings {
   static const String sendCode = 'إرسال الرمز';
   static const String splashSlogan = 'احجز ملعبك المفضل الآن بجودة عالمية';
   static const String loading = 'جاري التحميل';
-
-  // Home
   static const String home = 'الرئيسية';
   static const String search = 'استكشاف';
   static const String bookings = 'حجوزاتي';
@@ -44,8 +41,6 @@ abstract final class AppStrings {
   static const String football = 'كرة قدم';
   static const String basketball = 'كرة سلة';
   static const String tennis = 'تنس';
-
-  // Pitch
   static const String bookNow = 'احجز الآن';
   static const String perHour = 'ج.م / ساعة';
   static const String perHourShort = 'ج.م /ساعة';
@@ -67,13 +62,9 @@ abstract final class AppStrings {
       'تم تأكيد حجزك. يمكنك متابعة تفاصيل الحجز من صفحة حجوزاتي.';
   static const String backToHome = 'العودة للرئيسية';
   static const String viewBooking = 'عرض الحجز';
-
-  // Bookings
   static const String upcoming = 'القادمة';
   static const String past = 'السابقة';
   static const String noBookings = 'لا توجد حجوزات';
-
-  // Profile
   static const String editProfile = 'تعديل الملف الشخصي';
   static const String myBookings = 'حجوزاتي';
   static const String settings = 'الإعدادات';
@@ -81,8 +72,6 @@ abstract final class AppStrings {
   static const String logout = 'تسجيل الخروج';
   static const String save = 'حفظ';
   static const String wallet = 'المحفظة';
-
-  // Chat
   static const String typeMessage = 'اكتب رسالة...';
   static const String noMessages = 'لا توجد محادثات';
 }

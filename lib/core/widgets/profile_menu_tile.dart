@@ -36,12 +36,17 @@ class ProfileMenuTile extends StatelessWidget {
       title: Text(
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-              color: textColor ?? AppColors.textPrimary,
-              fontWeight: FontWeight.w500,
-            ),
+          color: textColor ?? AppColors.textPrimary,
+          fontWeight: FontWeight.w500,
+        ),
       ),
-      trailing: trailing ??
-          const Icon(Icons.arrow_back_ios_new, size: 16, color: AppColors.textMuted),
+      trailing:
+          trailing ??
+          const Icon(
+            Icons.arrow_back_ios_new,
+            size: 16,
+            color: AppColors.textMuted,
+          ),
     );
   }
 }

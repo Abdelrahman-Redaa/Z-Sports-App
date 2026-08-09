@@ -4,7 +4,6 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 
-// ─── Colors ───
 const _bg = Color(0xFF182540);
 const _surface = Color(0xFF1D2C4D);
 const _border = Color(0xFF2A3C60);
@@ -23,7 +22,6 @@ class MyBookingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            // ─── Header ───
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Row(
@@ -34,7 +32,10 @@ class MyBookingsScreen extends StatelessWidget {
                     children: [
                       Text(
                         'مرحباً، ${MockData.currentUser.name.split(' ').first}',
-                        style: const TextStyle(color: _textSecondary, fontSize: 13),
+                        style: const TextStyle(
+                          color: _textSecondary,
+                          fontSize: 13,
+                        ),
                       ),
                       const Text(
                         'Z Sports Booking',
@@ -49,15 +50,15 @@ class MyBookingsScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   CircleAvatar(
                     radius: 24,
-                    backgroundImage: NetworkImage(MockData.currentUser.avatarUrl),
+                    backgroundImage: NetworkImage(
+                      MockData.currentUser.avatarUrl,
+                    ),
                   ),
                 ],
               ),
             ),
 
             const SizedBox(height: 32),
-
-            // ─── Title ───
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
@@ -81,8 +82,6 @@ class MyBookingsScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-
-            // ─── Booking List ───
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -135,7 +134,6 @@ class MyBookingsScreen extends StatelessWidget {
   }
 }
 
-// ─── Booking Card ───
 class _BookingCard extends StatelessWidget {
   const _BookingCard({
     required this.pitchName,
@@ -164,13 +162,14 @@ class _BookingCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          // Top row: icon | name | status badge
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Status badge
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 5,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1A2E1A),
                   borderRadius: BorderRadius.circular(10),
@@ -185,7 +184,6 @@ class _BookingCard extends StatelessWidget {
                 ),
               ),
               const Spacer(),
-              // Name & category
               Column(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -205,7 +203,6 @@ class _BookingCard extends StatelessWidget {
                 ],
               ),
               const SizedBox(width: 12),
-              // Sport icon circle
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: const BoxDecoration(
@@ -218,21 +215,27 @@ class _BookingCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
-          // Date & Time row
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
                 time,
-                style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                style: const TextStyle(
+                  color: _textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(width: 6),
               const Icon(Icons.access_time, color: _primary, size: 18),
               const SizedBox(width: 20),
               Text(
                 date,
-                style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 14),
+                style: const TextStyle(
+                  color: _textPrimary,
+                  fontWeight: FontWeight.w700,
+                  fontSize: 14,
+                ),
               ),
               const SizedBox(width: 6),
               const Icon(Icons.calendar_today, color: _primary, size: 18),
@@ -240,8 +243,6 @@ class _BookingCard extends StatelessWidget {
           ),
 
           const SizedBox(height: 20),
-
-          // View details button
           SizedBox(
             width: double.infinity,
             height: 50,
@@ -251,7 +252,9 @@ class _BookingCard extends StatelessWidget {
                 backgroundColor: _primary,
                 foregroundColor: _bg,
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,

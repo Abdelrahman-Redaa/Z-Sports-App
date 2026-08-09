@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-// ─── Colors ───
 const _bg = Color(0xFF182540);
 const _surface = Color(0xFF1D2C4D);
 const _border = Color(0xFF2A3C60);
@@ -38,7 +37,11 @@ class BookingDetailScreen extends StatelessWidget {
         centerTitle: true,
         title: const Text(
           'تفاصيل الحجز',
-          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 18),
+          style: TextStyle(
+            color: _textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward, color: _textPrimary),
@@ -55,7 +58,6 @@ class BookingDetailScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ─── Pitch Image with name overlay ───
             Stack(
               children: [
                 SizedBox(
@@ -66,7 +68,6 @@ class BookingDetailScreen extends StatelessWidget {
                     fit: BoxFit.cover,
                   ),
                 ),
-                // Dark gradient overlay
                 Positioned.fill(
                   child: Container(
                     decoration: const BoxDecoration(
@@ -78,16 +79,20 @@ class BookingDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Status badge
                 Positioned(
                   bottom: 16,
                   right: 16,
                   child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 14,
+                      vertical: 6,
+                    ),
                     decoration: BoxDecoration(
                       color: const Color(0xFF1A2E1A),
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: _primary.withValues(alpha: 0.3)),
+                      border: Border.all(
+                        color: _primary.withValues(alpha: 0.3),
+                      ),
                     ),
                     child: const Text(
                       'مؤكد',
@@ -99,7 +104,6 @@ class BookingDetailScreen extends StatelessWidget {
                     ),
                   ),
                 ),
-                // Pitch name
                 Positioned(
                   bottom: 16,
                   left: 0,
@@ -115,7 +119,9 @@ class BookingDetailScreen extends StatelessWidget {
                           color: _textPrimary,
                           fontWeight: FontWeight.w800,
                           fontSize: 20,
-                          shadows: [Shadow(blurRadius: 10, color: Colors.black)],
+                          shadows: [
+                            Shadow(blurRadius: 10, color: Colors.black),
+                          ],
                         ),
                       ),
                     ),
@@ -129,10 +135,8 @@ class BookingDetailScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
-                  // ─── Booking ID & Cost ───
                   Row(
                     children: [
-                      // Cost
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(16),
@@ -146,7 +150,10 @@ class BookingDetailScreen extends StatelessWidget {
                             children: [
                               const Text(
                                 'التكلفة',
-                                style: TextStyle(color: _textSecondary, fontSize: 13),
+                                style: TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 13,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -162,7 +169,6 @@ class BookingDetailScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 12),
-                      // Booking ID
                       Expanded(
                         child: Container(
                           padding: const EdgeInsets.all(16),
@@ -176,7 +182,10 @@ class BookingDetailScreen extends StatelessWidget {
                             children: [
                               const Text(
                                 'رقم الحجز',
-                                style: TextStyle(color: _textSecondary, fontSize: 13),
+                                style: TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 13,
+                                ),
                               ),
                               const SizedBox(height: 8),
                               Text(
@@ -195,8 +204,6 @@ class BookingDetailScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // ─── Date Row ───
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -219,7 +226,10 @@ class BookingDetailScreen extends StatelessWidget {
                           children: [
                             const Text(
                               'التاريخ',
-                              style: TextStyle(color: _textSecondary, fontSize: 14),
+                              style: TextStyle(
+                                color: _textSecondary,
+                                fontSize: 14,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Container(
@@ -229,7 +239,11 @@ class BookingDetailScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: _border),
                               ),
-                              child: const Icon(Icons.calendar_today, color: _primary, size: 18),
+                              child: const Icon(
+                                Icons.calendar_today,
+                                color: _primary,
+                                size: 18,
+                              ),
                             ),
                           ],
                         ),
@@ -238,8 +252,6 @@ class BookingDetailScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 12),
-
-                  // ─── Time Row ───
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -262,7 +274,10 @@ class BookingDetailScreen extends StatelessWidget {
                           children: [
                             const Text(
                               'الوقت',
-                              style: TextStyle(color: _textSecondary, fontSize: 14),
+                              style: TextStyle(
+                                color: _textSecondary,
+                                fontSize: 14,
+                              ),
                             ),
                             const SizedBox(width: 10),
                             Container(
@@ -272,7 +287,11 @@ class BookingDetailScreen extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10),
                                 border: Border.all(color: _border),
                               ),
-                              child: const Icon(Icons.access_time, color: _primary, size: 18),
+                              child: const Icon(
+                                Icons.access_time,
+                                color: _primary,
+                                size: 18,
+                              ),
                             ),
                           ],
                         ),
@@ -281,13 +300,15 @@ class BookingDetailScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 32),
-
-                  // ─── Cancel Button ───
                   SizedBox(
                     width: double.infinity,
                     height: 54,
                     child: OutlinedButton.icon(
-                      icon: const Icon(Icons.cancel_outlined, color: Color(0xFFEF4444), size: 20),
+                      icon: const Icon(
+                        Icons.cancel_outlined,
+                        color: Color(0xFFEF4444),
+                        size: 20,
+                      ),
                       label: const Text(
                         'إلغاء الحجز',
                         style: TextStyle(
@@ -298,7 +319,10 @@ class BookingDetailScreen extends StatelessWidget {
                       ),
                       onPressed: () => _showCancelDialog(context),
                       style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xFF3A2020), width: 1),
+                        side: const BorderSide(
+                          color: Color(0xFF3A2020),
+                          width: 1,
+                        ),
                         backgroundColor: const Color(0xFF1E1515),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
@@ -308,8 +332,6 @@ class BookingDetailScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 16),
-
-                  // ─── Cancel Policy Note ───
                   const Text(
                     'تطبق سياسة الإلغاء. الإلغاء بعد مرور 24 ساعة من تاريخ الحجز أكثر من ثلاث مرات قد يعرضك لرسوم إضافية للحجز مرة أخرى.',
                     textAlign: TextAlign.right,
@@ -359,7 +381,9 @@ class BookingDetailScreen extends StatelessWidget {
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFFEF4444),
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
             ),
             child: const Text('نعم، إلغاء'),
           ),

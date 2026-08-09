@@ -36,9 +36,16 @@ class SearchBarWidget extends StatelessWidget {
           decoration: InputDecoration(
             hintText: hint,
             hintStyle: const TextStyle(color: AppColors.textMuted),
-            prefixIcon: const Icon(Icons.search, color: AppColors.textMuted, size: 22),
+            prefixIcon: const Icon(
+              Icons.search,
+              color: AppColors.textMuted,
+              size: 22,
+            ),
             border: InputBorder.none,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 14,
+            ),
           ),
         ),
       ),

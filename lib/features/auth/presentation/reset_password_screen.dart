@@ -7,7 +7,6 @@ import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dar
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_state.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
-  /// [email] and [otp] are passed from OTP screen as query params
   const ResetPasswordScreen({super.key, this.email, this.otp});
 
   final String? email;
@@ -48,7 +47,8 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     super.dispose();
   }
 
-  bool get _allRequirementsMet => _has8Chars && _hasUpperCase && _hasSpecialChar;
+  bool get _allRequirementsMet =>
+      _has8Chars && _hasUpperCase && _hasSpecialChar;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +56,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
       listener: (context, state) {
         if (state is AuthSuccess && state.message != null) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message!), backgroundColor: const Color(0xFF39FF14)),
+            SnackBar(
+              content: Text(state.message!),
+              backgroundColor: const Color(0xFF39FF14),
+            ),
           );
           context.go(AppRoutes.login);
         } else if (state is AuthError) {
@@ -73,7 +76,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
             elevation: 0,
             title: const Text(
               AppStrings.appName,
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18),
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
             ),
             centerTitle: true,
             leading: IconButton(
@@ -100,14 +107,19 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const Text(
                     'قم بإنشاء كلمة مرور قوية لحماية حسابك من خلال الخطوات التالية.',
                     textAlign: TextAlign.right,
-                    style: TextStyle(color: Color(0xFF8A96A3), height: 1.6, fontSize: 14),
+                    style: TextStyle(
+                      color: Color(0xFF8A96A3),
+                      height: 1.6,
+                      fontSize: 14,
+                    ),
                   ),
                   const SizedBox(height: 40),
-
-                  // New Password Field
                   const Align(
                     alignment: Alignment.centerRight,
-                    child: Text('كلمة المرور', style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14)),
+                    child: Text(
+                      'كلمة المرور',
+                      style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   _buildPasswordField(
@@ -116,21 +128,21 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     onToggle: () => setState(() => _obscureNew = !_obscureNew),
                   ),
                   const SizedBox(height: 24),
-
-                  // Confirm Password Field
                   const Align(
                     alignment: Alignment.centerRight,
-                    child: Text('تأكيد كلمة المرور', style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14)),
+                    child: Text(
+                      'تأكيد كلمة المرور',
+                      style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14),
+                    ),
                   ),
                   const SizedBox(height: 8),
                   _buildPasswordField(
                     controller: _confirmPasswordController,
                     obscure: _obscureConfirm,
-                    onToggle: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                    onToggle: () =>
+                        setState(() => _obscureConfirm = !_obscureConfirm),
                   ),
                   const SizedBox(height: 28),
-
-                  // Password Requirements
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
@@ -140,17 +152,24 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     ),
                     child: Column(
                       children: [
-                        _RequirementRow(met: _has8Chars, label: 'على الأقل 8 أحرف'),
+                        _RequirementRow(
+                          met: _has8Chars,
+                          label: 'على الأقل 8 أحرف',
+                        ),
                         const SizedBox(height: 12),
-                        _RequirementRow(met: _hasUpperCase, label: 'حرف كبير واحد على الأقل'),
+                        _RequirementRow(
+                          met: _hasUpperCase,
+                          label: 'حرف كبير واحد على الأقل',
+                        ),
                         const SizedBox(height: 12),
-                        _RequirementRow(met: _hasSpecialChar, label: r'رمز خاص (مثل @, #, $)'),
+                        _RequirementRow(
+                          met: _hasSpecialChar,
+                          label: r'رمز خاص (مثل @, #, $)',
+                        ),
                       ],
                     ),
                   ),
                   const SizedBox(height: 48),
-
-                  // Submit button
                   SizedBox(
                     height: 56,
                     child: ElevatedButton(
@@ -159,30 +178,41 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           : () {
                               if (!_allRequirementsMet) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('كلمة المرور لا تستوفي المتطلبات')),
+                                  const SnackBar(
+                                    content: Text(
+                                      'كلمة المرور لا تستوفي المتطلبات',
+                                    ),
+                                  ),
                                 );
                                 return;
                               }
-                              if (_newPasswordController.text != _confirmPasswordController.text) {
+                              if (_newPasswordController.text !=
+                                  _confirmPasswordController.text) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(content: Text('كلمتا المرور غير متطابقتين')),
+                                  const SnackBar(
+                                    content: Text('كلمتا المرور غير متطابقتين'),
+                                  ),
                                 );
                                 return;
                               }
-                              final email = widget.email ?? context.read<AuthCubit>().pendingEmail;
+                              final email =
+                                  widget.email ??
+                                  context.read<AuthCubit>().pendingEmail;
                               final otp = widget.otp ?? '';
                               context.read<AuthCubit>().resetPassword(
-                                    email,
-                                    otp,
-                                    _newPasswordController.text,
-                                    _confirmPasswordController.text,
-                                  );
+                                email,
+                                otp,
+                                _newPasswordController.text,
+                                _confirmPasswordController.text,
+                              );
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFF39FF14),
                         foregroundColor: const Color(0xFF182540),
                         elevation: 0,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16),
+                        ),
                       ),
                       child: state is AuthLoading
                           ? const CircularProgressIndicator(color: Colors.black)
@@ -191,7 +221,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               children: [
                                 Icon(Icons.lock_reset, size: 22),
                                 SizedBox(width: 8),
-                                Text('حفظ وتغيير', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                                Text(
+                                  'حفظ وتغيير',
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ],
                             ),
                     ),
@@ -222,7 +258,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           IconButton(
             onPressed: onToggle,
             icon: Icon(
-              obscure ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+              obscure
+                  ? Icons.visibility_off_outlined
+                  : Icons.visibility_outlined,
               color: const Color(0xFF8A96A3),
             ),
           ),
@@ -231,7 +269,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               controller: controller,
               obscureText: obscure,
               textAlign: TextAlign.right,
-              style: const TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w700),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.w700,
+              ),
               decoration: const InputDecoration(
                 border: InputBorder.none,
                 isDense: true,

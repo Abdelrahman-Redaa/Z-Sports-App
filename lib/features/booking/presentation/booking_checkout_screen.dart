@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 
-// ─── Constants ───
 const _bgColor = Color(0xFF182540);
 const _surfaceColor = Color(0xFF1D2C4D);
 const _borderColor = Color(0xFF2A3C60);
@@ -30,15 +29,26 @@ class BookingCheckoutScreen extends StatefulWidget {
 }
 
 class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
-  int _selectedPayment = 0; // 0 = instapay, 1 = cash
+  int _selectedPayment = 0;
   static const _instapayNumber = '01012345678';
 
   String _formatDate(String rawDate) {
     final parsed = DateTime.tryParse(rawDate);
     if (parsed == null) return rawDate;
     const months = [
-      '', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو',
-      'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'
+      '',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
     ];
     return '${parsed.day} ${months[parsed.month]} ${parsed.year}';
   }
@@ -58,7 +68,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         centerTitle: true,
         title: const Text(
           'إتمام الدفع',
-          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 18),
+          style: TextStyle(
+            color: _textPrimary,
+            fontWeight: FontWeight.w700,
+            fontSize: 18,
+          ),
         ),
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward, color: _textPrimary),
@@ -70,17 +84,18 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ─── Booking Summary ───
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
                 'ملخص الحجز',
-                style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
+                style: TextStyle(
+                  color: _textPrimary,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 20,
+                ),
               ),
             ),
             const SizedBox(height: 16),
-
-            // Pitch card
             Container(
               decoration: BoxDecoration(
                 color: _surfaceColor,
@@ -90,7 +105,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
               clipBehavior: Clip.antiAlias,
               child: Row(
                 children: [
-                  // Image
                   SizedBox(
                     width: 120,
                     height: 130,
@@ -99,7 +113,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       fit: BoxFit.cover,
                     ),
                   ),
-                  // Info
                   Expanded(
                     child: Padding(
                       padding: const EdgeInsets.all(16),
@@ -130,10 +143,17 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                             children: [
                               Text(
                                 formattedDate,
-                                style: const TextStyle(color: _textSecondary, fontSize: 12),
+                                style: const TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(width: 6),
-                              const Icon(Icons.calendar_today, size: 13, color: _textSecondary),
+                              const Icon(
+                                Icons.calendar_today,
+                                size: 13,
+                                color: _textSecondary,
+                              ),
                             ],
                           ),
                           const SizedBox(height: 4),
@@ -142,10 +162,17 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                             children: [
                               Text(
                                 timeRange,
-                                style: const TextStyle(color: _textSecondary, fontSize: 12),
+                                style: const TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 12,
+                                ),
                               ),
                               const SizedBox(width: 6),
-                              const Icon(Icons.access_time, size: 13, color: _textSecondary),
+                              const Icon(
+                                Icons.access_time,
+                                size: 13,
+                                color: _textSecondary,
+                              ),
                             ],
                           ),
                         ],
@@ -157,18 +184,18 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
             ),
 
             const SizedBox(height: 32),
-
-            // ─── Payment Method ───
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
                 'طريقة الدفع',
-                style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
+                style: TextStyle(
+                  color: _textPrimary,
+                  fontWeight: FontWeight.w800,
+                  fontSize: 20,
+                ),
               ),
             ),
             const SizedBox(height: 16),
-
-            // Instapay option
             _PaymentOption(
               icon: Icons.credit_card,
               title: 'انستا باي',
@@ -177,8 +204,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
               onTap: () => setState(() => _selectedPayment = 0),
             ),
             const SizedBox(height: 12),
-
-            // Cash option
             _PaymentOption(
               icon: Icons.payments_outlined,
               title: 'الدفع عند اللعب',
@@ -186,8 +211,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
               onTap: () => setState(() => _selectedPayment = 1),
             ),
             const SizedBox(height: 24),
-
-            // ─── Payment Details ───
             if (_selectedPayment == 0) ...[
               Container(
                 padding: const EdgeInsets.all(20),
@@ -203,12 +226,20 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            Clipboard.setData(const ClipboardData(text: _instapayNumber));
+                            Clipboard.setData(
+                              const ClipboardData(text: _instapayNumber),
+                            );
                             ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(content: Text('تم نسخ رقم التحويل')),
+                              const SnackBar(
+                                content: Text('تم نسخ رقم التحويل'),
+                              ),
                             );
                           },
-                          child: const Icon(Icons.copy, size: 18, color: _primaryColor),
+                          child: const Icon(
+                            Icons.copy,
+                            size: 18,
+                            color: _primaryColor,
+                          ),
                         ),
                         const Text(
                           'رقم التحويل',
@@ -221,7 +252,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       alignment: Alignment.centerRight,
                       child: Text(
                         _instapayNumber,
-                        style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 24),
+                        style: TextStyle(
+                          color: _textPrimary,
+                          fontWeight: FontWeight.w800,
+                          fontSize: 24,
+                        ),
                       ),
                     ),
                     const Padding(
@@ -241,7 +276,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         ),
                         const Text(
                           'المجموع الكلي',
-                          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                          style: TextStyle(
+                            color: _textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
@@ -258,13 +297,21 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                 ),
                 child: const Row(
                   children: [
-                    Icon(Icons.error_outline, color: Color(0xFFD66A65), size: 20),
+                    Icon(
+                      Icons.error_outline,
+                      color: Color(0xFFD66A65),
+                      size: 20,
+                    ),
                     SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         'ارسل صورة التحويل على واتساب على نفس رقم التحويل لتأكيد الحجز فوراً.',
                         textAlign: TextAlign.right,
-                        style: TextStyle(color: Color(0xFFD66A65), fontSize: 13, height: 1.6),
+                        style: TextStyle(
+                          color: Color(0xFFD66A65),
+                          fontSize: 13,
+                          height: 1.6,
+                        ),
                       ),
                     ),
                   ],
@@ -314,7 +361,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         ),
                         const Text(
                           'المجموع الكلي',
-                          style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 16),
+                          style: TextStyle(
+                            color: _textPrimary,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 16,
+                          ),
                         ),
                       ],
                     ),
@@ -325,8 +376,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
           ],
         ),
       ),
-
-      // ─── Confirm Button ───
       bottomSheet: Container(
         padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
         color: _bgColor,
@@ -344,7 +393,9 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
               backgroundColor: _primaryColor,
               foregroundColor: _bgColor,
               elevation: 0,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(16),
+              ),
             ),
           ),
         ),
@@ -353,7 +404,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   }
 }
 
-// ─── Payment Option Widget ───
 class _PaymentOption extends StatelessWidget {
   const _PaymentOption({
     required this.icon,

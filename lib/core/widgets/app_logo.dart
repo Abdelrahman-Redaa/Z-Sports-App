@@ -13,7 +13,9 @@ class AppLogo extends StatelessWidget {
         'assets/images/logo.png',
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) {
-          return const Center(child: Text('Logo', style: TextStyle(color: Colors.white)));
+          return const Center(
+            child: Text('Logo', style: TextStyle(color: Colors.white)),
+          );
         },
       ),
     );

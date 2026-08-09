@@ -80,7 +80,12 @@ class AuthRepository {
     }
   }
 
-  Future<bool> resetPassword(String email, String otp, String newPassword, String confirmNewPassword) async {
+  Future<bool> resetPassword(
+    String email,
+    String otp,
+    String newPassword,
+    String confirmNewPassword,
+  ) async {
     try {
       final response = await _apiClient.dio.post(
         ApiEndpoints.resetPassword,
@@ -109,7 +114,8 @@ class AuthRepository {
           if (errors is Map) {
             final firstKey = errors.keys.first;
             final firstVal = errors[firstKey];
-            if (firstVal is List && firstVal.isNotEmpty) return firstVal.first.toString();
+            if (firstVal is List && firstVal.isNotEmpty)
+              return firstVal.first.toString();
           }
         }
       }

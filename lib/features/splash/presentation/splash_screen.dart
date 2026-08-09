@@ -54,10 +54,10 @@ class _SplashScreenState extends State<SplashScreen>
                   AppStrings.splashSlogan,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                        color: AppColors.textPrimary,
-                        fontWeight: FontWeight.w500,
-                        height: 1.6,
-                      ),
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w500,
+                    height: 1.6,
+                  ),
                 ),
                 const Spacer(),
                 AnimatedBuilder(
@@ -71,16 +71,16 @@ class _SplashScreenState extends State<SplashScreen>
                           children: [
                             Text(
                               '$percent%',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(
                                     color: AppColors.textPrimary,
                                     fontWeight: FontWeight.w600,
                                   ),
                             ),
                             Text(
                               '${AppStrings.loading}...',
-                              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    color: AppColors.textPrimary,
-                                  ),
+                              style: Theme.of(context).textTheme.bodyMedium
+                                  ?.copyWith(color: AppColors.textPrimary),
                             ),
                           ],
                         ),
@@ -90,8 +90,12 @@ class _SplashScreenState extends State<SplashScreen>
                           child: LinearProgressIndicator(
                             value: _progressController.value,
                             minHeight: 3,
-                            backgroundColor: AppColors.textPrimary.withValues(alpha: 0.15),
-                            valueColor: const AlwaysStoppedAnimation(AppColors.textPrimary),
+                            backgroundColor: AppColors.textPrimary.withValues(
+                              alpha: 0.15,
+                            ),
+                            valueColor: const AlwaysStoppedAnimation(
+                              AppColors.textPrimary,
+                            ),
                           ),
                         ),
                       ],

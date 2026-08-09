@@ -30,11 +30,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          // Go to OTP screen with email as the identifier
-          context.push('${AppRoutes.otp}?phone=${_emailController.text.trim()}');
+          context.push(
+            '${AppRoutes.otp}?phone=${_emailController.text.trim()}',
+          );
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: AppColors.error),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.error,
+            ),
           );
         }
       },
@@ -61,7 +65,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: const Center(
-                          child: Icon(Icons.lock_reset, color: AppColors.primary, size: 40),
+                          child: Icon(
+                            Icons.lock_reset,
+                            color: AppColors.primary,
+                            size: 40,
+                          ),
                         ),
                       ),
                     ),
@@ -69,18 +77,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     Text(
                       'نسيت كلمة المرور؟',
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+                      style: Theme.of(context).textTheme.headlineMedium
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'أدخل بريدك الإلكتروني المسجل وسنرسل لك رمزاً للتحقق.',
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.6,
-                          ),
+                        color: AppColors.textSecondary,
+                        height: 1.6,
+                      ),
                     ),
                     const SizedBox(height: 48),
                     WhiteLabeledField(
@@ -88,7 +95,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       hint: 'example@domain.com',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
-                      validator: (v) => v == null || v.isEmpty ? 'أدخل بريدك الإلكتروني' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? 'أدخل بريدك الإلكتروني'
+                          : null,
                     ),
                     const SizedBox(height: 32),
                     SizedBox(
@@ -100,18 +109,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             : () {
                                 if (_formKey.currentState!.validate()) {
                                   context.read<AuthCubit>().forgetPassword(
-                                        _emailController.text.trim(),
-                                      );
+                                    _emailController.text.trim(),
+                                  );
                                 }
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
                           foregroundColor: AppColors.background,
                           elevation: 0,
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                         child: state is AuthLoading
-                            ? const CircularProgressIndicator(color: Colors.black)
+                            ? const CircularProgressIndicator(
+                                color: Colors.black,
+                              )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -119,7 +132,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                                   SizedBox(width: 8),
                                   Text(
                                     'إرسال الرمز',
-                                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 16,
+                                    ),
                                   ),
                                 ],
                               ),
@@ -131,15 +147,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       children: [
                         Text(
                           'تذكرت كلمة المرور؟',
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
                           onPressed: () => context.pop(),
                           child: Text(
                             'تسجيل الدخول',
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
                                 ),

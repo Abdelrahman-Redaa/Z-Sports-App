@@ -24,7 +24,6 @@ class BookingSuccessScreen extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward, color: Colors.white),
           onPressed: () {
-            // Navigate back to home, clearing the stack
             while (context.canPop()) {
               context.pop();
             }
@@ -38,8 +37,6 @@ class BookingSuccessScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const SizedBox(height: 40),
-
-            // ─── Glowing Success Icon ───
             Center(
               child: Stack(
                 alignment: Alignment.center,
@@ -81,8 +78,6 @@ class BookingSuccessScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 36),
-
-            // ─── Success Text ───
             const Text(
               'تم تأكيد الحجز بنجاح',
               textAlign: TextAlign.center,
@@ -98,15 +93,10 @@ class BookingSuccessScreen extends StatelessWidget {
             const Text(
               'استعد لتجربة رياضية مميزة',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Color(0xFF8A96A3),
-                fontSize: 15,
-              ),
+              style: TextStyle(color: Color(0xFF8A96A3), fontSize: 15),
             ),
 
             const SizedBox(height: 48),
-
-            // ─── Booking Details Label ───
             const Align(
               alignment: Alignment.centerRight,
               child: Text(
@@ -120,8 +110,6 @@ class BookingSuccessScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 12),
-
-            // ─── Booking Details Card ───
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(
@@ -180,8 +168,6 @@ class BookingSuccessScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 80),
-
-            // ─── Back to Home Button ───
             SizedBox(
               height: 56,
               child: OutlinedButton(

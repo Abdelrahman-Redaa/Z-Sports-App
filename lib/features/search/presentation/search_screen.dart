@@ -51,9 +51,9 @@ class _SearchScreenState extends State<SearchScreen> {
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Text(
                 AppStrings.search,
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                      fontWeight: FontWeight.w700,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
             Padding(
@@ -73,7 +73,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 itemCount: MockData.categories.length + 1,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (_, index) {
-                  final label = index == 0 ? 'الكل' : MockData.categories[index - 1];
+                  final label = index == 0
+                      ? 'الكل'
+                      : MockData.categories[index - 1];
                   return CategoryChip(
                     label: label,
                     isSelected: _selectedCategory == index,
@@ -89,13 +91,16 @@ class _SearchScreenState extends State<SearchScreen> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(Icons.search_off, size: 48, color: AppColors.textMuted),
+                          const Icon(
+                            Icons.search_off,
+                            size: 48,
+                            color: AppColors.textMuted,
+                          ),
                           const SizedBox(height: 12),
                           Text(
                             'لا توجد نتائج',
-                            style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
+                            style: Theme.of(context).textTheme.bodyLarge
+                                ?.copyWith(color: AppColors.textSecondary),
                           ),
                         ],
                       ),

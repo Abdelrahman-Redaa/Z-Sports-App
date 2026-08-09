@@ -65,17 +65,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Text(
                       AppStrings.joinTitle,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 8),
                     Text(
                       AppStrings.joinSubtitle,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.5,
-                          ),
+                        color: AppColors.textSecondary,
+                        height: 1.5,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     DarkLabeledField(
@@ -83,7 +82,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       label: AppStrings.fullName,
                       hint: AppStrings.nameHint,
                       prefixIcon: Icons.person_outline,
-                      validator: (v) => v == null || v.isEmpty ? 'أدخل الاسم' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'أدخل الاسم' : null,
                     ),
                     const SizedBox(height: 20),
                     DarkLabeledField(
@@ -92,7 +92,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       hint: 'example@mail.com',
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon: Icons.email_outlined,
-                      validator: (v) => v == null || v.isEmpty ? 'أدخل البريد' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'أدخل البريد' : null,
                     ),
                     const SizedBox(height: 20),
                     DarkLabeledField(
@@ -103,12 +104,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       prefixIcon: Icons.lock_outline,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: AppColors.textMuted,
                         ),
-                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
-                      validator: (v) => v == null || v.length < 6 ? '6 أحرف على الأقل' : null,
+                      validator: (v) =>
+                          v == null || v.length < 6 ? '6 أحرف على الأقل' : null,
                     ),
                     const SizedBox(height: 20),
                     DarkLabeledField(
@@ -118,12 +124,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       prefixIcon: Icons.lock_reset,
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureConfirm ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscureConfirm
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: AppColors.textMuted,
                         ),
-                        onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                        onPressed: () =>
+                            setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
-                      validator: (v) => v != _passwordController.text ? 'كلمة المرور غير متطابقة' : null,
+                      validator: (v) => v != _passwordController.text
+                          ? 'كلمة المرور غير متطابقة'
+                          : null,
                     ),
                     const SizedBox(height: 32),
                     PrimaryButton(
@@ -132,10 +143,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<AuthCubit>().signUp(
-                                _nameController.text.trim(),
-                                _emailController.text.trim(),
-                                _passwordController.text,
-                              );
+                            _nameController.text.trim(),
+                            _emailController.text.trim(),
+                            _passwordController.text,
+                          );
                         }
                       },
                     ),
@@ -145,15 +156,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       children: [
                         Text(
                           AppStrings.haveAccount,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
                           onPressed: () => context.pop(),
                           child: Text(
                             AppStrings.login,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
                                 ),

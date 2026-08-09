@@ -15,7 +15,6 @@ class FavoritesScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // ─── Header ───
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Row(
@@ -64,8 +63,6 @@ class FavoritesScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 32),
-
-            // ─── Title ───
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
@@ -80,8 +77,6 @@ class FavoritesScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 24),
-
-            // ─── Favorites List ───
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -98,7 +93,6 @@ class FavoritesScreen extends StatelessWidget {
   }
 }
 
-// ─── Favorite Pitch Card ───
 class _FavoritePitchCard extends StatelessWidget {
   const _FavoritePitchCard({required this.pitch});
 
@@ -117,7 +111,6 @@ class _FavoritePitchCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: Column(
           children: [
-            // ─── Image & Heart ───
             Stack(
               children: [
                 SizedBox(
@@ -128,11 +121,14 @@ class _FavoritePitchCard extends StatelessWidget {
                     fit: BoxFit.cover,
                     errorWidget: (_, __, ___) => Container(
                       color: const Color(0xFF1D2C4D),
-                      child: const Icon(Icons.sports_soccer, color: Color(0xFF39FF14), size: 60),
+                      child: const Icon(
+                        Icons.sports_soccer,
+                        color: Color(0xFF39FF14),
+                        size: 60,
+                      ),
                     ),
                   ),
                 ),
-                // Favorite Heart Button
                 Positioned(
                   top: 16,
                   left: 16,
@@ -151,21 +147,22 @@ class _FavoritePitchCard extends StatelessWidget {
                 ),
               ],
             ),
-
-            // ─── Details ───
             Padding(
               padding: const EdgeInsets.all(16),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
-                  // Rating + Book Button
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star, color: Color(0xFF39FF14), size: 16),
+                          const Icon(
+                            Icons.star,
+                            color: Color(0xFF39FF14),
+                            size: 16,
+                          ),
                           const SizedBox(width: 4),
                           Text(
                             pitch.rating.toString(),
@@ -204,8 +201,6 @@ class _FavoritePitchCard extends StatelessWidget {
                   ),
 
                   const Spacer(),
-
-                  // Pitch name + Price + Location
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [

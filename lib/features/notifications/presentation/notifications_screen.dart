@@ -27,10 +27,14 @@ class NotificationsScreen extends StatelessWidget {
           return Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: notification.isRead ? AppColors.surface : AppColors.primaryMuted,
+              color: notification.isRead
+                  ? AppColors.surface
+                  : AppColors.primaryMuted,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
-                color: notification.isRead ? AppColors.surfaceBorder : AppColors.primary.withValues(alpha: 0.3),
+                color: notification.isRead
+                    ? AppColors.surfaceBorder
+                    : AppColors.primary.withValues(alpha: 0.3),
               ),
             ),
             child: Row(
@@ -44,8 +48,12 @@ class NotificationsScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: Icon(
-                    notification.isRead ? Icons.notifications_outlined : Icons.notifications_active,
-                    color: notification.isRead ? AppColors.textMuted : AppColors.primary,
+                    notification.isRead
+                        ? Icons.notifications_outlined
+                        : Icons.notifications_active,
+                    color: notification.isRead
+                        ? AppColors.textMuted
+                        : AppColors.primary,
                     size: 20,
                   ),
                 ),
@@ -57,23 +65,23 @@ class NotificationsScreen extends StatelessWidget {
                       Text(
                         notification.title,
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                            ),
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         notification.body,
                         style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                              color: AppColors.textSecondary,
-                              height: 1.4,
-                            ),
+                          color: AppColors.textSecondary,
+                          height: 1.4,
+                        ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         notification.time,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.textMuted,
-                            ),
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ],
                   ),

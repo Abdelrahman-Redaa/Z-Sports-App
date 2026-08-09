@@ -5,8 +5,6 @@ import 'package:z_sports_booking/features/auth/presentation/cubit/auth_state.dar
 
 class AuthCubit extends Cubit<AuthState> {
   final AuthRepository _authRepository;
-  
-  // Store email across screens for OTP and Reset Password flows
   String _pendingEmail = '';
   String get pendingEmail => _pendingEmail;
 
@@ -86,10 +84,20 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  Future<void> resetPassword(String email, String otp, String newPassword, String confirmNewPassword) async {
+  Future<void> resetPassword(
+    String email,
+    String otp,
+    String newPassword,
+    String confirmNewPassword,
+  ) async {
     emit(AuthLoading());
     try {
-      final success = await _authRepository.resetPassword(email, otp, newPassword, confirmNewPassword);
+      final success = await _authRepository.resetPassword(
+        email,
+        otp,
+        newPassword,
+        confirmNewPassword,
+      );
       if (success) {
         emit(const AuthSuccess(message: 'تم تغيير كلمة المرور بنجاح'));
       } else {

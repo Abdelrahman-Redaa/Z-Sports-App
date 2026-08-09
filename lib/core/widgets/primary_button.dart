@@ -35,7 +35,9 @@ class PrimaryButton extends StatelessWidget {
           foregroundColor: fg,
           elevation: 0,
           padding: compact ? const EdgeInsets.symmetric(horizontal: 20) : null,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(compact ? 24 : 14)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(compact ? 24 : 14),
+          ),
         ),
         child: isLoading
             ? SizedBox(
@@ -85,7 +87,10 @@ class BookNowButton extends StatelessWidget {
           SizedBox(width: 6),
           Text(
             'احجز الآن',
-            style: TextStyle(fontWeight: FontWeight.w800, color: AppColors.background),
+            style: TextStyle(
+              fontWeight: FontWeight.w800,
+              color: AppColors.background,
+            ),
           ),
         ],
       ),

@@ -22,9 +22,9 @@ class ChatListScreen extends StatelessWidget {
           ? Center(
               child: Text(
                 AppStrings.noMessages,
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
               ),
             )
           : ListView.separated(
@@ -48,16 +48,16 @@ class ChatListScreen extends StatelessWidget {
                   title: Text(
                     chat.name,
                     style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontWeight: FontWeight.w700,
-                        ),
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                   subtitle: Text(
                     chat.lastMessage,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: Theme.of(context).textTheme.bodySmall?.copyWith(
-                          color: AppColors.textSecondary,
-                        ),
+                      color: AppColors.textSecondary,
+                    ),
                   ),
                   trailing: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -66,8 +66,8 @@ class ChatListScreen extends StatelessWidget {
                       Text(
                         chat.time,
                         style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                              color: AppColors.textMuted,
-                            ),
+                          color: AppColors.textMuted,
+                        ),
                       ),
                       if (chat.unreadCount > 0) ...[
                         const SizedBox(height: 4),
@@ -79,7 +79,8 @@ class ChatListScreen extends StatelessWidget {
                           ),
                           child: Text(
                             chat.unreadCount.toString(),
-                            style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                            style: Theme.of(context).textTheme.labelSmall
+                                ?.copyWith(
                                   color: AppColors.background,
                                   fontWeight: FontWeight.w700,
                                 ),

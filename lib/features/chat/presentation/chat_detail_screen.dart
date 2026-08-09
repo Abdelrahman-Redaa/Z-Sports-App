@@ -72,7 +72,10 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                           borderRadius: BorderRadius.circular(24),
                           borderSide: BorderSide.none,
                         ),
-                        contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 12,
+                        ),
                       ),
                     ),
                   ),
@@ -86,7 +89,11 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
                         color: AppColors.primary,
                         shape: BoxShape.circle,
                       ),
-                      child: const Icon(Icons.send, color: AppColors.background, size: 20),
+                      child: const Icon(
+                        Icons.send,
+                        color: AppColors.background,
+                        size: 20,
+                      ),
                     ),
                   ),
                 ],
@@ -109,7 +116,9 @@ class _MessageBubble extends StatelessWidget {
     final isSent = message.isSent;
 
     return Align(
-      alignment: isSent ? AlignmentDirectional.centerStart : AlignmentDirectional.centerEnd,
+      alignment: isSent
+          ? AlignmentDirectional.centerStart
+          : AlignmentDirectional.centerEnd,
       child: Container(
         margin: const EdgeInsets.only(bottom: 12),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -117,7 +126,9 @@ class _MessageBubble extends StatelessWidget {
           maxWidth: MediaQuery.of(context).size.width * 0.75,
         ),
         decoration: BoxDecoration(
-          color: isSent ? AppColors.chatBubbleSent : AppColors.chatBubbleReceived,
+          color: isSent
+              ? AppColors.chatBubbleSent
+              : AppColors.chatBubbleReceived,
           borderRadius: BorderRadius.only(
             topLeft: const Radius.circular(16),
             topRight: const Radius.circular(16),
@@ -131,17 +142,17 @@ class _MessageBubble extends StatelessWidget {
             Text(
               message.text,
               style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                    color: isSent ? AppColors.background : AppColors.textPrimary,
-                  ),
+                color: isSent ? AppColors.background : AppColors.textPrimary,
+              ),
             ),
             const SizedBox(height: 4),
             Text(
               message.time,
               style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                    color: isSent
-                        ? AppColors.background.withValues(alpha: 0.7)
-                        : AppColors.textMuted,
-                  ),
+                color: isSent
+                    ? AppColors.background.withValues(alpha: 0.7)
+                    : AppColors.textMuted,
+              ),
             ),
           ],
         ),

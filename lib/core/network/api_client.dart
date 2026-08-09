@@ -32,7 +32,6 @@ class ApiClient {
           return handler.next(response);
         },
         onError: (DioException e, handler) {
-          // You can handle global errors here (e.g., 401 Unauthorized -> logout)
           return handler.next(e);
         },
       ),

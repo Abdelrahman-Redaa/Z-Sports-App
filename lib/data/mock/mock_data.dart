@@ -25,7 +25,8 @@ abstract final class MockData {
     PitchModel(
       id: '1',
       name: 'ملعب الأساطير',
-      imageUrl: 'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1529900748604-07564a03e7a6?w=800',
       rating: 4.9,
       reviewCount: 120,
       pricePerHour: 300,
@@ -40,7 +41,8 @@ abstract final class MockData {
     PitchModel(
       id: '2',
       name: 'ملعب الملوك',
-      imageUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1574629810360-7efbbe195018?w=800',
       rating: 4.8,
       reviewCount: 100,
       pricePerHour: 250,
@@ -55,7 +57,8 @@ abstract final class MockData {
     PitchModel(
       id: '3',
       name: 'ملعب المدينة',
-      imageUrl: 'https://images.unsplash.com/photo-1459865269687-92ea836bad04?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1459865269687-92ea836bad04?w=800',
       rating: 4.4,
       reviewCount: 85,
       pricePerHour: 200,
@@ -68,7 +71,8 @@ abstract final class MockData {
     PitchModel(
       id: '4',
       name: 'ملعب الصقر',
-      imageUrl: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1517466787929-bc90951d0974?w=800',
       rating: 4.9,
       reviewCount: 200,
       pricePerHour: 350,
@@ -82,7 +86,8 @@ abstract final class MockData {
     PitchModel(
       id: '5',
       name: 'ملعب الشمس',
-      imageUrl: 'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1431324155629-1a6deb1dec8d?w=800',
       rating: 4.2,
       reviewCount: 45,
       pricePerHour: 180,
@@ -92,11 +97,11 @@ abstract final class MockData {
       amenities: ['إضاءة', 'مواقف'],
       description: 'ملعب اقتصادي مناسب للتدريبات اليومية.',
     ),
-    // ─── Basketball ───
     PitchModel(
       id: '6',
       name: 'سلة الحريف',
-      imageUrl: 'https://images.unsplash.com/photo-1546519638405-a9d1b29d3df3?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1546519638405-a9d1b29d3df3?w=800',
       rating: 4.5,
       reviewCount: 120,
       pricePerHour: 280,
@@ -111,7 +116,8 @@ abstract final class MockData {
     PitchModel(
       id: '7',
       name: 'سلة الاهرامات',
-      imageUrl: 'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1504450758481-7338eba7524a?w=800',
       rating: 4.7,
       reviewCount: 120,
       pricePerHour: 350,
@@ -123,11 +129,11 @@ abstract final class MockData {
           'استمتع بتجربة لعب لا مثيل لها في أفضل ملاعب كرة سلة بالمنطقة. تم تجهيز الملعب بأرضيات تمنحك الثبات والراحة أثناء الحركة.',
       isPopular: true,
     ),
-    // ─── Tennis ───
     PitchModel(
       id: '8',
       name: 'ملعب تنس النيل',
-      imageUrl: 'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1595435934249-5df7ed86e1c0?w=800',
       rating: 4.6,
       reviewCount: 90,
       pricePerHour: 320,
@@ -142,7 +148,8 @@ abstract final class MockData {
     PitchModel(
       id: '9',
       name: 'تنس الملوك',
-      imageUrl: 'https://images.unsplash.com/photo-1545809074-59472b3f5ecc?w=800',
+      imageUrl:
+          'https://images.unsplash.com/photo-1545809074-59472b3f5ecc?w=800',
       rating: 4.3,
       reviewCount: 65,
       pricePerHour: 250,
@@ -217,10 +224,30 @@ abstract final class MockData {
       time: '10:30 ص',
       unreadCount: 2,
       messages: [
-        ChatMessage(id: 'm1', text: 'مرحباً، أريد حجز الملعب', isSent: true, time: '10:00 ص'),
-        ChatMessage(id: 'm2', text: 'أهلاً بك! متى تريد الحجز؟', isSent: false, time: '10:05 ص'),
-        ChatMessage(id: 'm3', text: 'يوم الجمعة 6 مساءً', isSent: true, time: '10:10 ص'),
-        ChatMessage(id: 'm4', text: 'تم تأكيد حجزك، نراك قريباً!', isSent: false, time: '10:30 ص'),
+        ChatMessage(
+          id: 'm1',
+          text: 'مرحباً، أريد حجز الملعب',
+          isSent: true,
+          time: '10:00 ص',
+        ),
+        ChatMessage(
+          id: 'm2',
+          text: 'أهلاً بك! متى تريد الحجز؟',
+          isSent: false,
+          time: '10:05 ص',
+        ),
+        ChatMessage(
+          id: 'm3',
+          text: 'يوم الجمعة 6 مساءً',
+          isSent: true,
+          time: '10:10 ص',
+        ),
+        ChatMessage(
+          id: 'm4',
+          text: 'تم تأكيد حجزك، نراك قريباً!',
+          isSent: false,
+          time: '10:30 ص',
+        ),
       ],
     ),
     ChatConversation(
@@ -231,20 +258,36 @@ abstract final class MockData {
       time: 'أمس',
       unreadCount: 0,
       messages: [
-        ChatMessage(id: 'm5', text: 'هل الملعب متاح غداً؟', isSent: true, time: '3:00 م'),
-        ChatMessage(id: 'm6', text: 'الملعب متاح في الموعد المطلوب', isSent: false, time: '3:15 م'),
+        ChatMessage(
+          id: 'm5',
+          text: 'هل الملعب متاح غداً؟',
+          isSent: true,
+          time: '3:00 م',
+        ),
+        ChatMessage(
+          id: 'm6',
+          text: 'الملعب متاح في الموعد المطلوب',
+          isSent: false,
+          time: '3:15 م',
+        ),
       ],
     ),
   ];
 
   static const timeSlots = [
-    '08:00', '09:00', '10:00', '11:00',
-    '12:00', '01:00', '02:00', '03:00',
+    '08:00',
+    '09:00',
+    '10:00',
+    '11:00',
+    '12:00',
+    '01:00',
+    '02:00',
+    '03:00',
   ];
 
   static PitchModel pitchById(String id) =>
       pitches.firstWhere((p) => p.id == id, orElse: () => pitches.first);
 
-  static ChatConversation conversationById(String id) =>
-      conversations.firstWhere((c) => c.id == id, orElse: () => conversations.first);
+  static ChatConversation conversationById(String id) => conversations
+      .firstWhere((c) => c.id == id, orElse: () => conversations.first);
 }

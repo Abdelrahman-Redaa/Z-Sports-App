@@ -65,18 +65,17 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       AppStrings.login,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                            fontWeight: FontWeight.w800,
-                          ),
+                      style: Theme.of(context).textTheme.headlineSmall
+                          ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 10),
                     Text(
                       AppStrings.loginWelcome,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                            height: 1.5,
-                          ),
+                        color: AppColors.textSecondary,
+                        height: 1.5,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     WhiteLabeledField(
@@ -84,7 +83,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       label: AppStrings.email,
                       hint: 'example@domain.com',
                       keyboardType: TextInputType.emailAddress,
-                      validator: (v) => v == null || v.isEmpty ? 'أدخل البريد الإلكتروني' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? 'أدخل البريد الإلكتروني'
+                          : null,
                     ),
                     const SizedBox(height: 20),
                     PasswordLabelRow(
@@ -98,12 +99,17 @@ class _LoginScreenState extends State<LoginScreen> {
                       obscureText: _obscurePassword,
                       suffix: IconButton(
                         icon: Icon(
-                          _obscurePassword ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                          _obscurePassword
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
                           color: AppColors.textMuted,
                         ),
-                        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+                        onPressed: () => setState(
+                          () => _obscurePassword = !_obscurePassword,
+                        ),
                       ),
-                      validator: (v) => v == null || v.isEmpty ? 'أدخل كلمة المرور' : null,
+                      validator: (v) =>
+                          v == null || v.isEmpty ? 'أدخل كلمة المرور' : null,
                     ),
                     const SizedBox(height: 28),
                     PrimaryButton(
@@ -113,9 +119,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
                           context.read<AuthCubit>().signIn(
-                                _emailController.text.trim(),
-                                _passwordController.text,
-                              );
+                            _emailController.text.trim(),
+                            _passwordController.text,
+                          );
                         }
                       },
                     ),
@@ -124,8 +130,8 @@ class _LoginScreenState extends State<LoginScreen> {
                       AppStrings.orVia,
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                     const SizedBox(height: 16),
                     Row(
@@ -171,15 +177,15 @@ class _LoginScreenState extends State<LoginScreen> {
                       children: [
                         Text(
                           AppStrings.noAccount,
-                          style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                color: AppColors.textSecondary,
-                              ),
+                          style: Theme.of(context).textTheme.bodyMedium
+                              ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
                           onPressed: () => context.push(AppRoutes.register),
                           child: Text(
                             AppStrings.register,
-                            style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            style: Theme.of(context).textTheme.bodyMedium
+                                ?.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -218,7 +224,9 @@ class SocialLoginButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: AppColors.textPrimary.withValues(alpha: 0.3)),
+            border: Border.all(
+              color: AppColors.textPrimary.withValues(alpha: 0.3),
+            ),
           ),
           child: Center(child: child),
         ),
