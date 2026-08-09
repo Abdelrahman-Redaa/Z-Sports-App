@@ -3,7 +3,16 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 
 class BookingSuccessScreen extends StatelessWidget {
-  const BookingSuccessScreen({super.key});
+  const BookingSuccessScreen({
+    super.key,
+    this.pitchName = '',
+    this.date = '',
+    this.time = '',
+  });
+
+  final String pitchName;
+  final String date;
+  final String time;
 
   @override
   Widget build(BuildContext context) {
@@ -122,14 +131,18 @@ class BookingSuccessScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text(
-                        'سلة الحريف',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
+                      Expanded(
+                        child: Text(
+                          pitchName.isNotEmpty ? pitchName : 'ملعب الحريف',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
+                      const SizedBox(width: 8),
                       const Text(
                         'الملعب',
                         style: TextStyle(
@@ -143,18 +156,22 @@ class BookingSuccessScreen extends StatelessWidget {
                     padding: EdgeInsets.symmetric(vertical: 16),
                     child: Divider(color: Color(0xFF2A3C60)),
                   ),
-                  const Row(
+                  Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(
-                        'اليوم، 08:00 مساءً',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
+                      Expanded(
+                        child: Text(
+                          (date.isNotEmpty && time.isNotEmpty) ? '$date, $time' : 'اليوم، 08:00 مساءً',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 16,
+                          ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      Text(
+                      const SizedBox(width: 8),
+                      const Text(
                         'التاريخ والوقت',
                         style: TextStyle(
                           color: Color(0xFF8A96A3),

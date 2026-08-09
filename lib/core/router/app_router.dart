@@ -104,7 +104,11 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.bookingSuccess,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const BookingSuccessScreen(),
+      builder: (_, state) => BookingSuccessScreen(
+        pitchName: state.uri.queryParameters['pitchName'] ?? '',
+        date: state.uri.queryParameters['date'] ?? '',
+        time: state.uri.queryParameters['time'] ?? '',
+      ),
     ),
     GoRoute(
       path: AppRoutes.bookingDetail,

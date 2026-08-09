@@ -70,10 +70,23 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   }
 
   void _submitBooking() {
+    // Ensure time is in HH:mm:ss format (e.g. "14:00:00")
+    String rawTime = widget.time;
+    if (!rawTime.contains(':')) rawTime = '08:00:00';
+    final parts = rawTime.split(':');
+    final timeFormatted = parts.length >= 2
+        ? '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}:${parts.length > 2 ? parts[2] : '00'}'
+        : rawTime;
+
+    // Ensure date is in ISO datetime format
+    final dateFormatted = widget.date.contains('T')
+        ? widget.date
+        : '${widget.date}T00:00:00';
+
     context.read<BookingCubit>().submitBooking(
       stadiumId: int.tryParse(widget.pitchId) ?? 0,
-      date: widget.date.contains('T') ? widget.date : '${widget.date}T00:00:00',
-      time: widget.time,
+      date: dateFormatted,
+      time: timeFormatted,
       durationMinutes: 60,
     );
   }
@@ -129,7 +142,10 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
     return BlocListener<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is BookingSubmitSuccess) {
-          context.pushReplacement(AppRoutes.bookingSuccess);
+          final pitchName = Uri.encodeComponent(pitch.name);
+          final encodedDate = Uri.encodeComponent(formattedDate);
+          final encodedTime = Uri.encodeComponent(timeRange);
+          context.pushReplacement('${AppRoutes.bookingSuccess}?pitchName=$pitchName&date=$encodedDate&time=$encodedTime');
         } else if (state is BookingSubmitError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
