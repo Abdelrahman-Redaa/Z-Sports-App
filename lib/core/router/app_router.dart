@@ -7,7 +7,7 @@ import 'package:z_sports_booking/features/auth/presentation/register_screen.dart
 import 'package:z_sports_booking/features/auth/presentation/reset_password_screen.dart';
 import 'package:z_sports_booking/features/auth/presentation/welcome_screen.dart';
 import 'package:z_sports_booking/features/booking/presentation/booking_checkout_screen.dart';
-import 'package:z_sports_booking/features/booking/presentation/booking_detail_screen.dart';
+import 'package:z_sports_booking/features/my_bookings/presentation/booking_detail_screen.dart';
 import 'package:z_sports_booking/features/booking/presentation/booking_screen.dart';
 import 'package:z_sports_booking/features/booking/presentation/booking_success_screen.dart';
 import 'package:z_sports_booking/features/chat/presentation/chat_detail_screen.dart';

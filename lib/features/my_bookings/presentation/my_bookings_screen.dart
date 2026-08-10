@@ -1,8 +1,13 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
-import 'package:z_sports_booking/data/mock/mock_data.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
+import 'package:z_sports_booking/data/models/booking_model.dart';
+import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_cubit.dart';
+import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_state.dart';
+import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
+import 'package:z_sports_booking/features/profile/presentation/cubit/profile_state.dart';
 
 const _bg = Color(0xFF182540);
 const _surface = Color(0xFF1D2C4D);
@@ -11,8 +16,54 @@ const _primary = Color(0xFF39FF14);
 const _textPrimary = Colors.white;
 const _textSecondary = Color(0xFF8A96A3);
 
-class MyBookingsScreen extends StatelessWidget {
+class MyBookingsScreen extends StatefulWidget {
   const MyBookingsScreen({super.key});
+
+  @override
+  State<MyBookingsScreen> createState() => _MyBookingsScreenState();
+}
+
+class _MyBookingsScreenState extends State<MyBookingsScreen> {
+  @override
+  void initState() {
+    super.initState();
+    context.read<MyBookingsCubit>().loadMyBookings();
+  }
+
+  String _formatDate(String raw) {
+    try {
+      final dt = DateTime.tryParse(raw);
+      if (dt == null) return raw;
+      const months = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+      return '${dt.day} ${months[dt.month]}';
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  String _formatTime(String raw) {
+    try {
+      if (raw.isEmpty) return '';
+      final parts = raw.split(':');
+      final h = int.parse(parts[0]);
+      final m = parts.length > 1 ? parts[1] : '00';
+      final suffix = h >= 12 ? 'م' : 'ص';
+      final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
+      return '$h12:$m $suffix';
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  IconData _iconForCategory(String category) {
+    final c = category.toLowerCase();
+    if (c.contains('كرة قدم') || c.contains('football') || c.contains('soccer')) return Icons.sports_soccer;
+    if (c.contains('كرة سلة') || c.contains('basket')) return Icons.sports_basketball;
+    if (c.contains('تنس') || c.contains('tennis')) return Icons.sports_tennis;
+    if (c.contains('كرة طائرة') || c.contains('volley')) return Icons.sports_volleyball;
+    if (c.contains('باد') || c.contains('padel')) return Icons.sports_tennis;
+    return Icons.sports;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,53 +73,54 @@ class MyBookingsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            // Header
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
               child: Row(
                 children: [
                   const Spacer(),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        'مرحباً، ${MockData.currentUser.displayName.split(' ').first}',
-                        style: const TextStyle(
-                          color: _textSecondary,
-                          fontSize: 13,
-                        ),
-                      ),
-                      const Text(
-                        'Z Sports Booking',
-                        style: TextStyle(
-                          color: _primary,
-                          fontWeight: FontWeight.w800,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(width: 12),
-                  CircleAvatar(
-                    radius: 24,
-                    backgroundImage: NetworkImage(
-                      MockData.currentUser.profilePictureUrl ?? "",
-                    ),
+                  BlocBuilder<ProfileCubit, ProfileState>(
+                    builder: (context, state) {
+                      final name = state is ProfileLoaded
+                          ? state.user.displayName.split(' ').first
+                          : 'مستخدم';
+                      final avatar = state is ProfileLoaded ? (state.user.profilePictureUrl ?? '') : '';
+                      return Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                'مرحباً، $name',
+                                style: const TextStyle(color: _textSecondary, fontSize: 13),
+                              ),
+                              const Text(
+                                'Z Sports Booking',
+                                style: TextStyle(color: _primary, fontWeight: FontWeight.w800, fontSize: 16),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(width: 12),
+                          CircleAvatar(
+                            radius: 24,
+                            backgroundColor: _surface,
+                            backgroundImage: avatar.isNotEmpty ? NetworkImage(avatar) : null,
+                            child: avatar.isEmpty ? const Icon(Icons.person, color: _primary) : null,
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ],
               ),
             ),
-
             const SizedBox(height: 32),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 'حجوزاتي',
                 textAlign: TextAlign.right,
-                style: TextStyle(
-                  color: _textPrimary,
-                  fontWeight: FontWeight.w800,
-                  fontSize: 32,
-                ),
+                style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 32),
               ),
             ),
             const SizedBox(height: 4),
@@ -80,51 +132,91 @@ class MyBookingsScreen extends StatelessWidget {
                 style: TextStyle(color: _textSecondary, fontSize: 14),
               ),
             ),
-
             const SizedBox(height: 24),
+
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  _BookingCard(
-                    pitchName: 'سلة الحريف',
-                    pitchCategory: 'Z Sports ملاعب',
-                    date: '15 أكتوبر',
-                    time: '08:00 م',
-                    icon: Icons.sports_basketball,
-                    onTap: () => context.push(
-                      AppRoutes.bookingDetail,
-                      extra: {
-                        'pitchName': 'سلة الحريف',
-                        'pitchImage': MockData.pitches[5].imageUrl,
-                        'date': 'الأربعاء، 15 أكتوبر 2026',
-                        'time': '8:00 م - 9:00 م (60 دقيقة)',
-                        'price': '280',
-                        'bookingId': 'A-1',
+              child: BlocBuilder<MyBookingsCubit, MyBookingsState>(
+                builder: (context, state) {
+                  if (state is MyBookingsLoading) {
+                    return const Center(child: CircularProgressIndicator(color: _primary));
+                  }
+
+                  if (state is MyBookingsError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error_outline, color: _textSecondary, size: 60),
+                          const SizedBox(height: 16),
+                          Text(state.message, style: const TextStyle(color: _textSecondary), textAlign: TextAlign.center),
+                          const SizedBox(height: 24),
+                          ElevatedButton(
+                            onPressed: () => context.read<MyBookingsCubit>().loadMyBookings(),
+                            style: ElevatedButton.styleFrom(backgroundColor: _primary, foregroundColor: _bg),
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  List<BookingModel> bookings = [];
+                  if (state is MyBookingsLoaded) bookings = state.bookings;
+                  if (state is BookingCancelLoading) bookings = state.bookings;
+                  if (state is BookingCancelSuccess) bookings = state.bookings;
+
+                  if (bookings.isEmpty) {
+                    return const Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.sports_soccer, color: _textSecondary, size: 80),
+                          SizedBox(height: 16),
+                          Text(
+                            'لا توجد حجوزات حتى الآن',
+                            style: TextStyle(color: _textSecondary, fontSize: 18, fontWeight: FontWeight.w700),
+                          ),
+                          SizedBox(height: 8),
+                          Text(
+                            'احجز ملعبك المفضل الآن!',
+                            style: TextStyle(color: _textSecondary, fontSize: 14),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  return RefreshIndicator(
+                    color: _primary,
+                    backgroundColor: _surface,
+                    onRefresh: () => context.read<MyBookingsCubit>().loadMyBookings(),
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+                      itemCount: bookings.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 16),
+                      itemBuilder: (ctx, index) {
+                        final booking = bookings[index];
+                        return _BookingCard(
+                          booking: booking,
+                          formattedDate: _formatDate(booking.date),
+                          formattedTime: _formatTime(booking.time),
+                          icon: _iconForCategory(booking.category),
+                          onTap: () => context.push(
+                            AppRoutes.bookingDetail,
+                            extra: {
+                              'pitchName': booking.stadiumName,
+                              'pitchImage': booking.stadiumImage,
+                              'date': _formatDate(booking.date),
+                              'time': '${_formatTime(booking.time)} (${booking.durationMinutes} دقيقة)',
+                              'price': booking.totalPrice.toInt().toString(),
+                              'bookingId': booking.id.toString(),
+                            },
+                          ),
+                        );
                       },
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  _BookingCard(
-                    pitchName: 'ملعب الملوك',
-                    pitchCategory: 'Z Sports ملاعب',
-                    date: '18 أكتوبر',
-                    time: '10:30 م',
-                    icon: Icons.sports_soccer,
-                    onTap: () => context.push(
-                      AppRoutes.bookingDetail,
-                      extra: {
-                        'pitchName': 'ملعب الملوك',
-                        'pitchImage': MockData.pitches[1].imageUrl,
-                        'date': 'الأربعاء، 18 أكتوبر 2026',
-                        'time': '10:30 م - 11:30 م (60 دقيقة)',
-                        'price': '250',
-                        'bookingId': 'A-2',
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                ],
+                  );
+                },
               ),
             ),
           ],
@@ -136,20 +228,40 @@ class MyBookingsScreen extends StatelessWidget {
 
 class _BookingCard extends StatelessWidget {
   const _BookingCard({
-    required this.pitchName,
-    required this.pitchCategory,
-    required this.date,
-    required this.time,
+    required this.booking,
+    required this.formattedDate,
+    required this.formattedTime,
     required this.icon,
     required this.onTap,
   });
 
-  final String pitchName;
-  final String pitchCategory;
-  final String date;
-  final String time;
+  final BookingModel booking;
+  final String formattedDate;
+  final String formattedTime;
   final IconData icon;
   final VoidCallback onTap;
+
+  String get _statusLabel {
+    switch (booking.status) {
+      case BookingStatus.upcoming:
+        return 'مؤكد';
+      case BookingStatus.completed:
+        return 'مكتمل';
+      case BookingStatus.cancelled:
+        return 'ملغي';
+    }
+  }
+
+  Color get _statusColor {
+    switch (booking.status) {
+      case BookingStatus.upcoming:
+        return _primary;
+      case BookingStatus.completed:
+        return const Color(0xFF4A9EFF);
+      case BookingStatus.cancelled:
+        return const Color(0xFFD66A65);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +270,7 @@ class _BookingCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: _bg,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: _primary, width: 1.5),
+        border: Border.all(color: _statusColor, width: 1.5),
       ),
       child: Column(
         children: [
@@ -166,21 +278,14 @@ class _BookingCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 5,
-                ),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF1A2E1A),
+                  color: _statusColor.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: const Text(
-                  'مؤكد',
-                  style: TextStyle(
-                    color: _primary,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 12,
-                  ),
+                child: Text(
+                  _statusLabel,
+                  style: TextStyle(color: _statusColor, fontWeight: FontWeight.w700, fontSize: 12),
                 ),
               ),
               const Spacer(),
@@ -188,16 +293,14 @@ class _BookingCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   Text(
-                    pitchName,
-                    style: const TextStyle(
-                      color: _textPrimary,
-                      fontWeight: FontWeight.w800,
-                      fontSize: 20,
-                    ),
+                    booking.stadiumName.isNotEmpty ? booking.stadiumName : 'ملعب رياضي',
+                    style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   const SizedBox(height: 3),
                   Text(
-                    pitchCategory,
+                    booking.category.isNotEmpty ? booking.category : 'Z Sports ملاعب',
                     style: const TextStyle(color: _textSecondary, fontSize: 12),
                   ),
                 ],
@@ -205,43 +308,28 @@ class _BookingCard extends StatelessWidget {
               const SizedBox(width: 12),
               Container(
                 padding: const EdgeInsets.all(10),
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: _surface,
-                ),
-                child: Icon(icon, color: _primary, size: 26),
+                decoration: const BoxDecoration(shape: BoxShape.circle, color: _surface),
+                child: Icon(icon, color: _statusColor, size: 26),
               ),
             ],
           ),
-
           const SizedBox(height: 20),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              Text(
-                time,
-                style: const TextStyle(
-                  color: _textPrimary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(Icons.access_time, color: _primary, size: 18),
-              const SizedBox(width: 20),
-              Text(
-                date,
-                style: const TextStyle(
-                  color: _textPrimary,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14,
-                ),
-              ),
-              const SizedBox(width: 6),
-              const Icon(Icons.calendar_today, color: _primary, size: 18),
+              if (formattedTime.isNotEmpty) ...[
+                Text(formattedTime, style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
+                const SizedBox(width: 6),
+                Icon(Icons.access_time, color: _statusColor, size: 18),
+                const SizedBox(width: 20),
+              ],
+              if (formattedDate.isNotEmpty) ...[
+                Text(formattedDate, style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w700, fontSize: 14)),
+                const SizedBox(width: 6),
+                Icon(Icons.calendar_today, color: _statusColor, size: 18),
+              ],
             ],
           ),
-
           const SizedBox(height: 20),
           SizedBox(
             width: double.infinity,
@@ -249,22 +337,17 @@ class _BookingCard extends StatelessWidget {
             child: ElevatedButton(
               onPressed: onTap,
               style: ElevatedButton.styleFrom(
-                backgroundColor: _primary,
+                backgroundColor: _statusColor,
                 foregroundColor: _bg,
                 elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(16),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
               ),
               child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.arrow_back, size: 18),
                   SizedBox(width: 8),
-                  Text(
-                    'عرض تفاصيل الحجز',
-                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
-                  ),
+                  Text('عرض تفاصيل الحجز', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
                 ],
               ),
             ),
