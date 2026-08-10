@@ -27,6 +27,8 @@ class MyBookingsCubit extends Cubit<MyBookingsState> {
       final updated = current.bookings.where((b) => b.id != bookingId).toList();
       emit(BookingCancelSuccess(updated));
     } catch (e) {
+      emit(MyBookingsError(e.toString().replaceAll('Exception: ', '')));
+      await Future.delayed(const Duration(milliseconds: 100));
       emit(MyBookingsLoaded(current.bookings));
     }
   }
