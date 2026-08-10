@@ -166,20 +166,33 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                   if (state is BookingCancelSuccess) bookings = state.bookings;
 
                   if (bookings.isEmpty) {
-                    return const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                    return RefreshIndicator(
+                      color: _primary,
+                      backgroundColor: _surface,
+                      onRefresh: () => context.read<MyBookingsCubit>().loadMyBookings(),
+                      child: ListView(
+                        physics: const AlwaysScrollableScrollPhysics(),
                         children: [
-                          Icon(Icons.sports_soccer, color: _textSecondary, size: 80),
-                          SizedBox(height: 16),
-                          Text(
-                            'لا توجد حجوزات حتى الآن',
-                            style: TextStyle(color: _textSecondary, fontSize: 18, fontWeight: FontWeight.w700),
-                          ),
-                          SizedBox(height: 8),
-                          Text(
-                            'احجز ملعبك المفضل الآن!',
-                            style: TextStyle(color: _textSecondary, fontSize: 14),
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.6,
+                            child: const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.sports_soccer, color: _textSecondary, size: 80),
+                                  SizedBox(height: 16),
+                                  Text(
+                                    'لا توجد حجوزات حتى الآن',
+                                    style: TextStyle(color: _textSecondary, fontSize: 18, fontWeight: FontWeight.w700),
+                                  ),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    'احجز ملعبك المفضل الآن!',
+                                    style: TextStyle(color: _textSecondary, fontSize: 14),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ],
                       ),
