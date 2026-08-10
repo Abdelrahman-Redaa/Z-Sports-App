@@ -192,134 +192,163 @@ class _BookingScreenState extends State<BookingScreen> {
                   );
                 }
 
-                if (state is BookingSlotsLoaded && slots.isEmpty) {
-                  return Center(
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 40),
-                      child: Text(
-                        'لا توجد مواعيد متاحة في هذا اليوم',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
-                      ),
-                    ),
-                  );
-                }
+                 final morningSlots = <Map<String, String>>[];
+                 final eveningSlots = <Map<String, String>>[];
 
-                // If API returns times like "14:00:00", we can format them, but for now we just show what API returns
-                // or we can try to format them if they are in "HH:mm:ss" format.
-                final formattedSlots = slots.map((s) {
-                  try {
-                    if (s.contains(':')) {
-                      final parts = s.split(':');
-                      final h = int.parse(parts[0]);
-                      final m = parts[1];
-                      final suffix = h >= 12 ? 'م' : 'ص';
-                      final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
-                      return '$h12:$m $suffix';
-                    }
-                  } catch (e) {
-                    // ignore
-                  }
-                  return s;
-                }).toList();
+                 for (final raw in slots) {
+                   final display = _formatSlot(raw);
+                   try {
+                     final h = int.parse(raw.split(':')[0]);
+                     if (h < 12) {
+                       morningSlots.add({'raw': raw, 'display': display});
+                     } else {
+                       eveningSlots.add({'raw': raw, 'display': display});
+                     }
+                   } catch (_) {
+                     eveningSlots.add({'raw': raw, 'display': display});
+                   }
+                 }
 
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          'المواعيد المتاحة',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(Icons.access_time, color: AppColors.primary, size: 20),
-                      ],
-                    ),
-                    const SizedBox(height: 12),
-                    _buildTimeSlotsGrid(formattedSlots, slots),
-                  ],
-                );
-              },
-            ),
+                 return Column(
+                   crossAxisAlignment: CrossAxisAlignment.stretch,
+                   children: [
+                     if (morningSlots.isNotEmpty) ...[
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           Text(
+                             'الفترة الصباحية',
+                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                           ),
+                           const SizedBox(width: 8),
+                           const Icon(Icons.wb_sunny, color: AppColors.primary, size: 20),
+                         ],
+                       ),
+                       const SizedBox(height: 12),
+                       _buildSlotsGrid(morningSlots),
+                       const SizedBox(height: 24),
+                     ],
+                     if (eveningSlots.isNotEmpty) ...[
+                       Row(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           Text(
+                             'الفترة المسائية',
+                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                           ),
+                           const SizedBox(width: 8),
+                           const Icon(Icons.nights_stay, color: AppColors.primary, size: 20),
+                         ],
+                       ),
+                       const SizedBox(height: 12),
+                       _buildSlotsGrid(eveningSlots),
+                     ],
+                     if (morningSlots.isEmpty && eveningSlots.isEmpty)
+                       Center(
+                         child: Padding(
+                           padding: const EdgeInsets.symmetric(vertical: 40),
+                           child: Text(
+                             'لا توجد مواعيد متاحة في هذا اليوم',
+                             style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
+                           ),
+                         ),
+                       ),
+                   ],
+                 );
+               },
+             ),
             
-            const SizedBox(height: 32),
-            Container(
-              padding: const EdgeInsets.all(20),
-              decoration: BoxDecoration(
-                color: AppColors.surfaceLight,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: AppColors.surfaceBorder),
-              ),
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${pitch.pricePerHour.toInt()} ج.م',
-                        style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                      ),
-                      Text('سعر الساعة', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                    ],
-                  ),
-                  const SizedBox(height: 8),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('1 ساعة', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
-                      Text('مدة الحجز', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                    ],
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 12),
-                    child: Divider(color: AppColors.surfaceBorder),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${pitch.pricePerHour.toInt()} ج.م',
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w800),
-                      ),
-                      Text('المجموع الكلي', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-            const SizedBox(height: 32),
-            SizedBox(
-              height: 56,
-              child: ElevatedButton.icon(
-                icon: const Icon(Icons.check_circle_outline, size: 22),
-                label: const Text('متابعة الدفع', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
-                onPressed: _selectedTime != null
-                    ? () {
-                        final dateStr = DateFormat('yyyy-MM-dd').format(_days[_selectedDayIndex]);
-                        context.push(
-                          '/pitch/${widget.pitchId}/checkout?date=$dateStr&time=$_selectedTime',
-                        );
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.background,
-                  disabledBackgroundColor: AppColors.surfaceLight,
-                  disabledForegroundColor: AppColors.textMuted,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-          ],
-        ),
-      ),
-    );
+             const SizedBox(height: 32),
+             Container(
+               padding: const EdgeInsets.all(20),
+               decoration: BoxDecoration(
+                 color: AppColors.surfaceLight,
+                 borderRadius: BorderRadius.circular(16),
+                 border: Border.all(color: AppColors.surfaceBorder),
+               ),
+               child: Column(
+                 children: [
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text(
+                         '${pitch.pricePerHour.toInt()} ج.م',
+                         style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                       ),
+                       Text('سعر الساعة', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
+                     ],
+                   ),
+                   const SizedBox(height: 8),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text('1 ساعة', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+                       Text('مدة الحجز', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
+                     ],
+                   ),
+                   const Padding(
+                     padding: EdgeInsets.symmetric(vertical: 12),
+                     child: Divider(color: AppColors.surfaceBorder),
+                   ),
+                   Row(
+                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                     children: [
+                       Text(
+                         '${pitch.pricePerHour.toInt()} ج.م',
+                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w800),
+                       ),
+                       Text('المجموع الكلي', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                     ],
+                   ),
+                 ],
+               ),
+             ),
+             const SizedBox(height: 32),
+             SizedBox(
+               height: 56,
+               child: ElevatedButton.icon(
+                 icon: const Icon(Icons.check_circle_outline, size: 22),
+                 label: const Text('تأكيد الحجز', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                 onPressed: _selectedTime != null
+                     ? () {
+                         final dateStr = DateFormat('yyyy-MM-dd').format(_days[_selectedDayIndex]);
+                         context.push(
+                           '/pitch/${widget.pitchId}/checkout?date=$dateStr&time=$_selectedTime',
+                         );
+                       }
+                     : null,
+                 style: ElevatedButton.styleFrom(
+                   backgroundColor: AppColors.primary,
+                   foregroundColor: AppColors.background,
+                   disabledBackgroundColor: AppColors.surfaceLight,
+                   disabledForegroundColor: AppColors.textMuted,
+                   elevation: 0,
+                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                 ),
+               ),
+             ),
+             const SizedBox(height: 24),
+           ],
+         ),
+       ),
+     );
+   }
+
+  String _formatSlot(String raw) {
+    try {
+      if (raw.contains(':')) {
+        final parts = raw.split(':');
+        final h = int.parse(parts[0]);
+        final m = parts[1];
+        final suffix = h >= 12 ? 'م' : 'ص';
+        final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
+        return '$h12:$m $suffix';
+      }
+    } catch (_) {}
+    return raw;
   }
 
-  Widget _buildTimeSlotsGrid(List<String> displaySlots, List<String> originalSlots) {
+  Widget _buildSlotsGrid(List<Map<String, String>> slotItems) {
     return GridView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
@@ -329,14 +358,14 @@ class _BookingScreenState extends State<BookingScreen> {
         crossAxisSpacing: 10,
         childAspectRatio: 2.2,
       ),
-      itemCount: displaySlots.length,
+      itemCount: slotItems.length,
       itemBuilder: (_, index) {
-        final displayTime = displaySlots[index];
-        final rawTime = originalSlots[index];
-        final isSelected = _selectedTime == rawTime;
+        final raw = slotItems[index]['raw']!;
+        final display = slotItems[index]['display']!;
+        final isSelected = _selectedTime == raw;
 
         return GestureDetector(
-          onTap: () => setState(() => _selectedTime = isSelected ? null : rawTime),
+          onTap: () => setState(() => _selectedTime = isSelected ? null : raw),
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
@@ -349,7 +378,7 @@ class _BookingScreenState extends State<BookingScreen> {
             ),
             alignment: Alignment.center,
             child: Text(
-              displayTime,
+              display,
               style: Theme.of(context).textTheme.titleSmall?.copyWith(
                 color: isSelected ? AppColors.primary : AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
