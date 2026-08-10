@@ -9,6 +9,8 @@ import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_state.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_state.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_cubit.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_state.dart';
 
@@ -139,10 +141,17 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
                   left: 16,
-                  child: _CircleIconButton(
-                    icon: _isFavorite ? Icons.favorite : Icons.favorite_border,
-                    iconColor: _isFavorite ? AppColors.favorite : AppColors.textPrimary,
-                    onTap: () => setState(() => _isFavorite = !_isFavorite),
+                  child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                    builder: (context, state) {
+                      final isFav = context.read<FavoritesCubit>().isFavorite(pitch.id);
+                      return _CircleIconButton(
+                        icon: isFav ? Icons.favorite : Icons.favorite_border,
+                        iconColor: isFav ? const Color(0xFFEF4444) : AppColors.textPrimary,
+                        onTap: () {
+                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                        },
+                      );
+                    },
                   ),
                 ),
               ],

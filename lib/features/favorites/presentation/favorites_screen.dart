@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_state.dart';
 
 class FavoritesScreen extends StatelessWidget {
   const FavoritesScreen({super.key});
@@ -78,12 +81,61 @@ class FavoritesScreen extends StatelessWidget {
 
             const SizedBox(height: 24),
             Expanded(
-              child: ListView(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
-                children: [
-                  _FavoritePitchCard(pitch: MockData.pitches[1]),
-                  const SizedBox(height: 24),
-                ],
+              child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                builder: (context, state) {
+                  if (state is FavoritesLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(color: Color(0xFF39FF14)),
+                    );
+                  } else if (state is FavoritesError) {
+                    return Center(
+                      child: Text(
+                        'خطأ: ${state.message}',
+                        style: const TextStyle(color: Colors.red),
+                      ),
+                    );
+                  } else if (state is FavoritesLoaded) {
+                    if (state.favorites.isEmpty) {
+                      return RefreshIndicator(
+                        onRefresh: () => context.read<FavoritesCubit>().loadFavorites(),
+                        color: const Color(0xFF39FF14),
+                        backgroundColor: const Color(0xFF1D2C4D),
+                        child: ListView(
+                          physics: const AlwaysScrollableScrollPhysics(),
+                          children: const [
+                            SizedBox(height: 100),
+                            Center(
+                              child: Text(
+                                'لا توجد ملاعب مفضلة',
+                                style: TextStyle(
+                                  color: Color(0xFF8A96A3),
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    return RefreshIndicator(
+                      onRefresh: () => context.read<FavoritesCubit>().loadFavorites(),
+                      color: const Color(0xFF39FF14),
+                      backgroundColor: const Color(0xFF1D2C4D),
+                      child: ListView.separated(
+                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        itemCount: state.favorites.length,
+                        separatorBuilder: (_, __) => const SizedBox(height: 24),
+                        itemBuilder: (context, index) {
+                          final pitch = state.favorites[index];
+                          return _FavoritePitchCard(pitch: pitch);
+                        },
+                      ),
+                    );
+                  }
+                  return const SizedBox.shrink();
+                },
               ),
             ),
           ],
@@ -132,16 +184,21 @@ class _FavoritePitchCard extends StatelessWidget {
                 Positioned(
                   top: 16,
                   left: 16,
-                  child: Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: const BoxDecoration(
-                      color: Color(0xAA182540),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Icon(
-                      Icons.favorite,
-                      color: Color(0xFFEF4444),
-                      size: 24,
+                  child: GestureDetector(
+                    onTap: () {
+                      context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xAA182540),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.favorite,
+                        color: Color(0xFFEF4444),
+                        size: 24,
+                      ),
                     ),
                   ),
                 ),

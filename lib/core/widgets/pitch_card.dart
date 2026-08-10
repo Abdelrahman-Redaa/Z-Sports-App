@@ -1,8 +1,11 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_state.dart';
 
 class PitchCard extends StatelessWidget {
   const PitchCard({
@@ -78,6 +81,32 @@ class PitchCard extends StatelessWidget {
                       ),
                     ),
                   ),
+                Positioned(
+                  top: 10,
+                  left: 10,
+                  child: BlocBuilder<FavoritesCubit, FavoritesState>(
+                    builder: (context, state) {
+                      final isFav = context.read<FavoritesCubit>().isFavorite(pitch.id);
+                      return GestureDetector(
+                        onTap: () {
+                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                        },
+                        child: Container(
+                          padding: const EdgeInsets.all(6),
+                          decoration: const BoxDecoration(
+                            color: Color(0xAA182540),
+                            shape: BoxShape.circle,
+                          ),
+                          child: Icon(
+                            isFav ? Icons.favorite : Icons.favorite_border,
+                            color: isFav ? const Color(0xFFEF4444) : Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ],
             ),
             Padding(
