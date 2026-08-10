@@ -43,15 +43,36 @@ class MyBookingsRepository {
   String _handleError(DioException error) {
     if (error.response != null) {
       final data = error.response?.data;
+      
       if (data is Map) {
-        if (data['message'] != null && data['message'].toString().isNotEmpty) {
-          if (data['errors'] != null) {
-            return '${data['message']}\n${data['errors']}';
-          }
+        // 1. Check for standard 'message' field
+        if (data.containsKey('message') && data['message'] != null && data['message'].toString().isNotEmpty) {
           return data['message'].toString();
         }
+        
+        // 2. Check for ASP.NET Core ValidationProblemDetails 'errors' object
+        if (data.containsKey('errors') && data['errors'] is Map) {
+          final errorsMap = data['errors'] as Map;
+          if (errorsMap.isNotEmpty) {
+            // Extract the first error message from the validation errors
+            final firstErrorList = errorsMap.values.first;
+            if (firstErrorList is List && firstErrorList.isNotEmpty) {
+              return firstErrorList.first.toString();
+            }
+          }
+        }
+        
+        // 3. Check for general ASP.NET Core error 'title'
+        if (data.containsKey('title') && data['title'] != null && data['title'].toString().isNotEmpty) {
+          return data['title'].toString();
+        }
+      } else if (data is String && data.isNotEmpty) {
+        // 4. Fallback if the backend returned a plain string
+        return data;
       }
-      return 'حدث خطأ: ${error.response?.statusCode}\n$data';
+      
+      // 5. Absolute fallback with status code
+      return 'تعذر الإلغاء (خطأ ${error.response?.statusCode})';
     }
     return 'لا يوجد اتصال بالإنترنت';
   }
