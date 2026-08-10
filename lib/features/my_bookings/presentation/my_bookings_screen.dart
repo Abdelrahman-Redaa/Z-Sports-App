@@ -210,6 +210,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                               'time': '${_formatTime(booking.time)} (${booking.durationMinutes} دقيقة)',
                               'price': booking.totalPrice.toInt().toString(),
                               'bookingId': booking.id.toString(),
+                              'status': booking.status.name,
                             },
                           ),
                         );

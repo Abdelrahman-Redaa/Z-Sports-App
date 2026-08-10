@@ -122,6 +122,7 @@ final appRouter = GoRouter(
           time: extra['time'] ?? '',
           price: extra['price'] ?? '',
           bookingId: extra['bookingId'] ?? '',
+          status: extra['status'] ?? '',
         );
       },
     ),
