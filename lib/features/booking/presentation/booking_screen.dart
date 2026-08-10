@@ -180,16 +180,28 @@ class _BookingScreenState extends State<BookingScreen> {
                   );
                 }
                 
-                // Fallback slots if API fails or returns empty
-                const fallbackSlots = [
-                  '08:00:00', '09:00:00', '10:00:00', '11:00:00',
-                  '16:00:00', '17:00:00', '18:00:00', '19:00:00',
-                  '20:00:00', '21:00:00'
-                ];
-
-                List<String> slots = fallbackSlots;
-                if (state is BookingSlotsLoaded && state.availableSlots.isNotEmpty) {
+                List<String> slots = [];
+                if (state is BookingSlotsLoaded) {
                   slots = state.availableSlots;
+                } else if (state is BookingSlotsError) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 32),
+                      child: Text('عذراً، حدث خطأ أثناء جلب المواعيد', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red)),
+                    ),
+                  );
+                }
+
+                if (state is BookingSlotsLoaded && slots.isEmpty) {
+                  return Center(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 40),
+                      child: Text(
+                        'لا توجد مواعيد متاحة في هذا اليوم',
+                        style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
+                      ),
+                    ),
+                  );
                 }
 
                 // If API returns times like "14:00:00", we can format them, but for now we just show what API returns
