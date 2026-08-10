@@ -7,6 +7,8 @@ import 'package:z_sports_booking/core/constants/app_strings.dart';
 import 'package:z_sports_booking/core/di.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
+import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
+import 'package:z_sports_booking/features/booking/presentation/cubit/booking_state.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_cubit.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_state.dart';
 
@@ -27,13 +29,33 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
   void initState() {
     super.initState();
     _cubit = StadiumCubit(DI.stadiumRepository);
-    _cubit.loadStadiumById(int.tryParse(widget.pitchId) ?? 0);
+    final pitchId = int.tryParse(widget.pitchId) ?? 0;
+    _cubit.loadStadiumById(pitchId);
+    context.read<BookingCubit>().loadAvailableSlots(
+      pitchId,
+      DateFormat('yyyy-MM-ddTHH:mm:ss').format(DateTime.now()),
+    );
   }
 
   @override
   void dispose() {
     _cubit.close();
     super.dispose();
+  }
+
+  String _formatApiTimeForGrid(String raw) {
+    try {
+      if (raw.contains(':')) {
+        final parts = raw.split(':');
+        final h = int.parse(parts[0]);
+        final m = parts[1];
+        final suffix = h >= 12 ? 'م' : 'ص';
+        final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
+        final paddedH = h12.toString().padLeft(2, '0');
+        return '$paddedH:$m\n$suffix';
+      }
+    } catch (_) {}
+    return raw;
   }
 
   @override
@@ -79,7 +101,6 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
 
   Widget _buildContent(BuildContext context, PitchModel pitch) {
     final today = DateFormat('d MMMM', 'ar').format(DateTime.now());
-    final times = ['08:00\nص', '10:00\nص', '12:00\nم', '04:00\nم', '06:00\nم', '08:00\nم'];
 
     return Scaffold(
       body: CustomScrollView(
@@ -213,52 +234,81 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     ],
                   ),
                   const SizedBox(height: 16),
-                  SizedBox(
-                    height: 80,
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      reverse: true,
-                      itemCount: times.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 10),
-                      itemBuilder: (_, index) {
-                        final time = times[index];
-                        final isSelected = _selectedTime == time;
-                        return GestureDetector(
-                          onTap: () => setState(() => _selectedTime = time),
-                          child: AnimatedContainer(
-                            duration: const Duration(milliseconds: 200),
-                            width: 72,
-                            decoration: BoxDecoration(
-                              color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceLight,
-                              borderRadius: BorderRadius.circular(16),
-                              border: Border.all(
-                                color: isSelected ? AppColors.primary : AppColors.surfaceBorder,
-                                width: isSelected ? 1.5 : 1,
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  time.split('\n')[0],
-                                  style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontWeight: FontWeight.w700,
-                                    color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                                  ),
-                                ),
-                                const SizedBox(height: 2),
-                                Text(
-                                  time.split('\n').length > 1 ? time.split('\n')[1] : '',
-                                  style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                    color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                                  ),
-                                ),
-                              ],
+                  BlocBuilder<BookingCubit, BookingState>(
+                    builder: (context, state) {
+                      if (state is BookingSlotsLoading) {
+                        return const SizedBox(
+                          height: 80,
+                          child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                        );
+                      }
+                      
+                      List<String> apiSlots = [];
+                      if (state is BookingSlotsLoaded) {
+                        apiSlots = state.availableSlots;
+                      }
+
+                      if (apiSlots.isEmpty) {
+                        return const SizedBox(
+                          height: 80,
+                          child: Center(
+                            child: Text(
+                              'لا توجد مواعيد متاحة اليوم',
+                              style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w700),
                             ),
                           ),
                         );
-                      },
-                    ),
+                      }
+
+                      return SizedBox(
+                        height: 80,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          reverse: true,
+                          itemCount: apiSlots.length,
+                          separatorBuilder: (_, __) => const SizedBox(width: 10),
+                          itemBuilder: (_, index) {
+                            final rawTime = apiSlots[index];
+                            final formattedTime = _formatApiTimeForGrid(rawTime);
+                            final isSelected = _selectedTime == rawTime;
+                            return GestureDetector(
+                              onTap: () => setState(() => _selectedTime = rawTime),
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                width: 72,
+                                decoration: BoxDecoration(
+                                  color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceLight,
+                                  borderRadius: BorderRadius.circular(16),
+                                  border: Border.all(
+                                    color: isSelected ? AppColors.primary : AppColors.surfaceBorder,
+                                    width: isSelected ? 1.5 : 1,
+                                  ),
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      formattedTime.split('\n')[0],
+                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                        fontWeight: FontWeight.w700,
+                                        color: isSelected ? AppColors.primary : AppColors.textPrimary,
+                                      ),
+                                    ),
+                                    const SizedBox(height: 2),
+                                    Text(
+                                      formattedTime.split('\n')[1],
+                                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
+                                        color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      );
+                    },
                   ),
                   const SizedBox(height: 120),
                 ],

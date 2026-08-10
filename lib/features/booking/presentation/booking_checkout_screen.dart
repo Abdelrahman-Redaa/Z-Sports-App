@@ -6,7 +6,6 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/di.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
-import 'package:z_sports_booking/core/widgets/primary_button.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_state.dart';
@@ -144,6 +143,8 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
     return BlocListener<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is BookingSubmitSuccess) {
+          // Refresh my bookings list so new booking appears immediately
+          context.read<MyBookingsCubit>().loadMyBookings();
           final pitchName = Uri.encodeComponent(pitch.name);
           final encodedDate = Uri.encodeComponent(formattedDate);
           final encodedTime = Uri.encodeComponent(timeRange);
