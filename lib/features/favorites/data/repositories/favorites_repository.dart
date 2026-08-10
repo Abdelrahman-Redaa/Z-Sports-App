@@ -22,8 +22,10 @@ class FavoritesRepository {
 
   Future<void> addFavorite(int stadiumId) async {
     try {
-      await _apiClient.dio.post(ApiEndpoints.toggleFavorite(stadiumId));
+      await _apiClient.dio.post(ApiEndpoints.toggleFavorite(stadiumId), data: {});
     } on DioException catch (e) {
+      // ignore: avoid_print
+      print('❌ Add Favorite Error: ${e.response?.data} - ${e.message}');
       throw Exception(_handleError(e));
     }
   }
@@ -32,6 +34,8 @@ class FavoritesRepository {
     try {
       await _apiClient.dio.delete(ApiEndpoints.toggleFavorite(stadiumId));
     } on DioException catch (e) {
+      // ignore: avoid_print
+      print('❌ Remove Favorite Error: ${e.response?.data} - ${e.message}');
       throw Exception(_handleError(e));
     }
   }
