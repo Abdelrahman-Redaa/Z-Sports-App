@@ -323,9 +323,8 @@ class _BookingCard extends StatelessWidget {
   String get _statusLabel {
     switch (booking.status) {
       case BookingStatus.upcoming:
-        return 'مؤكد';
       case BookingStatus.pendingPayment:
-        return 'في انتظار الدفع';
+        return 'مؤكد';
       case BookingStatus.completed:
         return 'مكتمل';
       case BookingStatus.cancelled:
@@ -336,9 +335,8 @@ class _BookingCard extends StatelessWidget {
   Color get _statusColor {
     switch (booking.status) {
       case BookingStatus.upcoming:
-        return _primary;
       case BookingStatus.pendingPayment:
-        return const Color(0xFFFFB74D);
+        return _primary;
       case BookingStatus.completed:
         return const Color(0xFF4A9EFF);
       case BookingStatus.cancelled:

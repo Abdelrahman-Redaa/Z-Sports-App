@@ -11,7 +11,7 @@ class BookingStatusBadge extends StatelessWidget {
   Widget build(BuildContext context) {
     final (label, color) = switch (status) {
       BookingStatus.upcoming => ('قادمة', AppColors.primary),
-      BookingStatus.pendingPayment => ('في انتظار الدفع', const Color(0xFFFFB74D)),
+      BookingStatus.pendingPayment => ('قادمة', AppColors.primary),
       BookingStatus.completed => ('مكتملة', AppColors.textMuted),
       BookingStatus.cancelled => ('ملغية', AppColors.error),
     };

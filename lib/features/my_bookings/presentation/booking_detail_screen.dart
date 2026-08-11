@@ -46,7 +46,10 @@ class BookingDetailScreen extends StatelessWidget {
     return _primary;
   }
 
-  bool get _canCancel => status == BookingStatus.upcoming.name || status == '';
+  bool get _canCancel =>
+      status == BookingStatus.upcoming.name ||
+      status == BookingStatus.pendingPayment.name ||
+      status == '';
 
   void _showCancelConfirmation(BuildContext context) {
     showDialog(
