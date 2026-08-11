@@ -8,28 +8,39 @@ class FavoritesCubit extends Cubit<FavoritesState> {
 
   FavoritesCubit(this._repository) : super(const FavoritesInitial());
 
-  /// Quick synchronous check — reads from the current state's favoriteIds set
   bool isFavorite(String pitchId) => state.isFavorite(pitchId);
 
   Future<void> loadFavorites() async {
+    // ignore: avoid_print
+    print('🔵 [FavoritesCubit] loadFavorites() called. Current state: $state');
     emit(FavoritesLoading(state.favoriteIds));
     try {
       final favorites = await _repository.getFavorites();
+      // ignore: avoid_print
+      print('🟢 [FavoritesCubit] Loaded ${favorites.length} favorites');
       emit(FavoritesLoaded(favorites));
     } catch (e) {
       // ignore: avoid_print
-      print('🔴 loadFavorites error: $e');
+      print('🔴 [FavoritesCubit] loadFavorites error: $e');
       emit(FavoritesError(e.toString(), state.favoriteIds));
     }
   }
 
   Future<void> toggleFavorite(String pitchId) async {
     final intId = int.tryParse(pitchId);
-    if (intId == null) return;
+    // ignore: avoid_print
+    print('🔵 [FavoritesCubit] toggleFavorite("$pitchId") intId=$intId');
+    if (intId == null) {
+      // ignore: avoid_print
+      print('🔴 [FavoritesCubit] pitchId "$pitchId" is not a valid int - aborting');
+      return;
+    }
 
     final isCurrentlyFavorite = state.isFavorite(pitchId);
+    // ignore: avoid_print
+    print('🔵 [FavoritesCubit] isCurrentlyFavorite=$isCurrentlyFavorite');
 
-    // ── Optimistic UI update immediately ──────────────────────────────────
+    // Optimistic update: flip the icon immediately
     final newIds = Set<String>.from(state.favoriteIds);
     if (isCurrentlyFavorite) {
       newIds.remove(pitchId);
@@ -37,51 +48,48 @@ class FavoritesCubit extends Cubit<FavoritesState> {
       newIds.add(pitchId);
     }
 
-    // Rebuild the favorites list optimistically
     final currentList = state is FavoritesLoaded
         ? List<PitchModel>.from((state as FavoritesLoaded).favorites)
         : <PitchModel>[];
 
     if (isCurrentlyFavorite) {
       final updated = currentList.where((p) => p.id != pitchId).toList();
-      _emitOptimistic(updated, newIds);
+      emit(_OptimisticLoaded(updated, newIds));
     } else {
-      // Adding: keep list as-is; server reload will add the item
-      _emitOptimistic(currentList, newIds);
+      emit(_OptimisticLoaded(currentList, newIds));
     }
-    // ─────────────────────────────────────────────────────────────────────
+    // ignore: avoid_print
+    print('🟢 [FavoritesCubit] Optimistic state emitted. New favoriteIds: $newIds');
 
     try {
       if (isCurrentlyFavorite) {
         await _repository.removeFavorite(intId);
+        // ignore: avoid_print
+        print('🟢 [FavoritesCubit] removeFavorite() succeeded');
       } else {
         await _repository.addFavorite(intId);
+        // ignore: avoid_print
+        print('🟢 [FavoritesCubit] addFavorite() succeeded');
       }
-      // Sync with server to get accurate data
       await loadFavorites();
     } catch (e) {
       // ignore: avoid_print
-      print('🔴 toggleFavorite error: $e');
-      // Revert optimistic update
+      print('🔴 [FavoritesCubit] toggleFavorite error, reverting: $e');
       await loadFavorites();
       emit(FavoritesError(e.toString(), state.favoriteIds));
     }
   }
 
   void _emitOptimistic(List<PitchModel> list, Set<String> ids) {
-    // Use a synthetic FavoritesLoaded that carries the given ids set
     emit(_OptimisticLoaded(list, ids));
   }
 }
 
-/// Private subclass that allows decoupling favoriteIds from the actual list
 class _OptimisticLoaded extends FavoritesState {
   final List<PitchModel> favorites;
-
   _OptimisticLoaded(this.favorites, Set<String> ids) : super(ids);
 }
 
-/// Re-export helper so screens can still use FavoritesLoaded
 extension FavoritesStateX on FavoritesState {
   List<PitchModel>? get favoriteList {
     if (this is FavoritesLoaded) return (this as FavoritesLoaded).favorites;
