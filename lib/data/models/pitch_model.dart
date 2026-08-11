@@ -38,7 +38,7 @@ class PitchModel {
         amenitiesRaw.map((a) => (a['name'] ?? a.toString()).toString()).toList();
 
     return PitchModel(
-      id: json['id']?.toString() ?? '',
+      id: (json['id'] ?? json['stadiumId'])?.toString() ?? '',
       name: json['name'] ?? json['stadiumName'] ?? '',
       imageUrl: imageUrl,
       rating: (json['rating'] ?? json['averageRating'] ?? 0).toDouble(),
