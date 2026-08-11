@@ -35,30 +35,42 @@ class PitchCard extends StatelessWidget {
           children: [
             Stack(
               children: [
-                CachedNetworkImage(
-                  imageUrl: pitch.imageUrl,
-                  height: compact ? 120 : 160,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
-                  placeholder: (_, __) => Container(
-                    color: AppColors.surfaceLight,
-                    child: const Center(
-                      child: Icon(
-                        Icons.sports_soccer,
-                        color: AppColors.textMuted,
+                pitch.imageUrl.isNotEmpty
+                    ? CachedNetworkImage(
+                        imageUrl: pitch.imageUrl,
+                        height: compact ? 120 : 160,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        placeholder: (_, __) => Container(
+                          color: AppColors.surfaceLight,
+                          child: const Center(
+                            child: Icon(
+                              Icons.sports_soccer,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ),
+                        errorWidget: (_, __, ___) => Container(
+                          color: AppColors.surfaceLight,
+                          child: const Center(
+                            child: Icon(
+                              Icons.sports_soccer,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ),
+                      )
+                    : Container(
+                        height: compact ? 120 : 160,
+                        width: double.infinity,
+                        color: AppColors.surfaceLight,
+                        child: const Center(
+                          child: Icon(
+                            Icons.sports_soccer,
+                            color: AppColors.textMuted,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
-                  errorWidget: (_, __, ___) => Container(
-                    color: AppColors.surfaceLight,
-                    child: const Center(
-                      child: Icon(
-                        Icons.sports_soccer,
-                        color: AppColors.textMuted,
-                      ),
-                    ),
-                  ),
-                ),
                 if (pitch.isPopular)
                   Positioned(
                     top: 10,
