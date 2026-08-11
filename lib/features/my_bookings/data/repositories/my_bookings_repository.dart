@@ -12,10 +12,12 @@ class MyBookingsRepository {
     try {
       final response = await _apiClient.dio.get(ApiEndpoints.myBookings);
       final List<dynamic> data = response.data as List<dynamic>;
-      // DEBUG: print first booking to see real field names
-      if (data.isNotEmpty) {
+      // DEBUG: print all bookings to see real field names
+      for (int i = 0; i < data.length && i < 2; i++) {
         // ignore: avoid_print
-        print('🔍 BOOKING JSON: ${data.first}');
+        print('🔍 BOOKING[$i] ALL KEYS: ${(data[i] as Map).keys.toList()}');
+        // ignore: avoid_print
+        print('🔍 BOOKING[$i] FULL JSON: ${data[i]}');
       }
       return data
           .map((e) => BookingModel.fromJson(e as Map<String, dynamic>))
