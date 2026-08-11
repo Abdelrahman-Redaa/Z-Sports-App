@@ -1,4 +1,4 @@
-enum BookingStatus { upcoming, completed, cancelled }
+enum BookingStatus { upcoming, pendingPayment, completed, cancelled }
 
 class BookingModel {
   const BookingModel({
@@ -25,11 +25,20 @@ class BookingModel {
   final double totalPrice;
   final BookingStatus status;
 
+  static BookingStatus _parseStatus(String raw) {
+    final s = raw.toLowerCase();
+    if (s.contains('cancel')) return BookingStatus.cancelled;
+    if (s.contains('complet') || s.contains('done')) return BookingStatus.completed;
+    if (s.contains('pending') || s.contains('payment')) return BookingStatus.pendingPayment;
+    return BookingStatus.upcoming;
+  }
+
   static double _parsePrice(Map<String, dynamic> json) {
-    // Try every possible field name the backend might use
-    for (final key in ['totalPrice', 'total', 'price', 'amount', 'totalAmount',
-                       'cost', 'bookingPrice', 'bookingCost', 'pricePerHour',
-                       'TotalPrice', 'Total', 'Price', 'Amount']) {
+    for (final key in [
+      'totalPrice', 'total', 'price', 'amount', 'totalAmount',
+      'cost', 'bookingPrice', 'bookingCost', 'pricePerHour',
+      'TotalPrice', 'Total', 'Price', 'Amount'
+    ]) {
       final val = json[key];
       if (val != null) {
         final parsed = double.tryParse(val.toString());
@@ -40,25 +49,22 @@ class BookingModel {
   }
 
   static String _parseImage(Map<String, dynamic> json) {
-    // 1. Check top-level imageUrl fields
-    for (final key in ['imageUrl', 'image', 'stadiumImage', 'coverImage',
-                       'thumbnail', 'photo', 'ImageUrl', 'Image']) {
+    for (final key in [
+      'imageUrl', 'image', 'stadiumImage', 'coverImage',
+      'thumbnail', 'photo', 'ImageUrl', 'Image'
+    ]) {
       final val = json[key];
       if (val != null && val.toString().isNotEmpty) return val.toString();
     }
 
-    // 2. Check inside nested 'stadium' object
     final stadium = json['stadium'] as Map<String, dynamic>? ?? {};
 
-    // 2a. Try direct image fields on stadium
-    for (final key in ['imageUrl', 'image', 'coverImage', 'thumbnail',
-                       'photo', 'ImageUrl']) {
+    for (final key in ['imageUrl', 'image', 'coverImage', 'thumbnail', 'photo']) {
       final val = stadium[key];
       if (val != null && val.toString().isNotEmpty) return val.toString();
     }
 
-    // 2b. Try images array on stadium
-    for (final arrKey in ['images', 'Images', 'photos', 'Photos']) {
+    for (final arrKey in ['images', 'Images', 'photos']) {
       final images = stadium[arrKey] as List<dynamic>?;
       if (images != null && images.isNotEmpty) {
         final first = images.first;
@@ -73,7 +79,6 @@ class BookingModel {
       }
     }
 
-    // 2c. Try images array at top level
     for (final arrKey in ['images', 'Images', 'photos']) {
       final images = json[arrKey] as List<dynamic>?;
       if (images != null && images.isNotEmpty) {
@@ -93,14 +98,7 @@ class BookingModel {
   }
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
-    BookingStatus status = BookingStatus.upcoming;
-    final rawStatus = (json['status'] ?? json['bookingStatus'] ?? '').toString().toLowerCase();
-    if (rawStatus.contains('complet') || rawStatus.contains('done')) {
-      status = BookingStatus.completed;
-    } else if (rawStatus.contains('cancel')) {
-      status = BookingStatus.cancelled;
-    }
-
+    final rawStatus = (json['status'] ?? json['bookingStatus'] ?? '').toString();
     final stadium = json['stadium'] as Map<String, dynamic>? ?? {};
 
     return BookingModel(
@@ -108,12 +106,15 @@ class BookingModel {
       stadiumId: json['stadiumId'] ?? stadium['id'] ?? 0,
       stadiumName: json['stadiumName'] ?? stadium['name'] ?? '',
       stadiumImage: _parseImage(json),
-      category: json['categoryName'] ?? stadium['categoryName'] ?? stadium['category'] ?? '',
+      category: json['categoryName'] ??
+          stadium['categoryName'] ??
+          stadium['category'] ??
+          '',
       date: json['date'] ?? json['bookingDate'] ?? '',
       time: json['time'] ?? json['bookingTime'] ?? json['startTime'] ?? '',
       durationMinutes: json['durationMinutes'] ?? json['duration'] ?? 60,
       totalPrice: _parsePrice(json),
-      status: status,
+      status: _parseStatus(rawStatus),
     );
   }
 }
