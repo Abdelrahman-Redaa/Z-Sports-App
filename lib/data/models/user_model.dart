@@ -26,9 +26,9 @@ class UserModel {
       email: json['email'] ?? '',
       phoneNumber: json['phoneNumber'] ?? json['phone'],
       profilePictureUrl: json['profilePictureUrl'] ?? json['avatarUrl'] ?? json['image'],
-      bookingsCount: json['bookingsCount'] ?? json['bookings_count'] ?? 0,
-      pitchesCount: json['pitchesCount'] ?? json['pitches_count'] ?? json['stadiumsCount'] ?? 0,
-      points: json['points'] ?? 0,
+      bookingsCount: json['bookingsCount'] ?? json['bookingCount'] ?? json['bookings_count'] ?? 0,
+      pitchesCount: json['pitchesCount'] ?? json['favoriteCount'] ?? json['pitches_count'] ?? json['stadiumsCount'] ?? 0,
+      points: json['points'] ?? json['rewardPoints'] ?? 0,
     );
   }
 

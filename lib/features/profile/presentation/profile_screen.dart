@@ -121,7 +121,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     Expanded(
                       child: _StatCard(
                         value: '${user?.pitchesCount ?? 0}',
-                        label: 'ملاعب',
+                        label: 'مفضلة',
                       ),
                     ),
                     const SizedBox(width: 12),
