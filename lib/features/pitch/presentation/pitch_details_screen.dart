@@ -174,18 +174,13 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   left: 16,
                   child: BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, state) {
-                      final isFav = context.read<FavoritesCubit>().isFavorite(
-                        pitch.id,
-                      );
+                      // Read FROM STATE so BlocBuilder triggers rebuild on change
+                      final isFav = state.isFavorite(pitch.id);
                       return _CircleIconButton(
                         icon: isFav ? Icons.favorite : Icons.favorite_border,
-                        iconColor: isFav
-                            ? const Color(0xFFEF4444)
-                            : AppColors.textPrimary,
+                        iconColor: isFav ? const Color(0xFFEF4444) : AppColors.textPrimary,
                         onTap: () {
-                          context.read<FavoritesCubit>().toggleFavorite(
-                            pitch.id,
-                          );
+                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
                         },
                       );
                     },

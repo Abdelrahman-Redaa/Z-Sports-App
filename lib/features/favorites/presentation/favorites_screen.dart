@@ -84,65 +84,99 @@ class FavoritesScreen extends StatelessWidget {
             Expanded(
               child: BlocBuilder<FavoritesCubit, FavoritesState>(
                 builder: (context, state) {
-                  if (state is FavoritesLoading) {
+                  if (state.isLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(
-                        color: AppColors.primary,
-                      ),
+                      child: CircularProgressIndicator(color: AppColors.primary),
                     );
-                  } else if (state is FavoritesError) {
-                    return Center(
-                      child: Text(
-                        'خطأ: ${state.message}',
-                        style: const TextStyle(color: Colors.red),
-                      ),
-                    );
-                  } else if (state is FavoritesLoaded) {
-                    if (state.favorites.isEmpty) {
-                      return RefreshIndicator(
-                        onRefresh: () =>
-                            context.read<FavoritesCubit>().loadFavorites(),
-                        color: AppColors.primary,
-                        backgroundColor: AppColors.surface,
-                        child: ListView(
-                          physics: const AlwaysScrollableScrollPhysics(),
-                          children: const [
-                            SizedBox(height: 100),
-                            Center(
-                              child: Text(
-                                'لا توجد ملاعب مفضلة',
-                                style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 16,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
+                  }
 
+                  if (state.hasError) {
+                    return Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                          const SizedBox(height: 12),
+                          Text(
+                            state.errorMessage ?? 'حدث خطأ',
+                            style: const TextStyle(color: Colors.red),
+                            textAlign: TextAlign.center,
+                          ),
+                          const SizedBox(height: 16),
+                          ElevatedButton(
+                            onPressed: () =>
+                                context.read<FavoritesCubit>().loadFavorites(),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: AppColors.primary,
+                              foregroundColor: AppColors.background,
+                            ),
+                            child: const Text('إعادة المحاولة'),
+                          ),
+                        ],
+                      ),
+                    );
+                  }
+
+                  final favorites = state.favoriteList;
+
+                  if (favorites == null || favorites.isEmpty) {
                     return RefreshIndicator(
                       onRefresh: () =>
                           context.read<FavoritesCubit>().loadFavorites(),
                       color: AppColors.primary,
                       backgroundColor: AppColors.surface,
-                      child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 8,
-                        ),
+                      child: ListView(
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: state.favorites.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 20),
-                        itemBuilder: (context, index) {
-                          final pitch = state.favorites[index];
-                          return _FavoritePitchCard(pitch: pitch);
-                        },
+                        children: const [
+                          SizedBox(height: 100),
+                          Center(
+                            child: Column(
+                              children: [
+                                Icon(Icons.favorite_border,
+                                    color: AppColors.textMuted, size: 64),
+                                SizedBox(height: 16),
+                                Text(
+                                  'لا توجد ملاعب مفضلة',
+                                  style: TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                                SizedBox(height: 8),
+                                Text(
+                                  'اضغط على ❤️ على أي ملعب لإضافته',
+                                  style: TextStyle(
+                                    color: AppColors.textMuted,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     );
                   }
-                  return const SizedBox.shrink();
+
+                  return RefreshIndicator(
+                    onRefresh: () =>
+                        context.read<FavoritesCubit>().loadFavorites(),
+                    color: AppColors.primary,
+                    backgroundColor: AppColors.surface,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 20,
+                        vertical: 8,
+                      ),
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: favorites.length,
+                      separatorBuilder: (_, __) => const SizedBox(height: 20),
+                      itemBuilder: (context, index) {
+                        final pitch = favorites[index];
+                        return _FavoritePitchCard(pitch: pitch);
+                      },
+                    ),
+                  );
                 },
               ),
             ),
