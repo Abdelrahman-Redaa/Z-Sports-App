@@ -12,6 +12,8 @@ class ProfileRepository {
   Future<UserModel> getProfile() async {
     try {
       final response = await _apiClient.dio.get(ApiEndpoints.getProfile);
+      // ignore: avoid_print
+      print('🟢 [Profile] JSON: ${response.data}');
       return UserModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw Exception(_handleError(e));
