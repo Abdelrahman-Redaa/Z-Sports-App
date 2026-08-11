@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/user_model.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_state.dart';
 
-const _bg = Color(0xFF182540);
-const _surface = Color(0xFF1D2C4D);
-const _borderColor = Color(0xFF2A3C60);
-const _primary = Color(0xFF39FF14);
-const _textSecondary = Color(0xFF8A96A3);
+const _bg = AppColors.background;
+const _surface = AppColors.surface;
+const _borderColor = AppColors.surfaceBorder;
+const _primary = AppColors.primary;
+const _textSecondary = AppColors.textSecondary;
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -45,7 +46,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   Future<void> _pickImage() async {
     try {
-      final XFile? image = await _picker.pickImage(source: ImageSource.gallery, imageQuality: 80);
+      final XFile? image = await _picker.pickImage(
+        source: ImageSource.gallery,
+        imageQuality: 80,
+      );
       if (image != null) {
         setState(() => _selectedImage = File(image.path));
         if (mounted) {
@@ -55,7 +59,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('فشل اختيار الصورة: $e'), backgroundColor: Colors.red),
+          SnackBar(
+            content: Text('فشل اختيار الصورة: $e'),
+            backgroundColor: Colors.red,
+          ),
         );
       }
     }
@@ -65,12 +72,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final name = _nameController.text.trim();
     final phone = _phoneController.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('الاسم مطلوب')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('الاسم مطلوب')));
       return;
     }
-    context.read<ProfileCubit>().updateProfile(displayName: name, phoneNumber: phone);
+    context.read<ProfileCubit>().updateProfile(
+      displayName: name,
+      phoneNumber: phone,
+    );
   }
 
   @override
@@ -108,15 +118,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             centerTitle: true,
             title: const Text(
               'تعديل الملف الشخصي',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18),
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
             ),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_forward, color: Colors.white),
+              icon: const Icon(
+                Icons.arrow_forward,
+                color: AppColors.textPrimary,
+              ),
               onPressed: () => context.pop(),
             ),
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
               children: [
                 GestureDetector(
@@ -125,26 +142,38 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     alignment: Alignment.bottomLeft,
                     children: [
                       Container(
-                        width: 120,
-                        height: 120,
+                        width: 112,
+                        height: 112,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           border: Border.all(color: _primary, width: 2),
                           boxShadow: [
-                            BoxShadow(color: _primary.withValues(alpha: 0.15), blurRadius: 30, spreadRadius: 5),
+                            BoxShadow(
+                              color: _primary.withValues(alpha: 0.15),
+                              blurRadius: 24,
+                              spreadRadius: 3,
+                            ),
                           ],
                         ),
                         child: ClipOval(
                           child: _selectedImage != null
                               ? Image.file(_selectedImage!, fit: BoxFit.cover)
-                              : (user?.profilePictureUrl != null && user!.profilePictureUrl!.isNotEmpty
-                                  ? CachedNetworkImage(
-                                      imageUrl: user.profilePictureUrl!,
-                                      fit: BoxFit.cover,
-                                      errorWidget: (_, __, ___) =>
-                                          const Icon(Icons.person, color: _primary, size: 50),
-                                    )
-                                  : const Icon(Icons.person, color: _primary, size: 50)),
+                              : (user?.profilePictureUrl != null &&
+                                        user!.profilePictureUrl!.isNotEmpty
+                                    ? CachedNetworkImage(
+                                        imageUrl: user.profilePictureUrl!,
+                                        fit: BoxFit.cover,
+                                        errorWidget: (_, __, ___) => const Icon(
+                                          Icons.person,
+                                          color: _primary,
+                                          size: 48,
+                                        ),
+                                      )
+                                    : const Icon(
+                                        Icons.person,
+                                        color: _primary,
+                                        size: 48,
+                                      )),
                         ),
                       ),
                       Container(
@@ -159,17 +188,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: 14),
                 Text(
                   user?.displayName ?? 'المستخدم',
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 24),
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 22,
+                  ),
                 ),
                 const SizedBox(height: 4),
                 const Text(
                   'لاعب متميز',
-                  style: TextStyle(color: _primary, fontWeight: FontWeight.w700, fontSize: 14),
+                  style: TextStyle(
+                    color: _primary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 14,
+                  ),
                 ),
-                const SizedBox(height: 40),
+                const SizedBox(height: 32),
                 _EditableField(
                   label: 'الاسم الكامل',
                   controller: _nameController,
@@ -183,7 +220,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 36),
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -193,11 +230,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       backgroundColor: _primary,
                       foregroundColor: _bg,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.black)
-                        : const Text('حفظ التغييرات', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                        ? const CircularProgressIndicator(
+                            color: AppColors.background,
+                          )
+                        : const Text(
+                            'حفظ التغييرات',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
                 const SizedBox(height: 24),
@@ -228,25 +275,36 @@ class _EditableField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: _textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
+        Text(
+          label,
+          style: const TextStyle(
+            color: _textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(height: 8),
         Container(
-          height: 64,
+          height: 56,
           decoration: BoxDecoration(
             color: _surface,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: _borderColor),
           ),
           child: Row(
             children: [
-              const SizedBox(width: 20),
-              Icon(icon, color: _primary, size: 24),
               const SizedBox(width: 16),
+              Icon(icon, color: _primary, size: 22),
+              const SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: controller,
                   keyboardType: keyboardType,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     isDense: true,
@@ -255,7 +313,7 @@ class _EditableField extends StatelessWidget {
                 ),
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Icon(Icons.edit, color: _textSecondary, size: 20),
               ),
             ],

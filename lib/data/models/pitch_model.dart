@@ -48,10 +48,20 @@ class PitchModel {
               .toDouble(),
       location: json['location'] ?? json['address'] ?? '',
       distance: json['distance'] ?? '',
-      category: json['category']?['name'] ?? json['categoryName'] ?? json['category'] ?? '',
+      category: _parseCategory(json),
       amenities: amenities,
       description: json['description'] ?? '',
       isPopular: json['isPopular'] ?? json['isFeatured'] ?? false,
     );
+  }
+
+  static String _parseCategory(Map<String, dynamic> json) {
+    final cat = json['category'];
+    if (cat is Map) {
+      return cat['name']?.toString() ?? '';
+    } else if (cat is String) {
+      return cat;
+    }
+    return json['categoryName']?.toString() ?? '';
   }
 }

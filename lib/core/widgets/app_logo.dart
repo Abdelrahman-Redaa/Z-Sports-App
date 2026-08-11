@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, this.height = 80});
@@ -14,7 +15,7 @@ class AppLogo extends StatelessWidget {
         fit: BoxFit.contain,
         errorBuilder: (context, error, stackTrace) {
           return const Center(
-            child: Text('Logo', style: TextStyle(color: Colors.white)),
+            child: Text('Logo', style: TextStyle(color: AppColors.textPrimary)),
           );
         },
       ),

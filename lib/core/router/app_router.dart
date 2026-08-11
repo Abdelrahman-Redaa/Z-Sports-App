@@ -19,7 +19,6 @@ import 'package:z_sports_booking/features/notifications/presentation/notificatio
 import 'package:z_sports_booking/features/pitch/presentation/pitch_details_screen.dart';
 import 'package:z_sports_booking/features/profile/presentation/edit_profile_screen.dart';
 import 'package:z_sports_booking/features/profile/presentation/profile_screen.dart';
-import 'package:z_sports_booking/features/profile/presentation/settings_screen.dart';
 import 'package:z_sports_booking/features/profile/presentation/change_password_screen.dart';
 import 'package:z_sports_booking/features/search/presentation/search_screen.dart';
 import 'package:z_sports_booking/features/shell/presentation/main_shell.dart';
@@ -44,7 +43,6 @@ abstract final class AppRoutes {
   static const bookingSuccess = '/booking-success';
   static const bookingDetail = '/booking-detail';
   static const editProfile = '/edit-profile';
-  static const settings = '/settings';
   static const changePassword = '/change-password';
   static const notifications = '/notifications';
   static const chat = '/chat';
@@ -130,11 +128,6 @@ final appRouter = GoRouter(
       path: AppRoutes.editProfile,
       parentNavigatorKey: _rootNavigatorKey,
       builder: (_, __) => const EditProfileScreen(),
-    ),
-    GoRoute(
-      path: AppRoutes.settings,
-      parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const SettingsScreen(),
     ),
     GoRoute(
       path: AppRoutes.changePassword,

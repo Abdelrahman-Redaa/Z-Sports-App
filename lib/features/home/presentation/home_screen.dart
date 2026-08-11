@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
-import 'package:z_sports_booking/data/models/category_model.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_cubit.dart';
 import 'package:z_sports_booking/features/home/presentation/cubit/stadium_state.dart';
@@ -63,8 +62,10 @@ class _HomeScreenState extends State<HomeScreen> {
               child: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) {
                   String? avatarUrl;
-                  if (state is ProfileLoaded) avatarUrl = state.user.profilePictureUrl;
-                  if (state is ProfileUpdateSuccess) avatarUrl = state.user.profilePictureUrl;
+                  if (state is ProfileLoaded)
+                    avatarUrl = state.user.profilePictureUrl;
+                  if (state is ProfileUpdateSuccess)
+                    avatarUrl = state.user.profilePictureUrl;
                   return CircleAvatar(
                     radius: 24,
                     backgroundColor: AppColors.surfaceLight,
@@ -85,11 +86,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                     String name = '';
-                    if (state is ProfileLoaded) name = state.user.displayName.split(' ').first;
-                    if (state is ProfileUpdateSuccess) name = state.user.displayName.split(' ').first;
+                    if (state is ProfileLoaded)
+                      name = state.user.displayName.split(' ').first;
+                    if (state is ProfileUpdateSuccess)
+                      name = state.user.displayName.split(' ').first;
                     return Text(
                       name.isNotEmpty ? 'مرحباً، $name' : 'مرحباً',
-                      style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                      style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     );
                   },
                 ),
@@ -125,9 +130,16 @@ class _HomeScreenState extends State<HomeScreen> {
             decoration: const InputDecoration(
               hintText: AppStrings.searchHint,
               hintStyle: TextStyle(color: AppColors.textMuted),
-              prefixIcon: Icon(Icons.search, color: AppColors.textMuted, size: 22),
+              prefixIcon: Icon(
+                Icons.search,
+                color: AppColors.textMuted,
+                size: 22,
+              ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              contentPadding: EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 14,
+              ),
             ),
           ),
         ),
@@ -143,7 +155,9 @@ class _HomeScreenState extends State<HomeScreen> {
           alignment: Alignment.centerRight,
           child: Text(
             AppStrings.categories,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
+            style: Theme.of(
+              context,
+            ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
           ),
         ),
       ),
@@ -155,7 +169,9 @@ class _HomeScreenState extends State<HomeScreen> {
       return const SliverToBoxAdapter(
         child: SizedBox(
           height: 100,
-          child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+          child: Center(
+            child: CircularProgressIndicator(color: AppColors.primary),
+          ),
         ),
       );
     }
@@ -186,7 +202,10 @@ class _HomeScreenState extends State<HomeScreen> {
               icon: _iconForCategory(cat.name),
               label: cat.name,
               isSelected: selectedId == cat.id,
-              onTap: () => context.read<StadiumCubit>().filterByCategory(cat.id, cat.name),
+              onTap: () => context.read<StadiumCubit>().filterByCategory(
+                cat.id,
+                cat.name,
+              ),
             );
           },
         ),
@@ -213,7 +232,9 @@ class _HomeScreenState extends State<HomeScreen> {
               const SizedBox.shrink(),
             Text(
               'الملاعب المتاحة',
-              style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+              style: Theme.of(
+                context,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
             ),
           ],
         ),
@@ -224,7 +245,9 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget _buildStadiumsList(BuildContext context, StadiumState state) {
     if (state is StadiumLoading) {
       return const SliverFillRemaining(
-        child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+        child: Center(
+          child: CircularProgressIndicator(color: AppColors.primary),
+        ),
       );
     }
 
@@ -236,11 +259,18 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const Icon(Icons.error_outline, color: Colors.red, size: 48),
               const SizedBox(height: 12),
-              Text(state.message, style: const TextStyle(color: AppColors.textSecondary), textAlign: TextAlign.center),
+              Text(
+                state.message,
+                style: const TextStyle(color: AppColors.textSecondary),
+                textAlign: TextAlign.center,
+              ),
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () => context.read<StadiumCubit>().loadAll(),
-                style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.black),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.background,
+                ),
                 child: const Text('إعادة المحاولة'),
               ),
             ],
@@ -254,7 +284,10 @@ class _HomeScreenState extends State<HomeScreen> {
       if (pitches.isEmpty) {
         return const SliverFillRemaining(
           child: Center(
-            child: Text('لا توجد ملاعب في هذه الفئة', style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(
+              'لا توجد ملاعب في هذه الفئة',
+              style: TextStyle(color: AppColors.textSecondary),
+            ),
           ),
         );
       }
@@ -262,7 +295,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         sliver: SliverList.separated(
           itemCount: pitches.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 16),
+          separatorBuilder: (_, __) => const SizedBox(height: 14),
           itemBuilder: (_, index) {
             final pitch = pitches[index];
             return _CompactPitchTile(
@@ -279,7 +312,9 @@ class _HomeScreenState extends State<HomeScreen> {
 
   IconData _iconForCategory(String name) {
     final lower = name.toLowerCase();
-    if (lower.contains('قدم') || lower.contains('football') || lower.contains('soccer')) {
+    if (lower.contains('قدم') ||
+        lower.contains('football') ||
+        lower.contains('soccer')) {
       return Icons.sports_soccer;
     }
     if (lower.contains('سلة') || lower.contains('basket')) {
@@ -288,7 +323,9 @@ class _HomeScreenState extends State<HomeScreen> {
     if (lower.contains('تنس') || lower.contains('tennis')) {
       return Icons.sports_tennis;
     }
-    if (lower.contains('طائر') || lower.contains('badminton') || lower.contains('volley')) {
+    if (lower.contains('طائر') ||
+        lower.contains('badminton') ||
+        lower.contains('volley')) {
       return Icons.sports_volleyball;
     }
     return Icons.sports;
@@ -315,7 +352,7 @@ class _CategoryCard extends StatelessWidget {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
         width: 90,
-        padding: const EdgeInsets.symmetric(vertical: 14),
+        padding: const EdgeInsets.symmetric(vertical: 12),
         decoration: BoxDecoration(
           color: AppColors.surfaceLight,
           borderRadius: BorderRadius.circular(16),
@@ -328,14 +365,18 @@ class _CategoryCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(9),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: isSelected ? AppColors.primaryMuted : Colors.transparent,
               ),
-              child: Icon(icon, color: isSelected ? AppColors.primary : AppColors.textMuted, size: 24),
+              child: Icon(
+                icon,
+                color: isSelected ? AppColors.primary : AppColors.textMuted,
+                size: 24,
+              ),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 8),
             Text(
               label,
               style: Theme.of(context).textTheme.labelMedium?.copyWith(
@@ -382,7 +423,9 @@ class _CompactPitchTile extends StatelessWidget {
                     Text(
                       pitch.name,
                       textAlign: TextAlign.right,
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                     ),
@@ -393,12 +436,17 @@ class _CompactPitchTile extends StatelessWidget {
                         children: [
                           Text(
                             pitch.location,
-                            style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary),
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textSecondary),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: 4),
-                          const Icon(Icons.location_on_outlined, size: 13, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.location_on_outlined,
+                            size: 13,
+                            color: AppColors.textSecondary,
+                          ),
                         ],
                       ),
                     const SizedBox(height: 6),
@@ -417,8 +465,18 @@ class _CompactPitchTile extends StatelessWidget {
               width: 130,
               height: double.infinity,
               child: pitch.imageUrl.isNotEmpty
-                  ? CachedNetworkImage(imageUrl: pitch.imageUrl, fit: BoxFit.cover)
-                  : Container(color: AppColors.surfaceBorder, child: const Icon(Icons.sports_soccer, size: 40, color: AppColors.textMuted)),
+                  ? CachedNetworkImage(
+                      imageUrl: pitch.imageUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : Container(
+                      color: AppColors.surfaceBorder,
+                      child: const Icon(
+                        Icons.sports_soccer,
+                        size: 40,
+                        color: AppColors.textMuted,
+                      ),
+                    ),
             ),
           ],
         ),

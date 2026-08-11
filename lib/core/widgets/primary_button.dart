@@ -23,7 +23,7 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final fg = textColor ?? AppColors.background;
+    final fg = textColor ?? AppColors.textPrimary;
 
     return SizedBox(
       width: compact ? null : double.infinity,
@@ -34,9 +34,11 @@ class PrimaryButton extends StatelessWidget {
           backgroundColor: AppColors.primary,
           foregroundColor: fg,
           elevation: 0,
-          padding: compact ? const EdgeInsets.symmetric(horizontal: 20) : null,
+          padding: compact
+              ? const EdgeInsets.symmetric(horizontal: 20, vertical: 10)
+              : const EdgeInsets.symmetric(horizontal: 18),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(compact ? 24 : 14),
+            borderRadius: BorderRadius.circular(compact ? 24 : 16),
           ),
         ),
         child: isLoading
@@ -51,7 +53,12 @@ class PrimaryButton extends StatelessWidget {
                 children: [
                   Text(
                     label,
-                    style: TextStyle(fontWeight: FontWeight.w700, color: fg),
+                    style: TextStyle(
+                      fontSize: compact ? 14 : 16,
+                      fontWeight: FontWeight.w800,
+                      color: fg,
+                      height: 1.25,
+                    ),
                   ),
                   if (icon != null) ...[
                     const SizedBox(width: 8),

@@ -23,10 +23,10 @@ class ProfileMenuTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       leading: Container(
-        width: 42,
-        height: 42,
+        width: 40,
+        height: 40,
         decoration: BoxDecoration(
           color: AppColors.surfaceLight,
           borderRadius: BorderRadius.circular(12),
@@ -37,7 +37,8 @@ class ProfileMenuTile extends StatelessWidget {
         title,
         style: Theme.of(context).textTheme.bodyLarge?.copyWith(
           color: textColor ?? AppColors.textPrimary,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w700,
+          fontSize: 15,
         ),
       ),
       trailing:

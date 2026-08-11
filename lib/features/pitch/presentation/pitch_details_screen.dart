@@ -24,7 +24,6 @@ class PitchDetailsScreen extends StatefulWidget {
 
 class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
   String? _selectedTime;
-  bool _isFavorite = false;
   late final StadiumCubit _cubit;
 
   @override
@@ -68,24 +67,41 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
         builder: (context, state) {
           if (state is StadiumDetailLoading || state is StadiumInitial) {
             return const Scaffold(
-              body: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+              body: Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
             );
           }
 
           if (state is StadiumError) {
             return Scaffold(
-              appBar: AppBar(backgroundColor: AppColors.background, elevation: 0),
+              appBar: AppBar(
+                backgroundColor: AppColors.background,
+                elevation: 0,
+              ),
               body: Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Icon(Icons.error_outline, color: Colors.red, size: 48),
+                    const Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 48,
+                    ),
                     const SizedBox(height: 12),
-                    Text(state.message, style: const TextStyle(color: AppColors.textSecondary)),
+                    Text(
+                      state.message,
+                      style: const TextStyle(color: AppColors.textSecondary),
+                    ),
                     const SizedBox(height: 16),
                     ElevatedButton(
-                      onPressed: () => _cubit.loadStadiumById(int.tryParse(widget.pitchId) ?? 0),
-                      style: ElevatedButton.styleFrom(backgroundColor: AppColors.primary, foregroundColor: Colors.black),
+                      onPressed: () => _cubit.loadStadiumById(
+                        int.tryParse(widget.pitchId) ?? 0,
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.background,
+                      ),
                       child: const Text('إعادة المحاولة'),
                     ),
                   ],
@@ -116,12 +132,24 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                         height: 260,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => Container(height: 260, color: AppColors.surfaceLight),
+                        errorWidget: (_, __, ___) => Container(
+                          height: 260,
+                          color: AppColors.surfaceLight,
+                        ),
                       )
-                    : Container(height: 260, color: AppColors.surfaceLight,
-                        child: const Icon(Icons.sports_soccer, size: 80, color: AppColors.textMuted)),
+                    : Container(
+                        height: 260,
+                        color: AppColors.surfaceLight,
+                        child: const Icon(
+                          Icons.sports_soccer,
+                          size: 80,
+                          color: AppColors.textMuted,
+                        ),
+                      ),
                 Positioned(
-                  bottom: 0, left: 0, right: 0,
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
                   child: Container(
                     height: 80,
                     decoration: BoxDecoration(
@@ -136,19 +164,28 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
                   right: 16,
-                  child: _CircleIconButton(icon: Icons.arrow_forward, onTap: () => context.pop()),
+                  child: _CircleIconButton(
+                    icon: Icons.arrow_forward,
+                    onTap: () => context.pop(),
+                  ),
                 ),
                 Positioned(
                   top: MediaQuery.of(context).padding.top + 8,
                   left: 16,
                   child: BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, state) {
-                      final isFav = context.read<FavoritesCubit>().isFavorite(pitch.id);
+                      final isFav = context.read<FavoritesCubit>().isFavorite(
+                        pitch.id,
+                      );
                       return _CircleIconButton(
                         icon: isFav ? Icons.favorite : Icons.favorite_border,
-                        iconColor: isFav ? const Color(0xFFEF4444) : AppColors.textPrimary,
+                        iconColor: isFav
+                            ? const Color(0xFFEF4444)
+                            : AppColors.textPrimary,
                         onTap: () {
-                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                          context.read<FavoritesCubit>().toggleFavorite(
+                            pitch.id,
+                          );
                         },
                       );
                     },
@@ -166,7 +203,9 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   const SizedBox(height: 20),
                   Text(
                     pitch.name,
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.w800),
+                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 8),
@@ -174,32 +213,73 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Icon(Icons.location_on_outlined, size: 14, color: AppColors.textSecondary),
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 14,
+                          color: AppColors.textSecondary,
+                        ),
                         const SizedBox(width: 4),
-                        Text(pitch.location, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
+                        Text(
+                          pitch.location,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
+                        ),
                       ],
                     ),
                   const SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text('(${pitch.reviewCount} تقييم)', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
+                      Text(
+                        '(${pitch.reviewCount} تقييم)',
+                        style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                       const SizedBox(width: 8),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(border: Border.all(color: AppColors.primary), borderRadius: BorderRadius.circular(8)),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.primary),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
                         child: Row(
                           children: [
-                            Text(pitch.rating.toStringAsFixed(1), style: Theme.of(context).textTheme.labelLarge?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w700)),
-                            const Icon(Icons.star, size: 14, color: AppColors.primary),
+                            Text(
+                              pitch.rating.toStringAsFixed(1),
+                              style: Theme.of(context).textTheme.labelLarge
+                                  ?.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                            ),
+                            const Icon(
+                              Icons.star,
+                              size: 14,
+                              color: AppColors.primary,
+                            ),
                           ],
                         ),
                       ),
                       if (pitch.category.isNotEmpty) ...[
                         const SizedBox(width: 8),
-                        Text('•', style: TextStyle(color: AppColors.textSecondary.withValues(alpha: 0.5))),
+                        Text(
+                          '•',
+                          style: TextStyle(
+                            color: AppColors.textSecondary.withValues(
+                              alpha: 0.5,
+                            ),
+                          ),
+                        ),
                         const SizedBox(width: 8),
-                        Text(pitch.category, style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
+                        Text(
+                          pitch.category,
+                          style: Theme.of(context).textTheme.bodySmall
+                              ?.copyWith(color: AppColors.textSecondary),
+                        ),
                       ],
                     ],
                   ),
@@ -207,39 +287,67 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     const SizedBox(height: 24),
                     Align(
                       alignment: AlignmentDirectional.centerEnd,
-                      child: Text('المرافق', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                      child: Text(
+                        'المرافق',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
                     ),
                     const SizedBox(height: 12),
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
                       alignment: WrapAlignment.end,
-                      children: pitch.amenities.map((a) => _AmenityChip(label: a)).toList(),
+                      children: pitch.amenities
+                          .map((a) => _AmenityChip(label: a))
+                          .toList(),
                     ),
                   ],
                   const SizedBox(height: 24),
                   Align(
                     alignment: AlignmentDirectional.centerEnd,
-                    child: Text('عن الملعب', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                    child: Text(
+                      'عن الملعب',
+                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    pitch.description.isNotEmpty ? pitch.description : 'ملعب رياضي متاح للحجز.',
+                    pitch.description.isNotEmpty
+                        ? pitch.description
+                        : 'ملعب رياضي متاح للحجز.',
                     textAlign: TextAlign.right,
-                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary, height: 1.7),
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                      color: AppColors.textSecondary,
+                      height: 1.7,
+                    ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 28),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Row(
                         children: [
-                          const Icon(Icons.calendar_today_outlined, size: 14, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 14,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 6),
-                          Text('اليوم، $today', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
+                          Text(
+                            'اليوم، $today',
+                            style: Theme.of(context).textTheme.bodySmall
+                                ?.copyWith(color: AppColors.textSecondary),
+                          ),
                         ],
                       ),
-                      Text('المواعيد المتاحة', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
+                      Text(
+                        'المواعيد المتاحة',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
                     ],
                   ),
                   const SizedBox(height: 16),
@@ -247,11 +355,15 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                     builder: (context, state) {
                       if (state is BookingSlotsLoading) {
                         return const SizedBox(
-                          height: 80,
-                          child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                          height: 72,
+                          child: Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ),
                         );
                       }
-                      
+
                       List<String> apiSlots = [];
                       if (state is BookingSlotsLoaded) {
                         apiSlots = state.availableSlots;
@@ -259,37 +371,50 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
 
                       if (apiSlots.isEmpty) {
                         return const SizedBox(
-                          height: 80,
+                          height: 72,
                           child: Center(
                             child: Text(
                               'لا توجد مواعيد متاحة اليوم',
-                              style: TextStyle(color: AppColors.textSecondary, fontWeight: FontWeight.w700),
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         );
                       }
 
                       return SizedBox(
-                        height: 80,
+                        height: 72,
                         child: ListView.separated(
                           scrollDirection: Axis.horizontal,
                           reverse: true,
                           itemCount: apiSlots.length,
-                          separatorBuilder: (_, __) => const SizedBox(width: 10),
+                          separatorBuilder: (_, __) =>
+                              const SizedBox(width: 10),
                           itemBuilder: (_, index) {
                             final rawTime = apiSlots[index];
-                            final formattedTime = _formatApiTimeForGrid(rawTime);
+                            final formattedTime = _formatApiTimeForGrid(
+                              rawTime,
+                            );
                             final isSelected = _selectedTime == rawTime;
                             return GestureDetector(
-                              onTap: () => setState(() => _selectedTime = rawTime),
+                              onTap: () =>
+                                  setState(() => _selectedTime = rawTime),
                               child: AnimatedContainer(
                                 duration: const Duration(milliseconds: 200),
-                                width: 72,
+                                width: 68,
                                 decoration: BoxDecoration(
-                                  color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceLight,
+                                  color: isSelected
+                                      ? AppColors.primary.withValues(
+                                          alpha: 0.15,
+                                        )
+                                      : AppColors.surfaceLight,
                                   borderRadius: BorderRadius.circular(16),
                                   border: Border.all(
-                                    color: isSelected ? AppColors.primary : AppColors.surfaceBorder,
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : AppColors.surfaceBorder,
                                     width: isSelected ? 1.5 : 1,
                                   ),
                                 ),
@@ -298,17 +423,27 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                                   children: [
                                     Text(
                                       formattedTime.split('\n')[0],
-                                      style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                                        fontWeight: FontWeight.w700,
-                                        color: isSelected ? AppColors.primary : AppColors.textPrimary,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleSmall
+                                          ?.copyWith(
+                                            fontWeight: FontWeight.w700,
+                                            color: isSelected
+                                                ? AppColors.primary
+                                                : AppColors.textPrimary,
+                                          ),
                                     ),
                                     const SizedBox(height: 2),
                                     Text(
                                       formattedTime.split('\n')[1],
-                                      style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                                        color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                                      ),
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelSmall
+                                          ?.copyWith(
+                                            color: isSelected
+                                                ? AppColors.primary
+                                                : AppColors.textSecondary,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -319,7 +454,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                       );
                     },
                   ),
-                  const SizedBox(height: 120),
+                  const SizedBox(height: 104),
                 ],
               ),
             ),
@@ -328,7 +463,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
       ),
       bottomNavigationBar: SafeArea(
         child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           decoration: const BoxDecoration(
             color: AppColors.background,
             border: Border(top: BorderSide(color: AppColors.surfaceBorder)),
@@ -340,13 +475,19 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                 height: 52,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.bolt, size: 20),
-                  label: const Text(AppStrings.bookNow, style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15)),
-                  onPressed: () => context.push('/pitch/${widget.pitchId}/book'),
+                  label: const Text(
+                    AppStrings.bookNow,
+                    style: TextStyle(fontWeight: FontWeight.w800, fontSize: 15),
+                  ),
+                  onPressed: () =>
+                      context.push('/pitch/${widget.pitchId}/book'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
                     elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 ),
               ),
@@ -355,8 +496,18 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Text('الإجمالي', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: AppColors.textSecondary)),
-                  Text('${pitch.pricePerHour.toInt()} ج.م/ساعة', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
+                  Text(
+                    'الإجمالي',
+                    style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  Text(
+                    '${pitch.pricePerHour.toInt()} ج.م/ساعة',
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ],
               ),
             ],
@@ -380,13 +531,24 @@ class _AmenityChip extends StatelessWidget {
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.primary.withValues(alpha: 0.3)),
       ),
-      child: Text(label, style: const TextStyle(color: AppColors.primary, fontSize: 12, fontWeight: FontWeight.w600)),
+      child: Text(
+        label,
+        style: const TextStyle(
+          color: AppColors.primary,
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 }
 
 class _CircleIconButton extends StatelessWidget {
-  const _CircleIconButton({required this.icon, required this.onTap, this.iconColor});
+  const _CircleIconButton({
+    required this.icon,
+    required this.onTap,
+    this.iconColor,
+  });
 
   final IconData icon;
   final VoidCallback onTap;
@@ -400,7 +562,7 @@ class _CircleIconButton extends StatelessWidget {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: Colors.black.withValues(alpha: 0.55),
+          color: AppColors.background.withValues(alpha: 0.55),
           shape: BoxShape.circle,
           border: Border.all(color: AppColors.surfaceBorder),
         ),

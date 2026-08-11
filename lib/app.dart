@@ -10,6 +10,7 @@ import 'package:z_sports_booking/features/home/presentation/cubit/stadium_cubit.
 import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_cubit.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
+import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_state.dart';
 
 class ZSportsApp extends StatelessWidget {
   const ZSportsApp({super.key});
@@ -25,18 +26,31 @@ class ZSportsApp extends StatelessWidget {
         BlocProvider(create: (_) => MyBookingsCubit(DI.myBookingsRepository)..loadMyBookings()),
         BlocProvider(create: (_) => FavoritesCubit(DI.favoritesRepository)..loadFavorites()),
       ],
-      child: MaterialApp.router(
-        title: 'Z Sports',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.darkTheme,
-        locale: const Locale('ar'),
-        supportedLocales: const [Locale('ar'), Locale('en')],
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        routerConfig: appRouter,
+      child: BlocListener<FavoritesCubit, FavoritesState>(
+        listener: (context, state) {
+          if (state is FavoritesError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 4),
+              ),
+            );
+          }
+        },
+        child: MaterialApp.router(
+          title: 'Z Sports',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.darkTheme,
+          locale: const Locale('ar'),
+          supportedLocales: const [Locale('ar'), Locale('en')],
+          localizationsDelegates: const [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          routerConfig: appRouter,
+        ),
       ),
     );
   }

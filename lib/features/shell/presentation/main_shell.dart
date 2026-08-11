@@ -14,7 +14,7 @@ class MainShell extends StatelessWidget {
       body: navigationShell,
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
-          border: Border(top: BorderSide(color: AppColors.surfaceBorder)),
+          border: Border(top: BorderSide(color: AppColors.navBorder)),
         ),
         child: BottomNavigationBar(
           currentIndex: navigationShell.currentIndex,

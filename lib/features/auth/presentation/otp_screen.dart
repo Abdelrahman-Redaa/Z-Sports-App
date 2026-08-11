@@ -140,16 +140,16 @@ class _OtpScreenState extends State<OtpScreen> {
                       height: 1.6,
                     ),
                   ),
-                  const SizedBox(height: 48),
+                  const SizedBox(height: 40),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: List.generate(4, (index) {
                       return Container(
                         margin: const EdgeInsets.symmetric(horizontal: 8),
-                        width: 64,
-                        height: 64,
+                        width: 60,
+                        height: 60,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF131114),
+                          color: AppColors.backgroundLight,
                           shape: BoxShape.circle,
                           border: Border.all(color: AppColors.surfaceBorder),
                         ),
@@ -204,7 +204,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             vertical: 10,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF1E1C1F),
+                            color: AppColors.surface,
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Row(
@@ -225,7 +225,7 @@ class _OtpScreenState extends State<OtpScreen> {
                           ),
                         ),
 
-                  const SizedBox(height: 64),
+                  const SizedBox(height: 52),
                   SizedBox(
                     width: double.infinity,
                     height: 56,
@@ -255,14 +255,16 @@ class _OtpScreenState extends State<OtpScreen> {
                             },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        foregroundColor: AppColors.background,
+                        foregroundColor: AppColors.textPrimary,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       child: state is AuthLoading
-                          ? const CircularProgressIndicator(color: Colors.black)
+                          ? const CircularProgressIndicator(
+                              color: AppColors.textPrimary,
+                            )
                           : const Text(
                               'تأكيد الرمز',
                               style: TextStyle(

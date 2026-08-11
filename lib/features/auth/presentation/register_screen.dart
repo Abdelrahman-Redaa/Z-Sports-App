@@ -65,7 +65,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   children: [
                     Text(
                       AppStrings.joinTitle,
-                      style: Theme.of(context).textTheme.headlineSmall
+                      style: Theme.of(context).textTheme.headlineMedium
                           ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 8),
@@ -76,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 28),
                     DarkLabeledField(
                       controller: _nameController,
                       label: AppStrings.fullName,
@@ -85,7 +85,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: (v) =>
                           v == null || v.isEmpty ? 'أدخل الاسم' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     DarkLabeledField(
                       controller: _emailController,
                       label: AppStrings.email,
@@ -95,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: (v) =>
                           v == null || v.isEmpty ? 'أدخل البريد' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     DarkLabeledField(
                       controller: _passwordController,
                       label: AppStrings.password,
@@ -116,7 +116,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       validator: (v) =>
                           v == null || v.length < 6 ? '6 أحرف على الأقل' : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     DarkLabeledField(
                       label: AppStrings.confirmPassword,
                       hint: '••••••••',

@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
@@ -13,7 +14,7 @@ class FavoritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF182540),
+      backgroundColor: AppColors.background,
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -29,14 +30,14 @@ class FavoritesScreen extends StatelessWidget {
                       Text(
                         'مرحباً، ${MockData.currentUser.displayName}',
                         style: const TextStyle(
-                          color: Color(0xFF8A96A3),
+                          color: AppColors.textSecondary,
                           fontSize: 13,
                         ),
                       ),
                       const Text(
                         'Z Sports Booking',
                         style: TextStyle(
-                          color: Color(0xFF39FF14),
+                          color: AppColors.primary,
                           fontWeight: FontWeight.w800,
                           fontSize: 16,
                         ),
@@ -46,7 +47,7 @@ class FavoritesScreen extends StatelessWidget {
                   const SizedBox(width: 12),
                   CircleAvatar(
                     radius: 24,
-                    backgroundColor: const Color(0xFF1D2C4D),
+                    backgroundColor: AppColors.surface,
                     child: ClipOval(
                       child: CachedNetworkImage(
                         imageUrl: MockData.currentUser.profilePictureUrl ?? "",
@@ -55,7 +56,7 @@ class FavoritesScreen extends StatelessWidget {
                         fit: BoxFit.cover,
                         errorWidget: (_, __, ___) => const Icon(
                           Icons.person,
-                          color: Color(0xFF39FF14),
+                          color: AppColors.primary,
                           size: 28,
                         ),
                       ),
@@ -65,27 +66,29 @@ class FavoritesScreen extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 32),
+            const SizedBox(height: 28),
             const Padding(
               padding: EdgeInsets.symmetric(horizontal: 20),
               child: Text(
                 'الملاعب المفضلة',
                 textAlign: TextAlign.right,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.textPrimary,
                   fontWeight: FontWeight.w800,
-                  fontSize: 32,
+                  fontSize: 28,
                 ),
               ),
             ),
 
-            const SizedBox(height: 24),
+            const SizedBox(height: 20),
             Expanded(
               child: BlocBuilder<FavoritesCubit, FavoritesState>(
                 builder: (context, state) {
                   if (state is FavoritesLoading) {
                     return const Center(
-                      child: CircularProgressIndicator(color: Color(0xFF39FF14)),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     );
                   } else if (state is FavoritesError) {
                     return Center(
@@ -97,9 +100,10 @@ class FavoritesScreen extends StatelessWidget {
                   } else if (state is FavoritesLoaded) {
                     if (state.favorites.isEmpty) {
                       return RefreshIndicator(
-                        onRefresh: () => context.read<FavoritesCubit>().loadFavorites(),
-                        color: const Color(0xFF39FF14),
-                        backgroundColor: const Color(0xFF1D2C4D),
+                        onRefresh: () =>
+                            context.read<FavoritesCubit>().loadFavorites(),
+                        color: AppColors.primary,
+                        backgroundColor: AppColors.surface,
                         child: ListView(
                           physics: const AlwaysScrollableScrollPhysics(),
                           children: const [
@@ -108,7 +112,7 @@ class FavoritesScreen extends StatelessWidget {
                               child: Text(
                                 'لا توجد ملاعب مفضلة',
                                 style: TextStyle(
-                                  color: Color(0xFF8A96A3),
+                                  color: AppColors.textSecondary,
                                   fontSize: 16,
                                 ),
                               ),
@@ -119,14 +123,18 @@ class FavoritesScreen extends StatelessWidget {
                     }
 
                     return RefreshIndicator(
-                      onRefresh: () => context.read<FavoritesCubit>().loadFavorites(),
-                      color: const Color(0xFF39FF14),
-                      backgroundColor: const Color(0xFF1D2C4D),
+                      onRefresh: () =>
+                          context.read<FavoritesCubit>().loadFavorites(),
+                      color: AppColors.primary,
+                      backgroundColor: AppColors.surface,
                       child: ListView.separated(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
                         physics: const AlwaysScrollableScrollPhysics(),
                         itemCount: state.favorites.length,
-                        separatorBuilder: (_, __) => const SizedBox(height: 24),
+                        separatorBuilder: (_, __) => const SizedBox(height: 20),
                         itemBuilder: (context, index) {
                           final pitch = state.favorites[index];
                           return _FavoritePitchCard(pitch: pitch);
@@ -156,9 +164,9 @@ class _FavoritePitchCard extends StatelessWidget {
       onTap: () => context.push('/pitch/${pitch.id}'),
       child: Container(
         decoration: BoxDecoration(
-          color: const Color(0xFF1D2C4D),
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: const Color(0xFF2A3C60)),
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: AppColors.surfaceBorder),
         ),
         clipBehavior: Clip.antiAlias,
         child: Column(
@@ -166,16 +174,16 @@ class _FavoritePitchCard extends StatelessWidget {
             Stack(
               children: [
                 SizedBox(
-                  height: 180,
+                  height: 160,
                   width: double.infinity,
                   child: CachedNetworkImage(
                     imageUrl: pitch.imageUrl,
                     fit: BoxFit.cover,
                     errorWidget: (_, __, ___) => Container(
-                      color: const Color(0xFF1D2C4D),
+                      color: AppColors.surface,
                       child: const Icon(
                         Icons.sports_soccer,
-                        color: Color(0xFF39FF14),
+                        color: AppColors.primary,
                         size: 60,
                       ),
                     ),
@@ -191,7 +199,7 @@ class _FavoritePitchCard extends StatelessWidget {
                     child: Container(
                       padding: const EdgeInsets.all(8),
                       decoration: const BoxDecoration(
-                        color: Color(0xAA182540),
+                        color: AppColors.backgroundOverlay,
                         shape: BoxShape.circle,
                       ),
                       child: const Icon(
@@ -205,7 +213,7 @@ class _FavoritePitchCard extends StatelessWidget {
               ],
             ),
             Padding(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.all(14),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
@@ -217,28 +225,28 @@ class _FavoritePitchCard extends StatelessWidget {
                         children: [
                           const Icon(
                             Icons.star,
-                            color: Color(0xFF39FF14),
+                            color: AppColors.primary,
                             size: 16,
                           ),
                           const SizedBox(width: 4),
                           Text(
                             pitch.rating.toString(),
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.textPrimary,
                               fontWeight: FontWeight.w700,
                               fontSize: 14,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 16),
+                      const SizedBox(height: 14),
                       SizedBox(
                         height: 40,
                         child: ElevatedButton(
                           onPressed: () => context.push('/pitch/${pitch.id}'),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xFF39FF14),
-                            foregroundColor: const Color(0xFF182540),
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: AppColors.background,
                             elevation: 0,
                             padding: const EdgeInsets.symmetric(horizontal: 24),
                             shape: RoundedRectangleBorder(
@@ -264,9 +272,9 @@ class _FavoritePitchCard extends StatelessWidget {
                       Text(
                         pitch.name,
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w800,
-                          fontSize: 20,
+                          fontSize: 18,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -276,7 +284,7 @@ class _FavoritePitchCard extends StatelessWidget {
                           const Text(
                             '/ساعة',
                             style: TextStyle(
-                              color: Color(0xFF8A96A3),
+                              color: AppColors.textSecondary,
                               fontSize: 12,
                             ),
                           ),
@@ -284,7 +292,7 @@ class _FavoritePitchCard extends StatelessWidget {
                           Text(
                             '${pitch.pricePerHour.toInt()} ج.م',
                             style: const TextStyle(
-                              color: Color(0xFF39FF14),
+                              color: AppColors.primary,
                               fontWeight: FontWeight.w800,
                               fontSize: 18,
                             ),
@@ -298,14 +306,14 @@ class _FavoritePitchCard extends StatelessWidget {
                           Text(
                             'ملاعب Z Sports',
                             style: TextStyle(
-                              color: Color(0xFF8A96A3),
+                              color: AppColors.textSecondary,
                               fontSize: 13,
                             ),
                           ),
                           SizedBox(width: 4),
                           Icon(
                             Icons.location_on_outlined,
-                            color: Color(0xFF8A96A3),
+                            color: AppColors.textSecondary,
                             size: 14,
                           ),
                         ],

@@ -30,7 +30,7 @@ class WhiteLabeledField extends StatelessWidget {
           label,
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textLabel,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w600,
           ),
         ),
         const SizedBox(height: 8),
@@ -39,26 +39,30 @@ class WhiteLabeledField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
-          style: const TextStyle(color: AppColors.inputTextDark),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: AppColors.inputTextDark,
+            height: 1.25,
+          ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: TextStyle(
-              color: AppColors.textMuted.withValues(alpha: 0.7),
+            hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColors.inputHintDark,
+              height: 1.25,
             ),
             filled: true,
             fillColor: AppColors.inputWhite,
             suffixIcon: suffix,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 16,
+              vertical: 15,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+              borderSide: const BorderSide(color: AppColors.inputStroke),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide.none,
+              borderSide: const BorderSide(color: AppColors.inputStroke),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -114,10 +118,16 @@ class DarkLabeledField extends StatelessWidget {
           obscureText: obscureText,
           keyboardType: keyboardType,
           validator: validator,
-          style: const TextStyle(color: AppColors.textPrimary),
+          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+            color: AppColors.textPrimary,
+            height: 1.25,
+          ),
           decoration: InputDecoration(
             hintText: hint,
-            hintStyle: const TextStyle(color: AppColors.textMuted),
+            hintStyle: Theme.of(context).textTheme.bodyLarge?.copyWith(
+              color: AppColors.textPrimary,
+              height: 1.25,
+            ),
             filled: true,
             fillColor: AppColors.backgroundLight,
             prefixIcon: prefixIcon != null
@@ -126,7 +136,7 @@ class DarkLabeledField extends StatelessWidget {
             suffixIcon: suffixIcon,
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,
-              vertical: 16,
+              vertical: 15,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -166,7 +176,7 @@ class PasswordLabelRow extends StatelessWidget {
             'نسيت كلمة المرور؟',
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.primary,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w700,
             ),
           ),
         ),

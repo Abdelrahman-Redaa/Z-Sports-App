@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_state.dart';
 
-const _bg = Color(0xFF182540);
-const _surface = Color(0xFF1D2C4D);
-const _borderColor = Color(0xFF2A3C60);
-const _primary = Color(0xFF39FF14);
-const _textSecondary = Color(0xFF8A96A3);
+const _bg = AppColors.background;
+const _surface = AppColors.surface;
+const _borderColor = AppColors.surfaceBorder;
+const _primary = AppColors.primary;
+const _textSecondary = AppColors.textSecondary;
 
 class ChangePasswordScreen extends StatefulWidget {
   const ChangePasswordScreen({super.key});
@@ -40,9 +41,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final confirmPassword = _confirmPasswordController.text.trim();
 
     if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('الرجاء تعبئة جميع الحقول')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('الرجاء تعبئة جميع الحقول')));
       return;
     }
 
@@ -54,10 +55,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     }
 
     context.read<ProfileCubit>().changePassword(
-          currentPassword: oldPassword,
-          newPassword: newPassword,
-          confirmNewPassword: confirmPassword,
-        );
+      currentPassword: oldPassword,
+      newPassword: newPassword,
+      confirmNewPassword: confirmPassword,
+    );
   }
 
   @override
@@ -88,15 +89,22 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             centerTitle: true,
             title: const Text(
               'تغيير كلمة المرور',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 18),
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w700,
+                fontSize: 18,
+              ),
             ),
             leading: IconButton(
-              icon: const Icon(Icons.arrow_forward, color: Colors.white),
+              icon: const Icon(
+                Icons.arrow_forward,
+                color: AppColors.textPrimary,
+              ),
               onPressed: () => context.pop(),
             ),
           ),
           body: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -118,9 +126,10 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                   label: 'تأكيد كلمة المرور الجديدة',
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirm,
-                  onToggle: () => setState(() => _obscureConfirm = !_obscureConfirm),
+                  onToggle: () =>
+                      setState(() => _obscureConfirm = !_obscureConfirm),
                 ),
-                const SizedBox(height: 48),
+                const SizedBox(height: 36),
                 SizedBox(
                   width: double.infinity,
                   height: 56,
@@ -130,11 +139,21 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                       backgroundColor: _primary,
                       foregroundColor: _bg,
                       elevation: 0,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
                     child: isLoading
-                        ? const CircularProgressIndicator(color: Colors.black)
-                        : const Text('تغيير كلمة المرور', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
+                        ? const CircularProgressIndicator(
+                            color: AppColors.background,
+                          )
+                        : const Text(
+                            'تغيير كلمة المرور',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
+                          ),
                   ),
                 ),
               ],
@@ -164,25 +183,36 @@ class _PasswordField extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: const TextStyle(color: _textSecondary, fontSize: 13, fontWeight: FontWeight.w600)),
+        Text(
+          label,
+          style: const TextStyle(
+            color: _textSecondary,
+            fontSize: 13,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
         const SizedBox(height: 8),
         Container(
-          height: 64,
+          height: 56,
           decoration: BoxDecoration(
             color: _surface,
-            borderRadius: BorderRadius.circular(24),
+            borderRadius: BorderRadius.circular(16),
             border: Border.all(color: _borderColor),
           ),
           child: Row(
             children: [
-              const SizedBox(width: 20),
-              const Icon(Icons.lock_outline, color: _primary, size: 24),
               const SizedBox(width: 16),
+              const Icon(Icons.lock_outline, color: _primary, size: 22),
+              const SizedBox(width: 12),
               Expanded(
                 child: TextField(
                   controller: controller,
                   obscureText: obscureText,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16),
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 15,
+                  ),
                   decoration: const InputDecoration(
                     border: InputBorder.none,
                     isDense: true,
@@ -191,7 +221,10 @@ class _PasswordField extends StatelessWidget {
                 ),
               ),
               IconButton(
-                icon: Icon(obscureText ? Icons.visibility_off : Icons.visibility, color: _textSecondary),
+                icon: Icon(
+                  obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: _textSecondary,
+                ),
                 onPressed: onToggle,
               ),
               const SizedBox(width: 4),

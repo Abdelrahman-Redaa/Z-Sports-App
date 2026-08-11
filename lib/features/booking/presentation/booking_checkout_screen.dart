@@ -50,10 +50,24 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   String _formatDate(String rawDate) {
     final parsed = DateTime.tryParse(rawDate);
     if (parsed == null) return rawDate;
-    const months = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    const months = [
+      '',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ];
     return '${parsed.day} ${months[parsed.month]} ${parsed.year}';
   }
-  
+
   String _formatTime(String rawTime) {
     try {
       if (rawTime.contains(':')) {
@@ -100,15 +114,42 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         builder: (context, state) {
           if (state is StadiumDetailLoading || state is StadiumInitial) {
             return Scaffold(
-              appBar: AppBar(backgroundColor: AppColors.background, title: const Text('إتمام الدفع', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-              body: const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+              appBar: AppBar(
+                backgroundColor: AppColors.background,
+                title: const Text(
+                  'إتمام الدفع',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              body: const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
             );
           }
 
           if (state is StadiumError) {
-             return Scaffold(
-              appBar: AppBar(backgroundColor: AppColors.background, title: const Text('إتمام الدفع', style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold))),
-              body: Center(child: Text(state.message, style: const TextStyle(color: Colors.white))),
+            return Scaffold(
+              appBar: AppBar(
+                backgroundColor: AppColors.background,
+                title: const Text(
+                  'إتمام الدفع',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              body: Center(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: AppColors.textPrimary),
+                ),
+              ),
             );
           }
 
@@ -122,7 +163,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
   Widget _buildContent(BuildContext context, PitchModel pitch) {
     final formattedDate = _formatDate(widget.date);
     final displayTime = _formatTime(widget.time);
-    
+
     // Calculate end time
     String endTime = '09:00 م';
     try {
@@ -148,7 +189,9 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
           final pitchName = Uri.encodeComponent(pitch.name);
           final encodedDate = Uri.encodeComponent(formattedDate);
           final encodedTime = Uri.encodeComponent(timeRange);
-          context.pushReplacement('${AppRoutes.bookingSuccess}?pitchName=$pitchName&date=$encodedDate&time=$encodedTime');
+          context.pushReplacement(
+            '${AppRoutes.bookingSuccess}?pitchName=$pitchName&date=$encodedDate&time=$encodedTime',
+          );
         } else if (state is BookingSubmitError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message), backgroundColor: Colors.red),
@@ -164,18 +207,18 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
           title: const Text(
             'إتمام الدفع',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w700,
               fontSize: 18,
             ),
           ),
           leading: IconButton(
-            icon: const Icon(Icons.arrow_forward, color: Colors.white),
+            icon: const Icon(Icons.arrow_forward, color: AppColors.textPrimary),
             onPressed: () => context.pop(),
           ),
         ),
         body: SingleChildScrollView(
-          padding: const EdgeInsets.fromLTRB(20, 24, 20, 120),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 116),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -183,7 +226,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                 alignment: Alignment.centerRight,
                 child: Text(
                   'ملخص الحجز',
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 20),
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
                 ),
               ),
               const SizedBox(height: 16),
@@ -202,7 +249,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       child: CachedNetworkImage(
                         imageUrl: pitch.imageUrl,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => const Icon(Icons.sports_soccer, size: 40, color: AppColors.textMuted),
+                        errorWidget: (_, __, ___) => const Icon(
+                          Icons.sports_soccer,
+                          size: 40,
+                          color: AppColors.textMuted,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -213,13 +264,23 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              pitch.category.isNotEmpty ? pitch.category : 'رياضة',
-                              style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w700, fontSize: 12),
+                              pitch.category.isNotEmpty
+                                  ? pitch.category
+                                  : 'رياضة',
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 12,
+                              ),
                             ),
                             const SizedBox(height: 4),
                             Text(
                               pitch.name,
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18),
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w800,
+                                fontSize: 18,
+                              ),
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -227,18 +288,38 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(formattedDate, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                                Text(
+                                  formattedDate,
+                                  style: const TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 12,
+                                  ),
+                                ),
                                 const SizedBox(width: 6),
-                                const Icon(Icons.calendar_today, size: 13, color: AppColors.textSecondary),
+                                const Icon(
+                                  Icons.calendar_today,
+                                  size: 13,
+                                  color: AppColors.textSecondary,
+                                ),
                               ],
                             ),
                             const SizedBox(height: 4),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                Text(timeRange, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                                Text(
+                                  timeRange,
+                                  style: const TextStyle(
+                                    color: AppColors.textSecondary,
+                                    fontSize: 12,
+                                  ),
+                                ),
                                 const SizedBox(width: 6),
-                                const Icon(Icons.access_time, size: 13, color: AppColors.textSecondary),
+                                const Icon(
+                                  Icons.access_time,
+                                  size: 13,
+                                  color: AppColors.textSecondary,
+                                ),
                               ],
                             ),
                           ],
@@ -248,10 +329,17 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
               const Align(
                 alignment: Alignment.centerRight,
-                child: Text('طريقة الدفع', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 20)),
+                child: Text(
+                  'طريقة الدفع',
+                  style: TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 18,
+                  ),
+                ),
               ),
               const SizedBox(height: 16),
               _PaymentOption(
@@ -271,7 +359,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
               const SizedBox(height: 24),
               if (_selectedPayment == 0) ...[
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
                     color: AppColors.surfaceLight,
                     borderRadius: BorderRadius.circular(16),
@@ -284,12 +372,28 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              Clipboard.setData(const ClipboardData(text: _instapayNumber));
-                              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('تم نسخ رقم التحويل')));
+                              Clipboard.setData(
+                                const ClipboardData(text: _instapayNumber),
+                              );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text('تم نسخ رقم التحويل'),
+                                ),
+                              );
                             },
-                            child: const Icon(Icons.copy, size: 18, color: AppColors.primary),
+                            child: const Icon(
+                              Icons.copy,
+                              size: 18,
+                              color: AppColors.primary,
+                            ),
                           ),
-                          const Text('رقم التحويل', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+                          const Text(
+                            'رقم التحويل',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
                       const SizedBox(height: 8),
@@ -297,7 +401,11 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           _instapayNumber,
-                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 24),
+                          style: TextStyle(
+                            color: AppColors.textPrimary,
+                            fontWeight: FontWeight.w800,
+                            fontSize: 22,
+                          ),
                         ),
                       ),
                       const Padding(
@@ -309,9 +417,20 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         children: [
                           Text(
                             '${pitch.pricePerHour.toInt()} ج.م',
-                            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 22),
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                            ),
                           ),
-                          const Text('المجموع الكلي', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16)),
+                          const Text(
+                            'المجموع الكلي',
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -327,13 +446,21 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                   ),
                   child: const Row(
                     children: [
-                      Icon(Icons.error_outline, color: Color(0xFFD66A65), size: 20),
+                      Icon(
+                        Icons.error_outline,
+                        color: Color(0xFFD66A65),
+                        size: 20,
+                      ),
                       SizedBox(width: 12),
                       Expanded(
                         child: Text(
                           'ارسل صورة التحويل على واتساب على نفس رقم التحويل لتأكيد الحجز فوراً.',
                           textAlign: TextAlign.right,
-                          style: TextStyle(color: Color(0xFFD66A65), fontSize: 13, height: 1.6),
+                          style: TextStyle(
+                            color: Color(0xFFD66A65),
+                            fontSize: 13,
+                            height: 1.6,
+                          ),
                         ),
                       ),
                     ],
@@ -341,7 +468,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                 ),
               ] else ...[
                 Container(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.all(18),
                   decoration: BoxDecoration(
                     color: AppColors.surfaceLight,
                     borderRadius: BorderRadius.circular(16),
@@ -354,9 +481,19 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         children: [
                           Text(
                             '${pitch.pricePerHour.toInt()} ج.م',
-                            style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 16,
+                            ),
                           ),
-                          const Text('قيمة الحجز', style: TextStyle(color: AppColors.textSecondary, fontSize: 14)),
+                          const Text(
+                            'قيمة الحجز',
+                            style: TextStyle(
+                              color: AppColors.textSecondary,
+                              fontSize: 14,
+                            ),
+                          ),
                         ],
                       ),
                       const Padding(
@@ -368,9 +505,20 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                         children: [
                           Text(
                             '${pitch.pricePerHour.toInt()} ج.م',
-                            style: const TextStyle(color: AppColors.primary, fontWeight: FontWeight.w800, fontSize: 22),
+                            style: const TextStyle(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 20,
+                            ),
                           ),
-                          const Text('المجموع الكلي', style: TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 16)),
+                          const Text(
+                            'المجموع الكلي',
+                            style: TextStyle(
+                              color: AppColors.textPrimary,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
                         ],
                       ),
                     ],
@@ -381,7 +529,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
           ),
         ),
         bottomSheet: Container(
-          padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+          padding: const EdgeInsets.fromLTRB(20, 10, 20, 24),
           color: AppColors.background,
           child: SizedBox(
             width: double.infinity,
@@ -391,22 +539,36 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                 final isLoading = state is BookingSubmitLoading;
                 return ElevatedButton.icon(
                   icon: isLoading
-                      ? const SizedBox(width: 22, height: 22, child: CircularProgressIndicator(color: AppColors.background, strokeWidth: 2))
+                      ? const SizedBox(
+                          width: 22,
+                          height: 22,
+                          child: CircularProgressIndicator(
+                            color: AppColors.background,
+                            strokeWidth: 2,
+                          ),
+                        )
                       : const Icon(Icons.check_circle_outline, size: 22),
                   label: Text(
                     isLoading ? 'جاري التأكيد...' : 'تأكيد الحجز',
-                    style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w800,
+                      fontSize: 16,
+                    ),
                   ),
                   onPressed: isLoading ? null : _submitBooking,
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.primary,
                     foregroundColor: AppColors.background,
-                    disabledBackgroundColor: AppColors.primary.withValues(alpha: 0.5),
+                    disabledBackgroundColor: AppColors.primary.withValues(
+                      alpha: 0.5,
+                    ),
                     elevation: 0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(16),
+                    ),
                   ),
                 );
-              }
+              },
             ),
           ),
         ),
@@ -436,7 +598,7 @@ class _PaymentOption extends StatelessWidget {
       onTap: onTap,
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 200),
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: AppColors.surfaceLight,
           borderRadius: BorderRadius.circular(16),
@@ -454,12 +616,20 @@ class _PaymentOption extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 border: Border.all(
-                  color: isSelected ? AppColors.primary : AppColors.textSecondary,
+                  color: isSelected
+                      ? AppColors.primary
+                      : AppColors.textSecondary,
                   width: 1.5,
                 ),
                 color: isSelected ? AppColors.primary : Colors.transparent,
               ),
-              child: isSelected ? const Icon(Icons.circle, size: 10, color: Colors.white) : null,
+              child: isSelected
+                  ? const Icon(
+                      Icons.circle,
+                      size: 10,
+                      color: AppColors.textPrimary,
+                    )
+                  : null,
             ),
             const Spacer(),
             Column(
@@ -467,16 +637,26 @@ class _PaymentOption extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 16),
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontWeight: FontWeight.w800,
+                    fontSize: 15,
+                  ),
                 ),
                 if (subtitle != null) ...[
                   const SizedBox(height: 2),
-                  Text(subtitle!, style: const TextStyle(color: AppColors.textSecondary, fontSize: 12)),
+                  Text(
+                    subtitle!,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
                 ],
               ],
             ),
-            const SizedBox(width: 16),
-            Icon(icon, color: AppColors.primary, size: 28),
+            const SizedBox(width: 14),
+            Icon(icon, color: AppColors.primary, size: 26),
           ],
         ),
       ),

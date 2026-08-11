@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_state.dart';
 
@@ -58,33 +59,39 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.message!),
-              backgroundColor: const Color(0xFF39FF14),
+              backgroundColor: AppColors.success,
             ),
           );
           context.go(AppRoutes.login);
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(state.message), backgroundColor: Colors.red),
+            SnackBar(
+              content: Text(state.message),
+              backgroundColor: AppColors.error,
+            ),
           );
         }
       },
       builder: (context, state) {
         return Scaffold(
-          backgroundColor: const Color(0xFF182540),
+          backgroundColor: AppColors.background,
           appBar: AppBar(
-            backgroundColor: const Color(0xFF182540),
+            backgroundColor: AppColors.background,
             elevation: 0,
             title: const Text(
               AppStrings.appName,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
               ),
             ),
             centerTitle: true,
             leading: IconButton(
-              icon: const Icon(Icons.arrow_forward, color: Colors.white),
+              icon: const Icon(
+                Icons.arrow_forward,
+                color: AppColors.textPrimary,
+              ),
               onPressed: () => context.pop(),
             ),
           ),
@@ -98,7 +105,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     'تعيين كلمة مرور جديدة',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 28,
                     ),
@@ -108,7 +115,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     'قم بإنشاء كلمة مرور قوية لحماية حسابك من خلال الخطوات التالية.',
                     textAlign: TextAlign.right,
                     style: TextStyle(
-                      color: Color(0xFF8A96A3),
+                      color: AppColors.textSecondary,
                       height: 1.6,
                       fontSize: 14,
                     ),
@@ -118,7 +125,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       'كلمة المرور',
-                      style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14),
+                      style: TextStyle(
+                        color: AppColors.textLabel,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -132,7 +142,10 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     alignment: Alignment.centerRight,
                     child: Text(
                       'تأكيد كلمة المرور',
-                      style: TextStyle(color: Color(0xFF8A96A3), fontSize: 14),
+                      style: TextStyle(
+                        color: AppColors.textLabel,
+                        fontSize: 14,
+                      ),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -146,9 +159,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   Container(
                     padding: const EdgeInsets.all(20),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF1D2C4D),
+                      color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(color: const Color(0xFF2A3C60)),
+                      border: Border.all(color: AppColors.surfaceBorder),
                     ),
                     child: Column(
                       children: [
@@ -207,15 +220,17 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               );
                             },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF39FF14),
-                        foregroundColor: const Color(0xFF182540),
+                        backgroundColor: AppColors.primary,
+                        foregroundColor: AppColors.textPrimary,
                         elevation: 0,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       child: state is AuthLoading
-                          ? const CircularProgressIndicator(color: Colors.black)
+                          ? const CircularProgressIndicator(
+                              color: AppColors.textPrimary,
+                            )
                           : const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -249,9 +264,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
     return Container(
       height: 60,
       decoration: BoxDecoration(
-        color: const Color(0xFF1D2C4D),
+        color: AppColors.backgroundLight,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: const Color(0xFF2A3C60)),
+        border: Border.all(color: AppColors.surfaceBorder),
       ),
       child: Row(
         children: [
@@ -261,7 +276,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               obscure
                   ? Icons.visibility_off_outlined
                   : Icons.visibility_outlined,
-              color: const Color(0xFF8A96A3),
+              color: AppColors.textSecondary,
             ),
           ),
           Expanded(
@@ -270,7 +285,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               obscureText: obscure,
               textAlign: TextAlign.right,
               style: const TextStyle(
-                color: Colors.white,
+                color: AppColors.textPrimary,
                 fontSize: 16,
                 fontWeight: FontWeight.w700,
               ),
@@ -279,13 +294,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 isDense: true,
                 contentPadding: EdgeInsets.symmetric(vertical: 8),
                 hintText: '••••••••',
-                hintStyle: TextStyle(color: Color(0xFF8A96A3)),
+                hintStyle: TextStyle(color: AppColors.textSecondary),
               ),
             ),
           ),
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 16),
-            child: Icon(Icons.lock_outline, color: Color(0xFF39FF14), size: 22),
+            child: Icon(Icons.lock_outline, color: AppColors.primary, size: 22),
           ),
         ],
       ),
@@ -307,7 +322,7 @@ class _RequirementRow extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            color: met ? Colors.white : const Color(0xFF8A96A3),
+            color: met ? AppColors.textPrimary : AppColors.textSecondary,
             fontSize: 14,
           ),
         ),
@@ -315,7 +330,7 @@ class _RequirementRow extends StatelessWidget {
         Icon(
           Icons.check_circle,
           size: 20,
-          color: met ? const Color(0xFF39FF14) : const Color(0xFF2A3C60),
+          color: met ? AppColors.primary : AppColors.surfaceBorder,
         ),
       ],
     );

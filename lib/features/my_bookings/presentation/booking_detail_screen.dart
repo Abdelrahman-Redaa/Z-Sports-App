@@ -7,12 +7,12 @@ import 'package:z_sports_booking/data/models/booking_model.dart';
 import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_cubit.dart';
 import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_state.dart';
 
-const _bg = Color(0xFF131923);
-const _surface = Color(0xFF1B222C);
-const _border = Color(0xFF242C37);
-const _primary = Color(0xFF39FF14);
-const _textPrimary = Colors.white;
-const _textSecondary = Color(0xFF8A96A3);
+const _bg = AppColors.background;
+const _surface = AppColors.surface;
+const _border = AppColors.surfaceBorder;
+const _primary = AppColors.primary;
+const _textPrimary = AppColors.textPrimary;
+const _textSecondary = AppColors.textSecondary;
 
 class BookingDetailScreen extends StatelessWidget {
   const BookingDetailScreen({
@@ -53,8 +53,19 @@ class BookingDetailScreen extends StatelessWidget {
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: _surface,
-        title: const Text('إلغاء الحجز', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), textAlign: TextAlign.right),
-        content: const Text('هل أنت متأكد من إلغاء هذا الحجز؟', style: TextStyle(color: _textSecondary), textAlign: TextAlign.right),
+        title: const Text(
+          'إلغاء الحجز',
+          style: TextStyle(
+            color: AppColors.textPrimary,
+            fontWeight: FontWeight.bold,
+          ),
+          textAlign: TextAlign.right,
+        ),
+        content: const Text(
+          'هل أنت متأكد من إلغاء هذا الحجز؟',
+          style: TextStyle(color: _textSecondary),
+          textAlign: TextAlign.right,
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
@@ -63,9 +74,17 @@ class BookingDetailScreen extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(ctx);
-              context.read<MyBookingsCubit>().cancelBooking(int.tryParse(bookingId) ?? 0);
+              context.read<MyBookingsCubit>().cancelBooking(
+                int.tryParse(bookingId) ?? 0,
+              );
             },
-            child: const Text('نعم، إلغاء', style: TextStyle(color: Color(0xFFD66A65), fontWeight: FontWeight.bold)),
+            child: const Text(
+              'نعم، إلغاء',
+              style: TextStyle(
+                color: Color(0xFFD66A65),
+                fontWeight: FontWeight.bold,
+              ),
+            ),
           ),
         ],
       ),
@@ -78,7 +97,10 @@ class BookingDetailScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is BookingCancelSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('تم إلغاء الحجز بنجاح'), backgroundColor: Colors.green),
+            const SnackBar(
+              content: Text('تم إلغاء الحجز بنجاح'),
+              backgroundColor: Colors.green,
+            ),
           );
           context.pop();
         } else if (state is MyBookingsError) {
@@ -95,7 +117,11 @@ class BookingDetailScreen extends StatelessWidget {
           centerTitle: true,
           title: const Text(
             'تفاصيل الحجز',
-            style: TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
+            style: TextStyle(
+              color: _textPrimary,
+              fontWeight: FontWeight.w800,
+              fontSize: 20,
+            ),
           ),
           leading: Padding(
             padding: const EdgeInsets.only(left: 16.0),
@@ -119,7 +145,11 @@ class BookingDetailScreen extends StatelessWidget {
                   color: _surface,
                 ),
                 child: IconButton(
-                  icon: const Icon(Icons.arrow_forward, color: _textPrimary, size: 20),
+                  icon: const Icon(
+                    Icons.arrow_forward,
+                    color: _textPrimary,
+                    size: 20,
+                  ),
                   onPressed: () => context.pop(),
                 ),
               ),
@@ -133,13 +163,13 @@ class BookingDetailScreen extends StatelessWidget {
             children: [
               // Image with overlays
               ClipRRect(
-                borderRadius: BorderRadius.circular(24),
+                borderRadius: BorderRadius.circular(18),
                 child: Stack(
                   children: [
                     if (pitchImage.isNotEmpty)
                       CachedNetworkImage(
                         imageUrl: pitchImage,
-                        height: 220,
+                        height: 210,
                         width: double.infinity,
                         fit: BoxFit.cover,
                         errorWidget: (_, __, ___) => _buildPlaceholderImage(),
@@ -149,13 +179,13 @@ class BookingDetailScreen extends StatelessWidget {
 
                     // Gradient overlay for better text readability
                     Container(
-                      height: 220,
+                      height: 210,
                       decoration: BoxDecoration(
                         gradient: LinearGradient(
                           begin: Alignment.bottomCenter,
                           end: Alignment.topCenter,
                           colors: [
-                            Colors.black.withValues(alpha: 0.7),
+                            AppColors.background.withValues(alpha: 0.7),
                             Colors.transparent,
                           ],
                         ),
@@ -168,10 +198,15 @@ class BookingDetailScreen extends StatelessWidget {
                       child: Text(
                         pitchName.isNotEmpty ? pitchName : 'ملعب رياضي',
                         style: const TextStyle(
-                          color: Colors.white,
+                          color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
-                          fontSize: 26,
-                          shadows: [Shadow(blurRadius: 4, color: Colors.black54)],
+                          fontSize: 24,
+                          shadows: [
+                            Shadow(
+                              blurRadius: 4,
+                              color: AppColors.backgroundOverlay,
+                            ),
+                          ],
                         ),
                       ),
                     ),
@@ -179,7 +214,10 @@ class BookingDetailScreen extends StatelessWidget {
                       bottom: 20,
                       left: 16,
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: _statusColor.withValues(alpha: 0.8),
                           borderRadius: BorderRadius.circular(20),
@@ -188,7 +226,11 @@ class BookingDetailScreen extends StatelessWidget {
                           children: [
                             Text(
                               _statusLabel,
-                              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w700, fontSize: 13),
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 13,
+                              ),
                             ),
                             const SizedBox(width: 6),
                             Container(
@@ -196,7 +238,7 @@ class BookingDetailScreen extends StatelessWidget {
                               height: 8,
                               decoration: const BoxDecoration(
                                 shape: BoxShape.circle,
-                                color: Colors.white,
+                                color: AppColors.textPrimary,
                               ),
                             ),
                           ],
@@ -207,26 +249,36 @@ class BookingDetailScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // Booking ID and Price
               Row(
                 children: [
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       decoration: BoxDecoration(
                         color: _surface,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: _border),
                       ),
                       child: Column(
                         children: [
-                          const Text('التكلفة', style: TextStyle(color: _textSecondary, fontSize: 13)),
+                          const Text(
+                            'التكلفة',
+                            style: TextStyle(
+                              color: _textSecondary,
+                              fontSize: 13,
+                            ),
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             '$price ج.م',
-                            style: const TextStyle(color: _primary, fontWeight: FontWeight.w800, fontSize: 20),
+                            style: const TextStyle(
+                              color: _primary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                            ),
                           ),
                         ],
                       ),
@@ -235,19 +287,29 @@ class BookingDetailScreen extends StatelessWidget {
                   const SizedBox(width: 16),
                   Expanded(
                     child: Container(
-                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      padding: const EdgeInsets.symmetric(vertical: 18),
                       decoration: BoxDecoration(
                         color: _surface,
-                        borderRadius: BorderRadius.circular(24),
+                        borderRadius: BorderRadius.circular(16),
                         border: Border.all(color: _border),
                       ),
                       child: Column(
                         children: [
-                          const Text('رقم الحجز', style: TextStyle(color: _textSecondary, fontSize: 13)),
+                          const Text(
+                            'رقم الحجز',
+                            style: TextStyle(
+                              color: _textSecondary,
+                              fontSize: 13,
+                            ),
+                          ),
                           const SizedBox(height: 8),
                           Text(
                             '#$bookingId',
-                            style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 20),
+                            style: const TextStyle(
+                              color: _textPrimary,
+                              fontWeight: FontWeight.w800,
+                              fontSize: 18,
+                            ),
                           ),
                         ],
                       ),
@@ -256,14 +318,14 @@ class BookingDetailScreen extends StatelessWidget {
                 ],
               ),
 
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // Date and Time
               Container(
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
                   color: _surface,
-                  borderRadius: BorderRadius.circular(28),
+                  borderRadius: BorderRadius.circular(18),
                   border: Border.all(color: _border),
                 ),
                 child: Column(
@@ -274,11 +336,21 @@ class BookingDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text('التاريخ', style: TextStyle(color: _textSecondary, fontSize: 14)),
+                              const Text(
+                                'التاريخ',
+                                style: TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 14,
+                                ),
+                              ),
                               const SizedBox(height: 6),
                               Text(
                                 date,
-                                style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 16),
+                                style: const TextStyle(
+                                  color: _textPrimary,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
                               ),
                             ],
                           ),
@@ -290,7 +362,11 @@ class BookingDetailScreen extends StatelessWidget {
                             color: Color(0xFF222B3A),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.calendar_today, color: _primary, size: 22),
+                          child: const Icon(
+                            Icons.calendar_today,
+                            color: _primary,
+                            size: 22,
+                          ),
                         ),
                       ],
                     ),
@@ -304,11 +380,21 @@ class BookingDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text('الوقت', style: TextStyle(color: _textSecondary, fontSize: 14)),
+                              const Text(
+                                'الوقت',
+                                style: TextStyle(
+                                  color: _textSecondary,
+                                  fontSize: 14,
+                                ),
+                              ),
                               const SizedBox(height: 6),
                               Text(
                                 time,
-                                style: const TextStyle(color: _textPrimary, fontWeight: FontWeight.w800, fontSize: 16),
+                                style: const TextStyle(
+                                  color: _textPrimary,
+                                  fontWeight: FontWeight.w800,
+                                  fontSize: 16,
+                                ),
                               ),
                             ],
                           ),
@@ -320,7 +406,11 @@ class BookingDetailScreen extends StatelessWidget {
                             color: Color(0xFF222B3A),
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(Icons.access_time, color: _primary, size: 22),
+                          child: const Icon(
+                            Icons.access_time,
+                            color: _primary,
+                            size: 22,
+                          ),
                         ),
                       ],
                     ),
@@ -328,35 +418,45 @@ class BookingDetailScreen extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 32),
+              const SizedBox(height: 28),
 
               if (_canCancel) ...[
                 BlocBuilder<MyBookingsCubit, MyBookingsState>(
                   builder: (context, state) {
                     final isLoading = state is BookingCancelLoading;
                     return ElevatedButton(
-                      onPressed: isLoading ? null : () => _showCancelConfirmation(context),
+                      onPressed: isLoading
+                          ? null
+                          : () => _showCancelConfirmation(context),
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF25191C), // Dark red tinted background
+                        backgroundColor: const Color(
+                          0xFF25191C,
+                        ), // Dark red tinted background
                         foregroundColor: const Color(0xFFD66A65),
-                        padding: const EdgeInsets.symmetric(vertical: 18),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         elevation: 0,
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(24),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       child: isLoading
                           ? const SizedBox(
                               height: 24,
                               width: 24,
-                              child: CircularProgressIndicator(color: Color(0xFFD66A65), strokeWidth: 2.5),
+                              child: CircularProgressIndicator(
+                                color: Color(0xFFD66A65),
+                                strokeWidth: 2.5,
+                              ),
                             )
                           : const Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
                                   'إلغاء الحجز',
-                                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w800,
+                                    fontSize: 16,
+                                  ),
                                 ),
                                 SizedBox(width: 10),
                                 Icon(Icons.cancel_outlined, size: 20),

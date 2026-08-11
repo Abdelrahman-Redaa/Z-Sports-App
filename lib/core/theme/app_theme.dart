@@ -18,10 +18,98 @@ abstract final class AppTheme {
       ),
     );
 
-    final textTheme = GoogleFonts.tajawalTextTheme(base.textTheme).apply(
-      bodyColor: AppColors.textPrimary,
-      displayColor: AppColors.textPrimary,
-    );
+    final fontFamily = GoogleFonts.notoSansArabic().fontFamily;
+    final textTheme = GoogleFonts.notoSansArabicTextTheme(base.textTheme)
+        .copyWith(
+          displayLarge: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 36,
+            fontWeight: FontWeight.w800,
+            height: 1.25,
+            color: AppColors.textPrimary,
+          ),
+          headlineMedium: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 28,
+            fontWeight: FontWeight.w800,
+            height: 1.28,
+            color: AppColors.textPrimary,
+          ),
+          headlineSmall: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 24,
+            fontWeight: FontWeight.w800,
+            height: 1.3,
+            color: AppColors.textPrimary,
+          ),
+          titleLarge: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 20,
+            fontWeight: FontWeight.w800,
+            height: 1.35,
+            color: AppColors.textPrimary,
+          ),
+          titleMedium: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 18,
+            fontWeight: FontWeight.w700,
+            height: 1.35,
+            color: AppColors.textPrimary,
+          ),
+          titleSmall: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w700,
+            height: 1.35,
+            color: AppColors.textPrimary,
+          ),
+          bodyLarge: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w400,
+            height: 1.55,
+            color: AppColors.textPrimary,
+          ),
+          bodyMedium: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            height: 1.5,
+            color: AppColors.textPrimary,
+          ),
+          bodySmall: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 12,
+            fontWeight: FontWeight.w400,
+            height: 1.45,
+            color: AppColors.textSecondary,
+          ),
+          labelLarge: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 16,
+            fontWeight: FontWeight.w800,
+            height: 1.3,
+            color: AppColors.textPrimary,
+          ),
+          labelMedium: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+            height: 1.35,
+            color: AppColors.textPrimary,
+          ),
+          labelSmall: TextStyle(
+            fontFamily: fontFamily,
+            fontSize: 12,
+            fontWeight: FontWeight.w600,
+            height: 1.3,
+            color: AppColors.textSecondary,
+          ),
+        )
+        .apply(
+          bodyColor: AppColors.textPrimary,
+          displayColor: AppColors.textPrimary,
+        );
 
     return base.copyWith(
       textTheme: textTheme,
@@ -33,7 +121,7 @@ abstract final class AppTheme {
         titleTextStyle: textTheme.titleLarge?.copyWith(
           fontWeight: FontWeight.w700,
           color: AppColors.textPrimary,
-          fontFamily: GoogleFonts.tajawal().fontFamily,
+          fontFamily: fontFamily,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(
@@ -71,16 +159,21 @@ abstract final class AppTheme {
             borderRadius: BorderRadius.circular(16),
           ),
           textStyle: textTheme.titleMedium?.copyWith(
+            fontSize: 16,
             fontWeight: FontWeight.w700,
           ),
         ),
       ),
-      bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      bottomNavigationBarTheme: BottomNavigationBarThemeData(
         backgroundColor: AppColors.surface,
         selectedItemColor: AppColors.primary,
-        unselectedItemColor: AppColors.textMuted,
+        unselectedItemColor: AppColors.textSecondary,
         type: BottomNavigationBarType.fixed,
         elevation: 0,
+        selectedLabelStyle: textTheme.labelSmall?.copyWith(
+          fontWeight: FontWeight.w700,
+        ),
+        unselectedLabelStyle: textTheme.labelSmall,
       ),
       dividerTheme: const DividerThemeData(
         color: AppColors.surfaceBorder,

@@ -58,22 +58,22 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   children: [
                     Center(
                       child: Container(
-                        width: 80,
-                        height: 80,
+                        width: 72,
+                        height: 72,
                         decoration: BoxDecoration(
-                          color: const Color(0xFF1E1C1F),
-                          borderRadius: BorderRadius.circular(24),
+                          color: AppColors.surface,
+                          borderRadius: BorderRadius.circular(18),
                         ),
                         child: const Center(
                           child: Icon(
                             Icons.lock_reset,
                             color: AppColors.primary,
-                            size: 40,
+                            size: 36,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 28),
                     Text(
                       'نسيت كلمة المرور؟',
                       textAlign: TextAlign.center,
@@ -89,7 +89,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         height: 1.6,
                       ),
                     ),
-                    const SizedBox(height: 48),
+                    const SizedBox(height: 40),
                     WhiteLabeledField(
                       label: AppStrings.email,
                       hint: 'example@domain.com',
@@ -115,7 +115,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                               },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: AppColors.primary,
-                          foregroundColor: AppColors.background,
+                          foregroundColor: AppColors.textPrimary,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
@@ -123,7 +123,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                         ),
                         child: state is AuthLoading
                             ? const CircularProgressIndicator(
-                                color: Colors.black,
+                                color: AppColors.textPrimary,
                               )
                             : const Row(
                                 mainAxisAlignment: MainAxisAlignment.center,

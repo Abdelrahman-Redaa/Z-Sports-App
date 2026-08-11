@@ -65,8 +65,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     Text(
                       AppStrings.login,
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.headlineSmall
-                          ?.copyWith(fontWeight: FontWeight.w800),
+                      style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
                     const SizedBox(height: 10),
                     Text(
@@ -77,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 1.5,
                       ),
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 30),
                     WhiteLabeledField(
                       controller: _emailController,
                       label: AppStrings.email,
@@ -87,7 +88,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           ? 'أدخل البريد الإلكتروني'
                           : null,
                     ),
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 18),
                     PasswordLabelRow(
                       onForgotTap: () => context.push(AppRoutes.forgotPassword),
                     ),
@@ -111,7 +112,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       validator: (v) =>
                           v == null || v.isEmpty ? 'أدخل كلمة المرور' : null,
                     ),
-                    const SizedBox(height: 28),
+                    const SizedBox(height: 26),
                     PrimaryButton(
                       label: AppStrings.login,
                       icon: Icons.login,
@@ -161,7 +162,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               child: Text(
                                 'f',
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.textPrimary,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -224,9 +225,7 @@ class SocialLoginButton extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.transparent,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(
-              color: AppColors.textPrimary.withValues(alpha: 0.3),
-            ),
+            border: Border.all(color: AppColors.textPrimary),
           ),
           child: Center(child: child),
         ),

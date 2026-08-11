@@ -18,21 +18,9 @@ class WelcomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: TextButton(
-                  onPressed: () => context.go(AppRoutes.home),
-                  child: Text(
-                    'تخطي',
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: AppColors.textPrimary,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                ),
-              ),
+              const SizedBox(height: 48),
               const Spacer(flex: 2),
-              const Center(child: AppLogo(height: 90)),
+              const Center(child: AppLogo(height: 160)),
               const Spacer(flex: 2),
               Text(
                 'العب أذكى. احجز أسرع.',

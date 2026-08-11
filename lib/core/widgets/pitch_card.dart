@@ -86,20 +86,26 @@ class PitchCard extends StatelessWidget {
                   left: 10,
                   child: BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, state) {
-                      final isFav = context.read<FavoritesCubit>().isFavorite(pitch.id);
+                      final isFav = context.read<FavoritesCubit>().isFavorite(
+                        pitch.id,
+                      );
                       return GestureDetector(
                         onTap: () {
-                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                          context.read<FavoritesCubit>().toggleFavorite(
+                            pitch.id,
+                          );
                         },
                         child: Container(
                           padding: const EdgeInsets.all(6),
                           decoration: const BoxDecoration(
-                            color: Color(0xAA182540),
+                            color: AppColors.backgroundOverlay,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             isFav ? Icons.favorite : Icons.favorite_border,
-                            color: isFav ? const Color(0xFFEF4444) : Colors.white,
+                            color: isFav
+                                ? const Color(0xFFEF4444)
+                                : AppColors.textPrimary,
                             size: 20,
                           ),
                         ),

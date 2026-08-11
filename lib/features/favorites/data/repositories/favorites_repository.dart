@@ -15,28 +15,37 @@ class FavoritesRepository {
       return data
           .map((e) => PitchModel.fromJson(e as Map<String, dynamic>))
           .toList();
-    } on DioException catch (e) {
-      throw Exception(_handleError(e));
+    } catch (e) {
+      if (e is DioException) {
+        throw Exception(_handleError(e));
+      }
+      throw Exception(e.toString());
     }
   }
 
   Future<void> addFavorite(int stadiumId) async {
     try {
       await _apiClient.dio.post(ApiEndpoints.toggleFavorite(stadiumId), data: {});
-    } on DioException catch (e) {
-      // ignore: avoid_print
-      print('❌ Add Favorite Error: ${e.response?.data} - ${e.message}');
-      throw Exception(_handleError(e));
+    } catch (e) {
+      if (e is DioException) {
+        // ignore: avoid_print
+        print('❌ Add Favorite Error: ${e.response?.data} - ${e.message}');
+        throw Exception(_handleError(e));
+      }
+      throw Exception(e.toString());
     }
   }
 
   Future<void> removeFavorite(int stadiumId) async {
     try {
       await _apiClient.dio.delete(ApiEndpoints.toggleFavorite(stadiumId));
-    } on DioException catch (e) {
-      // ignore: avoid_print
-      print('❌ Remove Favorite Error: ${e.response?.data} - ${e.message}');
-      throw Exception(_handleError(e));
+    } catch (e) {
+      if (e is DioException) {
+        // ignore: avoid_print
+        print('❌ Remove Favorite Error: ${e.response?.data} - ${e.message}');
+        throw Exception(_handleError(e));
+      }
+      throw Exception(e.toString());
     }
   }
 
