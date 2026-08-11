@@ -34,6 +34,10 @@ class FavoritesRepository {
 
       // ignore: avoid_print
       print('🟢 [Favorites] Parsed ${data.length} favorites');
+      if (data.isNotEmpty) {
+        // ignore: avoid_print
+        print('🟢 [Favorites] FIRST ITEM JSON: ${data.first}');
+      }
 
       return data
           .map((e) => PitchModel.fromJson(e as Map<String, dynamic>))
