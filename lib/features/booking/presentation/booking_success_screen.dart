@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 
@@ -23,9 +24,9 @@ class BookingSuccessScreen extends StatelessWidget {
         backgroundColor: AppColors.background,
         elevation: 0,
         centerTitle: true,
-        title: const Text(
-          'تأكيد الحجز',
-          style: TextStyle(
+        title: Text(
+          context.tr('تأكيد الحجز', 'Booking Confirmation'),
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.w700,
             fontSize: 18,
@@ -85,10 +86,13 @@ class BookingSuccessScreen extends StatelessWidget {
             ),
 
             const SizedBox(height: 30),
-            const Text(
-              'تم تأكيد الحجز بنجاح',
+            Text(
+              context.tr(
+                'تم تأكيد الحجز بنجاح',
+                'Booking Confirmed Successfully',
+              ),
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w800,
                 fontSize: 24,
@@ -97,18 +101,26 @@ class BookingSuccessScreen extends StatelessWidget {
 
             const SizedBox(height: 10),
 
-            const Text(
-              'استعد لتجربة رياضية مميزة',
+            Text(
+              context.tr(
+                'استعد لتجربة رياضية مميزة',
+                'Get ready for a great sports experience',
+              ),
               textAlign: TextAlign.center,
-              style: TextStyle(color: AppColors.textSecondary, fontSize: 15),
+              style: const TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 15,
+              ),
             ),
 
             const SizedBox(height: 40),
-            const Align(
-              alignment: Alignment.centerRight,
+            Align(
+              alignment: context.isEnglish
+                  ? Alignment.centerLeft
+                  : Alignment.centerRight,
               child: Text(
-                'تفاصيل الحجز',
-                style: TextStyle(
+                context.tr('تفاصيل الحجز', 'Booking Details'),
+                style: const TextStyle(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
                   fontSize: 16,
@@ -141,9 +153,9 @@ class BookingSuccessScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'الملعب',
-                        style: TextStyle(
+                      Text(
+                        context.tr('الملعب', 'Field'),
+                        style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 14,
                         ),
@@ -161,7 +173,10 @@ class BookingSuccessScreen extends StatelessWidget {
                         child: Text(
                           (date.isNotEmpty && time.isNotEmpty)
                               ? '$date, $time'
-                              : 'اليوم، 08:00 مساءً',
+                              : context.tr(
+                                  'اليوم، 08:00 مساءً',
+                                  'Today, 08:00 PM',
+                                ),
                           style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontWeight: FontWeight.w800,
@@ -171,9 +186,9 @@ class BookingSuccessScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'التاريخ والوقت',
-                        style: TextStyle(
+                      Text(
+                        context.tr('التاريخ والوقت', 'Date and Time'),
+                        style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 14,
                         ),
@@ -201,9 +216,9 @@ class BookingSuccessScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                child: const Text(
-                  'العودة للرئيسية',
-                  style: TextStyle(
+                child: Text(
+                  context.tr('العودة للرئيسية', 'Back to Home'),
+                  style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w700,
                     fontSize: 16,

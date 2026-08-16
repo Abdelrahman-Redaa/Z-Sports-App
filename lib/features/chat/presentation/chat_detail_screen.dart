@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 import 'package:z_sports_booking/data/models/chat_model.dart';
@@ -34,7 +35,7 @@ class _ChatDetailScreenState extends State<ChatDetailScreen> {
         title: Text(conversation.name),
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward),
-          onPressed: () => context.pop(),
+          onPressed: () => popOrGo(context, AppRoutes.chat),
         ),
       ),
       body: Column(

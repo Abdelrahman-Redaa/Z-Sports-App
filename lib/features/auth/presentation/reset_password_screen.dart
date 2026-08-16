@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dart';
@@ -23,33 +25,44 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
   bool _has8Chars = false;
   bool _hasUpperCase = false;
+  bool _hasLowerCase = false;
+  bool _hasDigit = false;
   bool _hasSpecialChar = false;
 
+  late final TextEditingController _otpController;
   final _newPasswordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   @override
   void initState() {
     super.initState();
+    _otpController = TextEditingController(text: widget.otp ?? '');
     _newPasswordController.addListener(() {
       final val = _newPasswordController.text;
       setState(() {
         _has8Chars = val.length >= 8;
-        _hasUpperCase = val.contains(RegExp(r'[A-Z]'));
-        _hasSpecialChar = val.contains(RegExp(r'[@#\$!%*?&]'));
+        _hasUpperCase = val.codeUnits.any((c) => c >= 65 && c <= 90);
+        _hasLowerCase = val.codeUnits.any((c) => c >= 97 && c <= 122);
+        _hasDigit = val.codeUnits.any((c) => c >= 48 && c <= 57);
+        _hasSpecialChar = '@#\$!%*?&'.split('').any(val.contains);
       });
     });
   }
 
   @override
   void dispose() {
+    _otpController.dispose();
     _newPasswordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
   }
 
   bool get _allRequirementsMet =>
-      _has8Chars && _hasUpperCase && _hasSpecialChar;
+      _has8Chars &&
+      _hasUpperCase &&
+      _hasLowerCase &&
+      _hasDigit &&
+      _hasSpecialChar;
 
   @override
   Widget build(BuildContext context) {
@@ -92,7 +105,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 Icons.arrow_forward,
                 color: AppColors.textPrimary,
               ),
-              onPressed: () => context.pop(),
+              onPressed: () => context.go(AppRoutes.login),
             ),
           ),
           body: SafeArea(
@@ -101,31 +114,91 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const Text(
-                    'تعيين كلمة مرور جديدة',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
+                  Text(
+                    context.tr('تعيين كلمة مرور جديدة', 'Set a New Password'),
+                    textAlign: context.isEnglish
+                        ? TextAlign.left
+                        : TextAlign.right,
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 28,
                     ),
                   ),
                   const SizedBox(height: 12),
-                  const Text(
-                    'قم بإنشاء كلمة مرور قوية لحماية حسابك من خلال الخطوات التالية.',
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
+                  Text(
+                    context.tr(
+                      'قم بإنشاء كلمة مرور قوية لحماية حسابك من خلال الخطوات التالية.',
+                      'Create a strong password to protect your account.',
+                    ),
+                    textAlign: context.isEnglish
+                        ? TextAlign.left
+                        : TextAlign.right,
+                    style: const TextStyle(
                       color: AppColors.textSecondary,
                       height: 1.6,
                       fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 40),
-                  const Align(
-                    alignment: Alignment.centerRight,
+                  Align(
+                    alignment: context.isEnglish
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
                     child: Text(
-                      'كلمة المرور',
-                      style: TextStyle(
+                      context.tr('رمز التحقق', 'Verification Code'),
+                      style: const TextStyle(
+                        color: AppColors.textLabel,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  TextField(
+                    controller: _otpController,
+                    textDirection: TextDirection.ltr,
+                    textAlign: TextAlign.center,
+                    keyboardType: TextInputType.number,
+                    maxLength: 4,
+                    inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+                    style: const TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: 6,
+                    ),
+                    decoration: InputDecoration(
+                      counterText: '',
+                      hintText: '0000',
+                      hintStyle: const TextStyle(
+                        color: AppColors.textMuted,
+                        letterSpacing: 6,
+                      ),
+                      filled: true,
+                      fillColor: AppColors.backgroundLight,
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: AppColors.surfaceBorder,
+                        ),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: const BorderSide(
+                          color: AppColors.primary,
+                          width: 1.4,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 24),
+                  Align(
+                    alignment: context.isEnglish
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
+                    child: Text(
+                      context.tr('كلمة المرور', 'Password'),
+                      style: const TextStyle(
                         color: AppColors.textLabel,
                         fontSize: 14,
                       ),
@@ -138,11 +211,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                     onToggle: () => setState(() => _obscureNew = !_obscureNew),
                   ),
                   const SizedBox(height: 24),
-                  const Align(
-                    alignment: Alignment.centerRight,
+                  Align(
+                    alignment: context.isEnglish
+                        ? Alignment.centerLeft
+                        : Alignment.centerRight,
                     child: Text(
-                      'تأكيد كلمة المرور',
-                      style: TextStyle(
+                      context.tr('تأكيد كلمة المرور', 'Confirm Password'),
+                      style: const TextStyle(
                         color: AppColors.textLabel,
                         fontSize: 14,
                       ),
@@ -167,17 +242,42 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                       children: [
                         _RequirementRow(
                           met: _has8Chars,
-                          label: 'على الأقل 8 أحرف',
+                          label: context.tr(
+                            'على الأقل 8 أحرف',
+                            'At least 8 characters',
+                          ),
                         ),
                         const SizedBox(height: 12),
                         _RequirementRow(
                           met: _hasUpperCase,
-                          label: 'حرف كبير واحد على الأقل',
+                          label: context.tr(
+                            'حرف كبير واحد على الأقل',
+                            'At least one uppercase letter',
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _RequirementRow(
+                          met: _hasLowerCase,
+                          label: context.tr(
+                            'حرف صغير واحد على الأقل',
+                            'At least one lowercase letter',
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        _RequirementRow(
+                          met: _hasDigit,
+                          label: context.tr(
+                            'رقم واحد على الأقل',
+                            'At least one number',
+                          ),
                         ),
                         const SizedBox(height: 12),
                         _RequirementRow(
                           met: _hasSpecialChar,
-                          label: r'رمز خاص (مثل @, #, $)',
+                          label: context.tr(
+                            r'رمز خاص (مثل @, #, $)',
+                            r'Special character (e.g. @, #, $)',
+                          ),
                         ),
                       ],
                     ),
@@ -191,9 +291,12 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           : () {
                               if (!_allRequirementsMet) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      'كلمة المرور لا تستوفي المتطلبات',
+                                      context.tr(
+                                        'كلمة المرور لا تستوفي المتطلبات',
+                                        'Password does not meet requirements',
+                                      ),
                                     ),
                                   ),
                                 );
@@ -202,8 +305,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               if (_newPasswordController.text !=
                                   _confirmPasswordController.text) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('كلمتا المرور غير متطابقتين'),
+                                  SnackBar(
+                                    content: Text(
+                                      context.tr(
+                                        'كلمتا المرور غير متطابقتين',
+                                        'Passwords do not match',
+                                      ),
+                                    ),
                                   ),
                                 );
                                 return;
@@ -211,7 +319,34 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                               final email =
                                   widget.email ??
                                   context.read<AuthCubit>().pendingEmail;
-                              final otp = widget.otp ?? '';
+                              final otp = _otpController.text.trim();
+                              if (email.trim().isEmpty || otp.trim().isEmpty) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      context.tr(
+                                        'رمز التحقق غير صحيح، اطلب رمزاً جديداً.',
+                                        'Invalid verification code. Request a new code.',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                context.go(AppRoutes.forgotPassword);
+                                return;
+                              }
+                              if (otp.length < 4) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      context.tr(
+                                        'أدخل رمز التحقق كاملاً',
+                                        'Enter the full verification code',
+                                      ),
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
                               context.read<AuthCubit>().resetPassword(
                                 email,
                                 otp,
@@ -231,14 +366,14 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           ? const CircularProgressIndicator(
                               color: AppColors.textPrimary,
                             )
-                          : const Row(
+                          : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.lock_reset, size: 22),
-                                SizedBox(width: 8),
+                                const Icon(Icons.lock_reset, size: 22),
+                                const SizedBox(width: 8),
                                 Text(
-                                  'حفظ وتغيير',
-                                  style: TextStyle(
+                                  context.tr('حفظ وتغيير', 'Save Changes'),
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 16,
                                   ),

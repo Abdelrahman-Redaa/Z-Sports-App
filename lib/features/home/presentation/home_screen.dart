@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
@@ -62,10 +63,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: BlocBuilder<ProfileCubit, ProfileState>(
                 builder: (context, state) {
                   String? avatarUrl;
-                  if (state is ProfileLoaded)
+                  if (state is ProfileLoaded) {
                     avatarUrl = state.user.profilePictureUrl;
-                  if (state is ProfileUpdateSuccess)
+                  }
+                  if (state is ProfileUpdateSuccess) {
                     avatarUrl = state.user.profilePictureUrl;
+                  }
                   return CircleAvatar(
                     radius: 24,
                     backgroundColor: AppColors.surfaceLight,
@@ -86,12 +89,16 @@ class _HomeScreenState extends State<HomeScreen> {
                 BlocBuilder<ProfileCubit, ProfileState>(
                   builder: (context, state) {
                     String name = '';
-                    if (state is ProfileLoaded)
+                    if (state is ProfileLoaded) {
                       name = state.user.displayName.split(' ').first;
-                    if (state is ProfileUpdateSuccess)
+                    }
+                    if (state is ProfileUpdateSuccess) {
                       name = state.user.displayName.split(' ').first;
+                    }
                     return Text(
-                      name.isNotEmpty ? 'مرحباً، $name' : 'مرحباً',
+                      name.isNotEmpty
+                          ? context.tr('مرحباً، $name', 'Hello, $name')
+                          : context.tr('مرحباً', 'Hello'),
                       style: Theme.of(context).textTheme.bodySmall?.copyWith(
                         color: AppColors.textSecondary,
                       ),
@@ -127,16 +134,19 @@ class _HomeScreenState extends State<HomeScreen> {
             readOnly: true,
             onTap: () => context.push(AppRoutes.search),
             style: const TextStyle(color: AppColors.textPrimary),
-            decoration: const InputDecoration(
-              hintText: AppStrings.searchHint,
-              hintStyle: TextStyle(color: AppColors.textMuted),
-              prefixIcon: Icon(
+            decoration: InputDecoration(
+              hintText: context.tr(
+                'ابحث عن ملعب أو رياضة',
+                'Search fields or sports',
+              ),
+              hintStyle: const TextStyle(color: AppColors.textMuted),
+              prefixIcon: const Icon(
                 Icons.search,
                 color: AppColors.textMuted,
                 size: 22,
               ),
               border: InputBorder.none,
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 horizontal: 16,
                 vertical: 14,
               ),
@@ -154,7 +164,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Align(
           alignment: Alignment.centerRight,
           child: Text(
-            AppStrings.categories,
+            context.tr('التصنيفات', 'Categories'),
             style: Theme.of(
               context,
             ).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700),
@@ -187,12 +197,12 @@ class _HomeScreenState extends State<HomeScreen> {
           scrollDirection: Axis.horizontal,
           reverse: true,
           itemCount: categories.length + 1,
-          separatorBuilder: (_, __) => const SizedBox(width: 12),
+          separatorBuilder: (_, _) => const SizedBox(width: 12),
           itemBuilder: (_, index) {
             if (index == 0) {
               return _CategoryCard(
                 icon: Icons.apps_rounded,
-                label: 'الكل',
+                label: context.tr('الكل', 'All'),
                 isSelected: selectedId == null,
                 onTap: () => context.read<StadiumCubit>().clearFilter(),
               );
@@ -222,7 +232,10 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             if (state is StadiumLoaded)
               Text(
-                '${state.filtered.length} ملعب',
+                context.tr(
+                  '${state.filtered.length} ملعب',
+                  '${state.filtered.length} fields',
+                ),
                 style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                   color: AppColors.primary,
                   fontWeight: FontWeight.w700,
@@ -231,7 +244,7 @@ class _HomeScreenState extends State<HomeScreen> {
             else
               const SizedBox.shrink(),
             Text(
-              'الملاعب المتاحة',
+              context.tr('الملاعب المتاحة', 'Available Fields'),
               style: Theme.of(
                 context,
               ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
@@ -271,7 +284,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   backgroundColor: AppColors.primary,
                   foregroundColor: AppColors.background,
                 ),
-                child: const Text('إعادة المحاولة'),
+                child: Text(context.tr('إعادة المحاولة', 'Retry')),
               ),
             ],
           ),
@@ -282,11 +295,14 @@ class _HomeScreenState extends State<HomeScreen> {
     if (state is StadiumLoaded) {
       final pitches = state.filtered;
       if (pitches.isEmpty) {
-        return const SliverFillRemaining(
+        return SliverFillRemaining(
           child: Center(
             child: Text(
-              'لا توجد ملاعب في هذه الفئة',
-              style: TextStyle(color: AppColors.textSecondary),
+              context.tr(
+                'لا توجد ملاعب في هذه الفئة',
+                'No fields in this category',
+              ),
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
         );
@@ -295,7 +311,7 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.fromLTRB(20, 8, 20, 32),
         sliver: SliverList.separated(
           itemCount: pitches.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 14),
+          separatorBuilder: (_, _) => const SizedBox(height: 14),
           itemBuilder: (_, index) {
             final pitch = pitches[index];
             return _CompactPitchTile(

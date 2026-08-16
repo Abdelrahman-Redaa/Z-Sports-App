@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 import 'package:z_sports_booking/core/di.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
@@ -22,9 +23,9 @@ class BookingScreen extends StatefulWidget {
 class _BookingScreenState extends State<BookingScreen> {
   int _selectedDayIndex = 0;
   String? _selectedTime;
-  
+
   late final StadiumCubit _stadiumCubit;
-  
+
   List<DateTime> get _days {
     final now = DateTime.now();
     return List.generate(7, (i) => now.add(Duration(days: i)));
@@ -47,18 +48,40 @@ class _BookingScreenState extends State<BookingScreen> {
   void _loadSlotsForSelectedDay() {
     final dateStr = DateFormat('yyyy-MM-dd').format(_days[_selectedDayIndex]);
     context.read<BookingCubit>().loadAvailableSlots(
-      int.tryParse(widget.pitchId) ?? 0, 
+      int.tryParse(widget.pitchId) ?? 0,
       dateStr,
     );
   }
 
   String _dayName(DateTime date) {
-    const names = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+    const names = [
+      'الأحد',
+      'الاثنين',
+      'الثلاثاء',
+      'الأربعاء',
+      'الخميس',
+      'الجمعة',
+      'السبت',
+    ];
     return names[date.weekday % 7];
   }
 
   String get _monthName {
-    const months = ['', 'يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو', 'يوليو', 'أغسطس', 'سبتمبر', 'أكتوبر', 'نوفمبر', 'ديسمبر'];
+    const months = [
+      '',
+      'يناير',
+      'فبراير',
+      'مارس',
+      'أبريل',
+      'مايو',
+      'يونيو',
+      'يوليو',
+      'أغسطس',
+      'سبتمبر',
+      'أكتوبر',
+      'نوفمبر',
+      'ديسمبر',
+    ];
     return months[_days[_selectedDayIndex].month];
   }
 
@@ -70,8 +93,13 @@ class _BookingScreenState extends State<BookingScreen> {
         builder: (context, state) {
           if (state is StadiumDetailLoading || state is StadiumInitial) {
             return Scaffold(
-              appBar: AppBar(title: const Text('جاري التحميل...'), centerTitle: true),
-              body: const Center(child: CircularProgressIndicator(color: AppColors.primary)),
+              appBar: AppBar(
+                title: const Text('جاري التحميل...'),
+                centerTitle: true,
+              ),
+              body: const Center(
+                child: CircularProgressIndicator(color: AppColors.primary),
+              ),
             );
           }
           if (state is StadiumError) {
@@ -96,7 +124,7 @@ class _BookingScreenState extends State<BookingScreen> {
         centerTitle: true,
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward),
-          onPressed: () => context.pop(),
+          onPressed: () => popOrGo(context, '/pitch/${widget.pitchId}'),
         ),
       ),
       body: SingleChildScrollView(
@@ -116,14 +144,18 @@ class _BookingScreenState extends State<BookingScreen> {
                 ),
                 Text(
                   'اختر التاريخ',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                  ),
                 ),
               ],
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: List.generate(days.length > 5 ? 5 : days.length, (index) {
+              children: List.generate(days.length > 5 ? 5 : days.length, (
+                index,
+              ) {
                 final date = days[index];
                 final isSelected = _selectedDayIndex == index;
 
@@ -140,10 +172,14 @@ class _BookingScreenState extends State<BookingScreen> {
                     width: 60,
                     height: 72,
                     decoration: BoxDecoration(
-                      color: isSelected ? AppColors.primary : AppColors.surfaceLight,
+                      color: isSelected
+                          ? AppColors.primary
+                          : AppColors.surfaceLight,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? AppColors.primary : AppColors.surfaceBorder,
+                        color: isSelected
+                            ? AppColors.primary
+                            : AppColors.surfaceBorder,
                       ),
                     ),
                     child: Column(
@@ -151,17 +187,23 @@ class _BookingScreenState extends State<BookingScreen> {
                       children: [
                         Text(
                           _dayName(date),
-                          style: Theme.of(context).textTheme.labelSmall?.copyWith(
-                            color: isSelected ? AppColors.background : AppColors.textSecondary,
-                          ),
+                          style: Theme.of(context).textTheme.labelSmall
+                              ?.copyWith(
+                                color: isSelected
+                                    ? AppColors.background
+                                    : AppColors.textSecondary,
+                              ),
                         ),
                         const SizedBox(height: 6),
                         Text(
                           date.day.toString(),
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            fontWeight: FontWeight.w800,
-                            color: isSelected ? AppColors.background : AppColors.textPrimary,
-                          ),
+                          style: Theme.of(context).textTheme.titleMedium
+                              ?.copyWith(
+                                fontWeight: FontWeight.w800,
+                                color: isSelected
+                                    ? AppColors.background
+                                    : AppColors.textPrimary,
+                              ),
                         ),
                       ],
                     ),
@@ -170,16 +212,20 @@ class _BookingScreenState extends State<BookingScreen> {
               }),
             ),
             const SizedBox(height: 32),
-            
+
             BlocBuilder<BookingCubit, BookingState>(
               builder: (context, state) {
                 if (state is BookingSlotsLoading) {
                   return const SizedBox(
                     height: 150,
-                    child: Center(child: CircularProgressIndicator(color: AppColors.primary)),
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
                   );
                 }
-                
+
                 List<String> slots = [];
                 if (state is BookingSlotsLoaded) {
                   slots = state.availableSlots;
@@ -187,152 +233,198 @@ class _BookingScreenState extends State<BookingScreen> {
                   return Center(
                     child: Padding(
                       padding: const EdgeInsets.symmetric(vertical: 32),
-                      child: Text('عذراً، حدث خطأ أثناء جلب المواعيد', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: Colors.red)),
+                      child: Text(
+                        'عذراً، حدث خطأ أثناء جلب المواعيد',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.bodyMedium?.copyWith(color: Colors.red),
+                      ),
                     ),
                   );
                 }
 
-                 final morningSlots = <Map<String, String>>[];
-                 final eveningSlots = <Map<String, String>>[];
+                final morningSlots = <Map<String, String>>[];
+                final eveningSlots = <Map<String, String>>[];
 
-                 for (final raw in slots) {
-                   final display = _formatSlot(raw);
-                   try {
-                     final h = int.parse(raw.split(':')[0]);
-                     if (h < 12) {
-                       morningSlots.add({'raw': raw, 'display': display});
-                     } else {
-                       eveningSlots.add({'raw': raw, 'display': display});
-                     }
-                   } catch (_) {
-                     eveningSlots.add({'raw': raw, 'display': display});
-                   }
-                 }
+                for (final raw in slots) {
+                  final display = _formatSlot(raw);
+                  try {
+                    final h = int.parse(raw.split(':')[0]);
+                    if (h < 12) {
+                      morningSlots.add({'raw': raw, 'display': display});
+                    } else {
+                      eveningSlots.add({'raw': raw, 'display': display});
+                    }
+                  } catch (_) {
+                    eveningSlots.add({'raw': raw, 'display': display});
+                  }
+                }
 
-                 return Column(
-                   crossAxisAlignment: CrossAxisAlignment.stretch,
-                   children: [
-                     if (morningSlots.isNotEmpty) ...[
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           Text(
-                             'الفترة الصباحية',
-                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                           ),
-                           const SizedBox(width: 8),
-                           const Icon(Icons.wb_sunny, color: AppColors.primary, size: 20),
-                         ],
-                       ),
-                       const SizedBox(height: 12),
-                       _buildSlotsGrid(morningSlots),
-                       const SizedBox(height: 24),
-                     ],
-                     if (eveningSlots.isNotEmpty) ...[
-                       Row(
-                         mainAxisAlignment: MainAxisAlignment.end,
-                         children: [
-                           Text(
-                             'الفترة المسائية',
-                             style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                           ),
-                           const SizedBox(width: 8),
-                           const Icon(Icons.nights_stay, color: AppColors.primary, size: 20),
-                         ],
-                       ),
-                       const SizedBox(height: 12),
-                       _buildSlotsGrid(eveningSlots),
-                     ],
-                     if (morningSlots.isEmpty && eveningSlots.isEmpty)
-                       Center(
-                         child: Padding(
-                           padding: const EdgeInsets.symmetric(vertical: 40),
-                           child: Text(
-                             'لا توجد مواعيد متاحة في هذا اليوم',
-                             style: Theme.of(context).textTheme.titleMedium?.copyWith(color: AppColors.textSecondary),
-                           ),
-                         ),
-                       ),
-                   ],
-                 );
-               },
-             ),
-            
-             const SizedBox(height: 32),
-             Container(
-               padding: const EdgeInsets.all(20),
-               decoration: BoxDecoration(
-                 color: AppColors.surfaceLight,
-                 borderRadius: BorderRadius.circular(16),
-                 border: Border.all(color: AppColors.surfaceBorder),
-               ),
-               child: Column(
-                 children: [
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Text(
-                         '${pitch.pricePerHour.toInt()} ج.م',
-                         style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800),
-                       ),
-                       Text('سعر الساعة', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                     ],
-                   ),
-                   const SizedBox(height: 8),
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Text('1 ساعة', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w800)),
-                       Text('مدة الحجز', style: Theme.of(context).textTheme.bodyMedium?.copyWith(color: AppColors.textSecondary)),
-                     ],
-                   ),
-                   const Padding(
-                     padding: EdgeInsets.symmetric(vertical: 12),
-                     child: Divider(color: AppColors.surfaceBorder),
-                   ),
-                   Row(
-                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                     children: [
-                       Text(
-                         '${pitch.pricePerHour.toInt()} ج.م',
-                         style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: AppColors.primary, fontWeight: FontWeight.w800),
-                       ),
-                       Text('المجموع الكلي', style: Theme.of(context).textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w700)),
-                     ],
-                   ),
-                 ],
-               ),
-             ),
-             const SizedBox(height: 32),
-             SizedBox(
-               height: 56,
-               child: ElevatedButton.icon(
-                 icon: const Icon(Icons.check_circle_outline, size: 22),
-                 label: const Text('تأكيد الحجز', style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16)),
-                 onPressed: _selectedTime != null
-                     ? () {
-                         final dateStr = DateFormat('yyyy-MM-dd').format(_days[_selectedDayIndex]);
-                         context.push(
-                           '/pitch/${widget.pitchId}/checkout?date=$dateStr&time=$_selectedTime',
-                         );
-                       }
-                     : null,
-                 style: ElevatedButton.styleFrom(
-                   backgroundColor: AppColors.primary,
-                   foregroundColor: AppColors.background,
-                   disabledBackgroundColor: AppColors.surfaceLight,
-                   disabledForegroundColor: AppColors.textMuted,
-                   elevation: 0,
-                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                 ),
-               ),
-             ),
-             const SizedBox(height: 24),
-           ],
-         ),
-       ),
-     );
-   }
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    if (morningSlots.isNotEmpty) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'الفترة الصباحية',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.wb_sunny,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      _buildSlotsGrid(morningSlots),
+                      const SizedBox(height: 24),
+                    ],
+                    if (eveningSlots.isNotEmpty) ...[
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Text(
+                            'الفترة المسائية',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(fontWeight: FontWeight.w800),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.nights_stay,
+                            color: AppColors.primary,
+                            size: 20,
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 12),
+                      _buildSlotsGrid(eveningSlots),
+                    ],
+                    if (morningSlots.isEmpty && eveningSlots.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 40),
+                          child: Text(
+                            'لا توجد مواعيد متاحة في هذا اليوم',
+                            style: Theme.of(context).textTheme.titleMedium
+                                ?.copyWith(color: AppColors.textSecondary),
+                          ),
+                        ),
+                      ),
+                  ],
+                );
+              },
+            ),
+
+            const SizedBox(height: 32),
+            Container(
+              padding: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceLight,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.surfaceBorder),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${pitch.pricePerHour.toInt()} ج.م',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        'سعر الساعة',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '1 ساعة',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w800),
+                      ),
+                      Text(
+                        'مدة الحجز',
+                        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(vertical: 12),
+                    child: Divider(color: AppColors.surfaceBorder),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${pitch.pricePerHour.toInt()} ج.م',
+                        style: Theme.of(context).textTheme.headlineSmall
+                            ?.copyWith(
+                              color: AppColors.primary,
+                              fontWeight: FontWeight.w800,
+                            ),
+                      ),
+                      Text(
+                        'المجموع الكلي',
+                        style: Theme.of(context).textTheme.titleMedium
+                            ?.copyWith(fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 32),
+            SizedBox(
+              height: 56,
+              child: ElevatedButton.icon(
+                icon: const Icon(Icons.check_circle_outline, size: 22),
+                label: const Text(
+                  'تأكيد الحجز',
+                  style: TextStyle(fontWeight: FontWeight.w800, fontSize: 16),
+                ),
+                onPressed: _selectedTime != null
+                    ? () {
+                        final dateStr = DateFormat(
+                          'yyyy-MM-dd',
+                        ).format(_days[_selectedDayIndex]);
+                        context.push(
+                          '/pitch/${widget.pitchId}/checkout?date=$dateStr&time=$_selectedTime',
+                        );
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: AppColors.primary,
+                  foregroundColor: AppColors.background,
+                  disabledBackgroundColor: AppColors.surfaceLight,
+                  disabledForegroundColor: AppColors.textMuted,
+                  elevation: 0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        ),
+      ),
+    );
+  }
 
   String _formatSlot(String raw) {
     try {
@@ -369,7 +461,9 @@ class _BookingScreenState extends State<BookingScreen> {
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary.withValues(alpha: 0.15) : AppColors.surfaceLight,
+              color: isSelected
+                  ? AppColors.primary.withValues(alpha: 0.15)
+                  : AppColors.surfaceLight,
               borderRadius: BorderRadius.circular(14),
               border: Border.all(
                 color: isSelected ? AppColors.primary : AppColors.surfaceBorder,

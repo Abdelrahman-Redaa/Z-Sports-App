@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:z_sports_booking/core/network/api_client.dart';
 import 'package:z_sports_booking/core/network/api_endpoints.dart';
+import 'package:z_sports_booking/core/network/error_message_mapper.dart';
 
 class BookingRepository {
   final ApiClient _apiClient;
@@ -43,18 +44,6 @@ class BookingRepository {
   }
 
   String _handleError(DioException error) {
-    if (error.response != null) {
-      final data = error.response?.data;
-      if (data is Map) {
-        if (data['message'] != null && data['message'].toString().isNotEmpty) {
-          if (data['errors'] != null) {
-            return '${data['message']}\n${data['errors']}';
-          }
-          return data['message'];
-        }
-      }
-      return 'حدث خطأ: ${error.response?.statusCode}\n$data';
-    }
-    return 'لا يوجد اتصال بالإنترنت';
+    return friendlyDioError(error, fallbackMessage: 'تعذر إتمام الحجز.');
   }
 }

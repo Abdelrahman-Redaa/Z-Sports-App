@@ -5,6 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/di.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
@@ -78,14 +79,12 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
         return '$h12:$m $suffix';
       }
-    } catch (e) {
-      // ignore
+    } catch (_) {
     }
     return rawTime.isNotEmpty ? rawTime : '08:00 م';
   }
 
   void _submitBooking() {
-    // Ensure time is in HH:mm:ss format (e.g. "14:00:00")
     String rawTime = widget.time;
     if (!rawTime.contains(':')) rawTime = '08:00:00';
     final parts = rawTime.split(':');
@@ -93,7 +92,6 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
         ? '${parts[0].padLeft(2, '0')}:${parts[1].padLeft(2, '0')}:${parts.length > 2 ? parts[2] : '00'}'
         : rawTime;
 
-    // Ensure date is in ISO datetime format
     final dateFormatted = widget.date.contains('T')
         ? widget.date
         : '${widget.date}T00:00:00';
@@ -169,22 +167,20 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
     try {
       if (widget.time.contains(':')) {
         final parts = widget.time.split(':');
-        var h = int.parse(parts[0]) + 1; // add 1 hour duration
+        var h = int.parse(parts[0]) + 1;
         if (h >= 24) h = 0;
         final m = parts[1];
         final suffix = h >= 12 ? 'م' : 'ص';
         final h12 = h > 12 ? h - 12 : (h == 0 ? 12 : h);
         endTime = '$h12:$m $suffix';
       }
-    } catch (e) {
-      // ignore
+    } catch (_) {
     }
     final timeRange = '$displayTime - $endTime';
 
     return BlocListener<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is BookingSubmitSuccess) {
-          // Refresh my bookings list so new booking appears immediately
           context.read<MyBookingsCubit>().loadMyBookings();
           final pitchName = Uri.encodeComponent(pitch.name);
           final encodedDate = Uri.encodeComponent(formattedDate);
@@ -214,7 +210,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
           ),
           leading: IconButton(
             icon: const Icon(Icons.arrow_forward, color: AppColors.textPrimary),
-            onPressed: () => context.pop(),
+            onPressed: () => popOrGo(context, '/pitch/${widget.pitchId}/book'),
           ),
         ),
         body: SingleChildScrollView(
@@ -249,7 +245,7 @@ class _BookingCheckoutScreenState extends State<BookingCheckoutScreen> {
                       child: CachedNetworkImage(
                         imageUrl: pitch.imageUrl,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => const Icon(
+                        errorWidget: (_, _, _) => const Icon(
                           Icons.sports_soccer,
                           size: 40,
                           color: AppColors.textMuted,

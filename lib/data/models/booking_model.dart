@@ -27,17 +27,33 @@ class BookingModel {
 
   static BookingStatus _parseStatus(String raw) {
     final s = raw.toLowerCase();
-    if (s.contains('cancel')) return BookingStatus.cancelled;
-    if (s.contains('complet') || s.contains('done')) return BookingStatus.completed;
-    if (s.contains('pending') || s.contains('payment')) return BookingStatus.pendingPayment;
+    if (s.contains('cancel')) {
+      return BookingStatus.cancelled;
+    }
+    if (s.contains('complet') || s.contains('done')) {
+      return BookingStatus.completed;
+    }
+    if (s.contains('pending') || s.contains('payment')) {
+      return BookingStatus.pendingPayment;
+    }
     return BookingStatus.upcoming;
   }
 
   static double _parsePrice(Map<String, dynamic> json) {
     for (final key in [
-      'totalPrice', 'total', 'price', 'amount', 'totalAmount',
-      'cost', 'bookingPrice', 'bookingCost', 'pricePerHour',
-      'TotalPrice', 'Total', 'Price', 'Amount'
+      'totalPrice',
+      'total',
+      'price',
+      'amount',
+      'totalAmount',
+      'cost',
+      'bookingPrice',
+      'bookingCost',
+      'pricePerHour',
+      'TotalPrice',
+      'Total',
+      'Price',
+      'Amount',
     ]) {
       final val = json[key];
       if (val != null) {
@@ -45,13 +61,40 @@ class BookingModel {
         if (parsed != null && parsed > 0) return parsed;
       }
     }
+
+    for (final parentKey in ['stadium', 'pitch', 'playground', 'field']) {
+      final parent = json[parentKey];
+      if (parent is! Map<String, dynamic>) continue;
+
+      for (final key in [
+        'pricePerHour',
+        'pricePerSlot',
+        'hourPrice',
+        'hourlyPrice',
+        'price',
+        'Price',
+      ]) {
+        final val = parent[key];
+        if (val != null) {
+          final parsed = double.tryParse(val.toString());
+          if (parsed != null && parsed > 0) return parsed;
+        }
+      }
+    }
+
     return 0.0;
   }
 
   static String _parseImage(Map<String, dynamic> json) {
     for (final key in [
-      'imageUrl', 'image', 'stadiumImage', 'coverImage',
-      'thumbnail', 'photo', 'ImageUrl', 'Image'
+      'imageUrl',
+      'image',
+      'stadiumImage',
+      'coverImage',
+      'thumbnail',
+      'photo',
+      'ImageUrl',
+      'Image',
     ]) {
       final val = json[key];
       if (val != null && val.toString().isNotEmpty) return val.toString();
@@ -59,7 +102,13 @@ class BookingModel {
 
     final stadium = json['stadium'] as Map<String, dynamic>? ?? {};
 
-    for (final key in ['imageUrl', 'image', 'coverImage', 'thumbnail', 'photo']) {
+    for (final key in [
+      'imageUrl',
+      'image',
+      'coverImage',
+      'thumbnail',
+      'photo',
+    ]) {
       final val = stadium[key];
       if (val != null && val.toString().isNotEmpty) return val.toString();
     }
@@ -69,7 +118,14 @@ class BookingModel {
       if (images != null && images.isNotEmpty) {
         final first = images.first;
         if (first is Map) {
-          for (final k in ['imageUrl', 'url', 'path', 'src', 'ImageUrl', 'Url']) {
+          for (final k in [
+            'imageUrl',
+            'url',
+            'path',
+            'src',
+            'ImageUrl',
+            'Url',
+          ]) {
             final v = first[k];
             if (v != null && v.toString().isNotEmpty) return v.toString();
           }
@@ -98,7 +154,8 @@ class BookingModel {
   }
 
   factory BookingModel.fromJson(Map<String, dynamic> json) {
-    final rawStatus = (json['status'] ?? json['bookingStatus'] ?? '').toString();
+    final rawStatus = (json['status'] ?? json['bookingStatus'] ?? '')
+        .toString();
     final stadium = json['stadium'] as Map<String, dynamic>? ?? {};
 
     return BookingModel(
@@ -106,7 +163,8 @@ class BookingModel {
       stadiumId: json['stadiumId'] ?? stadium['id'] ?? 0,
       stadiumName: json['stadiumName'] ?? stadium['name'] ?? '',
       stadiumImage: _parseImage(json),
-      category: json['categoryName'] ??
+      category:
+          json['categoryName'] ??
           stadium['categoryName'] ??
           stadium['category'] ??
           '',

@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:dio/dio.dart';
 import 'package:z_sports_booking/core/network/api_client.dart';
 import 'package:z_sports_booking/core/network/api_endpoints.dart';
+import 'package:z_sports_booking/core/network/error_message_mapper.dart';
 import 'package:z_sports_booking/data/models/user_model.dart';
 
 class ProfileRepository {
@@ -12,8 +13,6 @@ class ProfileRepository {
   Future<UserModel> getProfile() async {
     try {
       final response = await _apiClient.dio.get(ApiEndpoints.getProfile);
-      // ignore: avoid_print
-      print('🟢 [Profile] JSON: ${response.data}');
       return UserModel.fromJson(response.data as Map<String, dynamic>);
     } on DioException catch (e) {
       throw Exception(_handleError(e));
@@ -55,7 +54,7 @@ class ProfileRepository {
     required String confirmNewPassword,
   }) async {
     try {
-      await _apiClient.dio.put(
+      await _apiClient.dio.post(
         ApiEndpoints.changePassword,
         data: {
           'currentPassword': currentPassword,
@@ -69,22 +68,9 @@ class ProfileRepository {
   }
 
   String _handleError(DioException error) {
-    if (error.response != null) {
-      final data = error.response?.data;
-      if (data is Map) {
-        if (data['message'] != null) return data['message'];
-        if (data['errors'] != null) {
-          final errors = data['errors'];
-          if (errors is Map && errors.isNotEmpty) {
-            final firstVal = errors.values.first;
-            if (firstVal is List && firstVal.isNotEmpty) {
-              return firstVal.first.toString();
-            }
-          }
-        }
-      }
-      return 'خطأ في الخادم: ${error.response?.statusCode}';
-    }
-    return 'لا يوجد اتصال بالإنترنت';
+    return friendlyDioError(
+      error,
+      fallbackMessage: 'تعذر تحديث بيانات الحساب.',
+    );
   }
 }

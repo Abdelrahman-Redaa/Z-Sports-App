@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/core/widgets/category_chip.dart';
 import 'package:z_sports_booking/core/widgets/pitch_card.dart';
@@ -28,7 +30,10 @@ class _SearchScreenState extends State<SearchScreen> {
     super.dispose();
   }
 
-  List<PitchModel> _applyFilters(List<PitchModel> all, List<dynamic> categories) {
+  List<PitchModel> _applyFilters(
+    List<PitchModel> all,
+    List<dynamic> categories,
+  ) {
     var results = all;
 
     if (_selectedCategoryIndex > 0 && categories.isNotEmpty) {
@@ -58,7 +63,9 @@ class _SearchScreenState extends State<SearchScreen> {
       body: SafeArea(
         child: BlocBuilder<StadiumCubit, StadiumState>(
           builder: (context, state) {
-            final allStadiums = state is StadiumLoaded ? state.stadiums : <PitchModel>[];
+            final allStadiums = state is StadiumLoaded
+                ? state.stadiums
+                : <PitchModel>[];
             final categories = state is StadiumLoaded ? state.categories : [];
             final filtered = _applyFilters(allStadiums, categories);
 
@@ -70,15 +77,20 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Row(
                     children: [
                       IconButton(
-                        icon: const Icon(Icons.arrow_forward, color: AppColors.textPrimary),
-                        onPressed: () => context.pop(),
+                        icon: const Icon(
+                          Icons.arrow_forward,
+                          color: AppColors.textPrimary,
+                        ),
+                        onPressed: () => popOrGo(context, AppRoutes.home),
                         padding: EdgeInsets.zero,
                         alignment: Alignment.centerRight,
                       ),
                       const SizedBox(width: 8),
                       Text(
-                        AppStrings.search,
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w700),
+                        context.tr('استكشاف', 'Search'),
+                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ],
                   ),
@@ -86,7 +98,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 Padding(
                   padding: const EdgeInsets.all(20),
                   child: SearchBarWidget(
-                    hint: AppStrings.searchHint,
+                    hint: context.tr(
+                      'ابحث عن ملعب أو رياضة',
+                      'Search fields or sports',
+                    ),
                     readOnly: false,
                     controller: _searchController,
                     onChanged: (v) => setState(() => _query = v),
@@ -98,20 +113,29 @@ class _SearchScreenState extends State<SearchScreen> {
                     scrollDirection: Axis.horizontal,
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     itemCount: categories.length + 1,
-                    separatorBuilder: (_, __) => const SizedBox(width: 8),
+                    separatorBuilder: (_, _) => const SizedBox(width: 8),
                     itemBuilder: (_, index) {
-                      final label = index == 0 ? 'الكل' : categories[index - 1].name as String;
+                      final label = index == 0
+                          ? context.tr('الكل', 'All')
+                          : categories[index - 1].name as String;
                       return CategoryChip(
                         label: label,
                         isSelected: _selectedCategoryIndex == index,
-                        onTap: () => setState(() => _selectedCategoryIndex = index),
+                        onTap: () =>
+                            setState(() => _selectedCategoryIndex = index),
                       );
                     },
                   ),
                 ),
                 const SizedBox(height: 16),
                 if (state is StadiumLoading)
-                  const Expanded(child: Center(child: CircularProgressIndicator(color: AppColors.primary)))
+                  const Expanded(
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                  )
                 else
                   Expanded(
                     child: filtered.isEmpty
@@ -119,11 +143,18 @@ class _SearchScreenState extends State<SearchScreen> {
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                const Icon(Icons.search_off, size: 48, color: AppColors.textMuted),
+                                const Icon(
+                                  Icons.search_off,
+                                  size: 48,
+                                  color: AppColors.textMuted,
+                                ),
                                 const SizedBox(height: 12),
                                 Text(
-                                  'لا توجد نتائج',
-                                  style: Theme.of(context).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
+                                  context.tr('لا توجد نتائج', 'No results'),
+                                  style: Theme.of(context).textTheme.bodyLarge
+                                      ?.copyWith(
+                                        color: AppColors.textSecondary,
+                                      ),
                                 ),
                               ],
                             ),
@@ -131,7 +162,8 @@ class _SearchScreenState extends State<SearchScreen> {
                         : ListView.separated(
                             padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                             itemCount: filtered.length,
-                            separatorBuilder: (_, __) => const SizedBox(height: 12),
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 12),
                             itemBuilder: (_, index) {
                               final pitch = filtered[index];
                               return PitchCard(

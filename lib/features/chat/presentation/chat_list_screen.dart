@@ -1,7 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 
@@ -12,16 +14,16 @@ class ChatListScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.chat),
+        title: Text(context.tr('المحادثات', 'Chats')),
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward),
-          onPressed: () => context.pop(),
+          onPressed: () => popOrGo(context, AppRoutes.home),
         ),
       ),
       body: MockData.conversations.isEmpty
           ? Center(
               child: Text(
-                AppStrings.noMessages,
+                context.tr('لا توجد محادثات', 'No conversations'),
                 style: Theme.of(
                   context,
                 ).textTheme.bodyLarge?.copyWith(color: AppColors.textSecondary),
@@ -30,7 +32,7 @@ class ChatListScreen extends StatelessWidget {
           : ListView.separated(
               padding: const EdgeInsets.all(20),
               itemCount: MockData.conversations.length,
-              separatorBuilder: (_, __) => const SizedBox(height: 8),
+              separatorBuilder: (_, _) => const SizedBox(height: 8),
               itemBuilder: (_, index) {
                 final chat = MockData.conversations[index];
 

@@ -55,21 +55,23 @@ final appRouter = GoRouter(
   navigatorKey: _rootNavigatorKey,
   initialLocation: AppRoutes.splash,
   routes: [
-    GoRoute(path: AppRoutes.splash, builder: (_, __) => const SplashScreen()),
-    GoRoute(path: AppRoutes.welcome, builder: (_, __) => const WelcomeScreen()),
-    GoRoute(path: AppRoutes.login, builder: (_, __) => const LoginScreen()),
+    GoRoute(path: AppRoutes.splash, builder: (_, _) => const SplashScreen()),
+    GoRoute(path: AppRoutes.welcome, builder: (_, _) => const WelcomeScreen()),
+    GoRoute(path: AppRoutes.login, builder: (_, _) => const LoginScreen()),
     GoRoute(
       path: AppRoutes.register,
-      builder: (_, __) => const RegisterScreen(),
+      builder: (_, _) => const RegisterScreen(),
     ),
     GoRoute(
       path: AppRoutes.otp,
-      builder: (_, state) =>
-          OtpScreen(phone: state.uri.queryParameters['phone'] ?? ''),
+      builder: (_, state) => OtpScreen(
+        phone: state.uri.queryParameters['phone'] ?? '',
+        flow: state.uri.queryParameters['flow'] ?? 'register',
+      ),
     ),
     GoRoute(
       path: AppRoutes.forgotPassword,
-      builder: (_, __) => const ForgotPasswordScreen(),
+      builder: (_, _) => const ForgotPasswordScreen(),
     ),
     GoRoute(
       path: AppRoutes.resetPassword,
@@ -127,22 +129,22 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.editProfile,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const EditProfileScreen(),
+      builder: (_, _) => const EditProfileScreen(),
     ),
     GoRoute(
       path: AppRoutes.changePassword,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const ChangePasswordScreen(),
+      builder: (_, _) => const ChangePasswordScreen(),
     ),
     GoRoute(
       path: AppRoutes.notifications,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const NotificationsScreen(),
+      builder: (_, _) => const NotificationsScreen(),
     ),
     GoRoute(
       path: AppRoutes.chat,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const ChatListScreen(),
+      builder: (_, _) => const ChatListScreen(),
     ),
     GoRoute(
       path: AppRoutes.chatDetail,
@@ -153,17 +155,17 @@ final appRouter = GoRouter(
     GoRoute(
       path: AppRoutes.search,
       parentNavigatorKey: _rootNavigatorKey,
-      builder: (_, __) => const SearchScreen(),
+      builder: (_, _) => const SearchScreen(),
     ),
     StatefulShellRoute.indexedStack(
-      builder: (_, __, navigationShell) =>
+      builder: (_, _, navigationShell) =>
           MainShell(navigationShell: navigationShell),
       branches: [
         StatefulShellBranch(
           routes: [
             GoRoute(
               path: AppRoutes.home,
-              builder: (_, __) => const HomeScreen(),
+              builder: (_, _) => const HomeScreen(),
             ),
           ],
         ),
@@ -171,7 +173,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.bookings,
-              builder: (_, __) => const MyBookingsScreen(),
+              builder: (_, _) => const MyBookingsScreen(),
             ),
           ],
         ),
@@ -179,7 +181,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.favorites,
-              builder: (_, __) => const FavoritesScreen(),
+              builder: (_, _) => const FavoritesScreen(),
             ),
           ],
         ),
@@ -187,7 +189,7 @@ final appRouter = GoRouter(
           routes: [
             GoRoute(
               path: AppRoutes.profile,
-              builder: (_, __) => const ProfileScreen(),
+              builder: (_, _) => const ProfileScreen(),
             ),
           ],
         ),

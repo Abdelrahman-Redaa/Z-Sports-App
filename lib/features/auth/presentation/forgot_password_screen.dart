@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/core/widgets/labeled_field.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dart';
@@ -29,10 +31,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
-        if (state is AuthSuccess) {
-          context.push(
-            '${AppRoutes.otp}?phone=${_emailController.text.trim()}',
-          );
+        if (state is AuthSuccess && state.message == null) {
+          final email = Uri.encodeComponent(_emailController.text.trim());
+          context.push('${AppRoutes.resetPassword}?email=$email');
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -75,14 +76,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     const SizedBox(height: 28),
                     Text(
-                      'نسيت كلمة المرور؟',
+                      context.tr('نسيت كلمة المرور؟', 'Forgot Password?'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.headlineMedium
                           ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'أدخل بريدك الإلكتروني المسجل وسنرسل لك رمزاً للتحقق.',
+                      context.tr(
+                        'أدخل بريدك الإلكتروني المسجل وسنرسل لك رمزاً للتحقق.',
+                        'Enter your registered email and we will send a verification code.',
+                      ),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
@@ -91,12 +95,12 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     ),
                     const SizedBox(height: 40),
                     WhiteLabeledField(
-                      label: AppStrings.email,
+                      label: context.tr('البريد الإلكتروني', 'Email'),
                       hint: 'example@domain.com',
                       controller: _emailController,
                       keyboardType: TextInputType.emailAddress,
                       validator: (v) => v == null || v.isEmpty
-                          ? 'أدخل بريدك الإلكتروني'
+                          ? context.tr('أدخل بريدك الإلكتروني', 'Enter email')
                           : null,
                     ),
                     const SizedBox(height: 32),
@@ -125,14 +129,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                             ? const CircularProgressIndicator(
                                 color: AppColors.textPrimary,
                               )
-                            : const Row(
+                            : Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.send_outlined, size: 20),
-                                  SizedBox(width: 8),
+                                  const Icon(Icons.send_outlined, size: 20),
+                                  const SizedBox(width: 8),
                                   Text(
-                                    'إرسال الرمز',
-                                    style: TextStyle(
+                                    context.tr('إرسال الرمز', 'Send Code'),
+                                    style: const TextStyle(
                                       fontWeight: FontWeight.w800,
                                       fontSize: 16,
                                     ),
@@ -146,14 +150,17 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'تذكرت كلمة المرور؟',
+                          context.tr(
+                            'تذكرت كلمة المرور؟',
+                            'Remembered your password?',
+                          ),
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () => popOrGo(context, AppRoutes.login),
                           child: Text(
-                            'تسجيل الدخول',
+                            context.tr('تسجيل الدخول', 'Login'),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: AppColors.primary,

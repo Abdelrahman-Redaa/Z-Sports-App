@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/core/widgets/labeled_field.dart';
 import 'package:z_sports_booking/core/widgets/primary_button.dart';
@@ -37,7 +38,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
-          context.push('${AppRoutes.otp}?phone=${_emailController.text}');
+          final email = Uri.encodeComponent(_emailController.text.trim());
+          context.push('${AppRoutes.otp}?phone=$email&flow=register');
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
@@ -52,7 +54,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           appBar: AppBar(
             leading: IconButton(
               icon: const Icon(Icons.arrow_forward),
-              onPressed: () => context.pop(),
+              onPressed: () => popOrGo(context, AppRoutes.welcome),
             ),
           ),
           body: SafeArea(
@@ -64,13 +66,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      AppStrings.joinTitle,
+                      context.tr('انضم إلى Z Sports', 'Join Z Sports'),
                       style: Theme.of(context).textTheme.headlineMedium
                           ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      AppStrings.joinSubtitle,
+                      context.tr(
+                        'سجل الآن لحجز ملاعبك المفضلة بسهولة',
+                        'Create an account to book your favorite fields easily',
+                      ),
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
                         height: 1.5,
@@ -79,26 +84,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const SizedBox(height: 28),
                     DarkLabeledField(
                       controller: _nameController,
-                      label: AppStrings.fullName,
-                      hint: AppStrings.nameHint,
+                      label: context.tr('الاسم', 'Name'),
+                      hint: context.tr('أدخل اسمك الكامل', 'Enter your name'),
                       prefixIcon: Icons.person_outline,
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'أدخل الاسم' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? context.tr('أدخل الاسم', 'Enter name')
+                          : null,
                     ),
                     const SizedBox(height: 18),
                     DarkLabeledField(
                       controller: _emailController,
-                      label: AppStrings.email,
+                      label: context.tr('البريد الإلكتروني', 'Email'),
                       hint: 'example@mail.com',
                       keyboardType: TextInputType.emailAddress,
                       prefixIcon: Icons.email_outlined,
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'أدخل البريد' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? context.tr('أدخل البريد', 'Enter email')
+                          : null,
                     ),
                     const SizedBox(height: 18),
                     DarkLabeledField(
                       controller: _passwordController,
-                      label: AppStrings.password,
+                      label: context.tr('كلمة المرور', 'Password'),
                       hint: '••••••••',
                       obscureText: _obscurePassword,
                       prefixIcon: Icons.lock_outline,
@@ -113,12 +120,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           () => _obscurePassword = !_obscurePassword,
                         ),
                       ),
-                      validator: (v) =>
-                          v == null || v.length < 6 ? '6 أحرف على الأقل' : null,
+                      validator: (v) => v == null || v.length < 6
+                          ? context.tr('6 أحرف على الأقل', 'At least 6 chars')
+                          : null,
                     ),
                     const SizedBox(height: 18),
                     DarkLabeledField(
-                      label: AppStrings.confirmPassword,
+                      label: context.tr(
+                        'تأكيد كلمة المرور',
+                        'Confirm Password',
+                      ),
                       hint: '••••••••',
                       obscureText: _obscureConfirm,
                       prefixIcon: Icons.lock_reset,
@@ -133,12 +144,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             setState(() => _obscureConfirm = !_obscureConfirm),
                       ),
                       validator: (v) => v != _passwordController.text
-                          ? 'كلمة المرور غير متطابقة'
+                          ? context.tr(
+                              'كلمة المرور غير متطابقة',
+                              'Passwords do not match',
+                            )
                           : null,
                     ),
                     const SizedBox(height: 32),
                     PrimaryButton(
-                      label: AppStrings.register,
+                      label: context.tr('إنشاء حساب', 'Create Account'),
                       isLoading: state is AuthLoading,
                       onPressed: () {
                         if (_formKey.currentState!.validate()) {
@@ -155,14 +169,17 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          AppStrings.haveAccount,
+                          context.tr(
+                            'لديك حساب بالفعل؟',
+                            'Already have an account?',
+                          ),
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
-                          onPressed: () => context.pop(),
+                          onPressed: () => popOrGo(context, AppRoutes.login),
                           child: Text(
-                            AppStrings.login,
+                            context.tr('تسجيل الدخول', 'Login'),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: AppColors.primary,

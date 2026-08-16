@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:z_sports_booking/core/network/api_client.dart';
 import 'package:z_sports_booking/core/network/api_endpoints.dart';
+import 'package:z_sports_booking/core/network/error_message_mapper.dart';
 
 class AuthRepository {
   final ApiClient _apiClient;
@@ -86,18 +87,33 @@ class AuthRepository {
     String newPassword,
     String confirmNewPassword,
   ) async {
+    final data = {
+      'email': email,
+      'otp': otp,
+      'newPassword': newPassword,
+      'confirmNewPassword': confirmNewPassword,
+    };
+
     try {
       final response = await _apiClient.dio.post(
         ApiEndpoints.resetPassword,
-        data: {
-          'email': email,
-          'otp': otp,
-          'newPassword': newPassword,
-          'confirmNewPassword': confirmNewPassword,
-        },
+        data: data,
       );
-      return response.statusCode == 200 || response.statusCode == 201;
+      final statusCode = response.statusCode ?? 0;
+      return statusCode >= 200 && statusCode < 300;
     } on DioException catch (e) {
+      if (e.response?.statusCode == 404) {
+        try {
+          final response = await _apiClient.dio.post(
+            '/Api/Account/ResetPassword',
+            data: data,
+          );
+          final statusCode = response.statusCode ?? 0;
+          return statusCode >= 200 && statusCode < 300;
+        } on DioException catch (fallbackError) {
+          throw Exception(_handleDioError(fallbackError));
+        }
+      }
       throw Exception(_handleDioError(e));
     } catch (e) {
       throw Exception('حدث خطأ غير متوقع');
@@ -105,23 +121,9 @@ class AuthRepository {
   }
 
   String _handleDioError(DioException error) {
-    if (error.response != null) {
-      final data = error.response?.data;
-      if (data is Map) {
-        if (data['message'] != null) return data['message'];
-        if (data['errors'] != null) {
-          final errors = data['errors'];
-          if (errors is Map) {
-            final firstKey = errors.keys.first;
-            final firstVal = errors[firstKey];
-            if (firstVal is List && firstVal.isNotEmpty)
-              return firstVal.first.toString();
-          }
-        }
-      }
-      if (data is String && data.isNotEmpty) return data;
-      return 'خطأ في الخادم: ${error.response?.statusCode}';
-    }
-    return 'لا يوجد اتصال بالإنترنت';
+    return friendlyDioError(
+      error,
+      fallbackMessage: 'تعذر إتمام العملية، حاول مرة أخرى.',
+    );
   }
 }

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 
 class MainShell extends StatelessWidget {
@@ -22,26 +22,26 @@ class MainShell extends StatelessWidget {
             index,
             initialLocation: index == navigationShell.currentIndex,
           ),
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.home_outlined),
-              activeIcon: Icon(Icons.home),
-              label: AppStrings.home,
+              icon: const Icon(Icons.home_outlined),
+              activeIcon: const Icon(Icons.home),
+              label: context.tr('الرئيسية', 'Home'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.calendar_today_outlined),
-              activeIcon: Icon(Icons.calendar_today),
-              label: AppStrings.bookings,
+              icon: const Icon(Icons.calendar_today_outlined),
+              activeIcon: const Icon(Icons.calendar_today),
+              label: context.tr('حجوزاتي', 'Bookings'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.favorite_outline),
-              activeIcon: Icon(Icons.favorite),
-              label: 'المفضلة',
+              icon: const Icon(Icons.favorite_outline),
+              activeIcon: const Icon(Icons.favorite),
+              label: context.tr('المفضلة', 'Favorites'),
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person_outline),
-              activeIcon: Icon(Icons.person),
-              label: AppStrings.profile,
+              icon: const Icon(Icons.person_outline),
+              activeIcon: const Icon(Icons.person),
+              label: context.tr('حسابي', 'Profile'),
             ),
           ],
           type: BottomNavigationBarType.fixed,

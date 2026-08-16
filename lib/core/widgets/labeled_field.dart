@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 
 class WhiteLabeledField extends StatelessWidget {
@@ -173,7 +174,7 @@ class PasswordLabelRow extends StatelessWidget {
         GestureDetector(
           onTap: onForgotTap,
           child: Text(
-            'نسيت كلمة المرور؟',
+            context.tr('نسيت كلمة المرور؟', 'Forgot Password?'),
             style: Theme.of(context).textTheme.bodySmall?.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w700,
@@ -181,7 +182,7 @@ class PasswordLabelRow extends StatelessWidget {
           ),
         ),
         Text(
-          'كلمة المرور',
+          context.tr('كلمة المرور', 'Password'),
           style: Theme.of(context).textTheme.bodyMedium?.copyWith(
             color: AppColors.textLabel,
             fontWeight: FontWeight.w500,

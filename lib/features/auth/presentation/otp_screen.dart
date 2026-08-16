@@ -1,17 +1,20 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_cubit.dart';
 import 'package:z_sports_booking/features/auth/presentation/cubit/auth_state.dart';
 
 class OtpScreen extends StatefulWidget {
-  const OtpScreen({super.key, required this.phone});
+  const OtpScreen({super.key, required this.phone, required this.flow});
 
   final String phone;
+  final String flow;
 
   @override
   State<OtpScreen> createState() => _OtpScreenState();
@@ -27,12 +30,16 @@ class _OtpScreenState extends State<OtpScreen> {
   Timer? _timer;
   int _secondsLeft = 40;
   bool _canResend = false;
-  bool get _isRegisterFlow => widget.phone.contains('@');
+  bool get _isRegisterFlow => widget.flow == 'register';
 
   @override
   void initState() {
     super.initState();
     _startTimer();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _focusNodes.first.requestFocus();
+    });
   }
 
   void _startTimer() {
@@ -91,19 +98,26 @@ class _OtpScreenState extends State<OtpScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthOtpConfirmed) {
-          context.go(AppRoutes.home);
-        } else if (state is AuthSuccess) {
-          if (!_isRegisterFlow) {
-            context.push(AppRoutes.resetPassword);
-          } else {
-            if (state.message != null) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message!),
-                  backgroundColor: AppColors.primary,
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                context.tr(
+                  'تم تأكيد الحساب بنجاح، سجل الدخول الآن',
+                  'Account verified successfully. Login now',
                 ),
-              );
-            }
+              ),
+              backgroundColor: AppColors.primary,
+            ),
+          );
+          context.go(AppRoutes.login);
+        } else if (state is AuthSuccess) {
+          if (state.message != null) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message!),
+                backgroundColor: AppColors.primary,
+              ),
+            );
           }
         } else if (state is AuthError) {
           ScaffoldMessenger.of(context).showSnackBar(
@@ -126,14 +140,17 @@ class _OtpScreenState extends State<OtpScreen> {
               child: Column(
                 children: [
                   Text(
-                    'تحقق من الرمز',
+                    context.tr('تحقق من الرمز', 'Verify Code'),
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'أدخل الرمز المكون من 4 أرقام المرسل إلى\nبريدك الإلكتروني',
+                    context.tr(
+                      'أدخل الرمز المكون من 4 أرقام المرسل إلى\nبريدك الإلكتروني',
+                      'Enter the 4-digit code sent to\nyour email',
+                    ),
                     textAlign: TextAlign.center,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: AppColors.textSecondary,
@@ -141,37 +158,47 @@ class _OtpScreenState extends State<OtpScreen> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(4, (index) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        width: 60,
-                        height: 60,
-                        decoration: BoxDecoration(
-                          color: AppColors.backgroundLight,
-                          shape: BoxShape.circle,
-                          border: Border.all(color: AppColors.surfaceBorder),
-                        ),
-                        child: TextField(
-                          controller: _controllers[index],
-                          focusNode: _focusNodes[index],
-                          textAlign: TextAlign.center,
-                          keyboardType: TextInputType.number,
-                          maxLength: 1,
-                          style: Theme.of(context).textTheme.headlineMedium
-                              ?.copyWith(
-                                fontWeight: FontWeight.w800,
-                                color: AppColors.primary,
-                              ),
-                          decoration: const InputDecoration(
-                            counterText: '',
-                            border: InputBorder.none,
+                  Directionality(
+                    textDirection: TextDirection.ltr,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(4, (index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          width: 60,
+                          height: 60,
+                          decoration: BoxDecoration(
+                            color: AppColors.backgroundLight,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.surfaceBorder),
                           ),
-                          onChanged: (v) => _onChanged(v, index),
-                        ),
-                      );
-                    }),
+                          child: TextField(
+                            controller: _controllers[index],
+                            focusNode: _focusNodes[index],
+                            autofocus: index == 0,
+                            textAlign: TextAlign.center,
+                            keyboardType: TextInputType.number,
+                            textInputAction: index == 3
+                                ? TextInputAction.done
+                                : TextInputAction.next,
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly,
+                            ],
+                            maxLength: 1,
+                            style: Theme.of(context).textTheme.headlineMedium
+                                ?.copyWith(
+                                  fontWeight: FontWeight.w800,
+                                  color: AppColors.primary,
+                                ),
+                            decoration: const InputDecoration(
+                              counterText: '',
+                              border: InputBorder.none,
+                            ),
+                            onChanged: (v) => _onChanged(v, index),
+                          ),
+                        );
+                      }),
+                    ),
                   ),
 
                   const SizedBox(height: 32),
@@ -180,9 +207,15 @@ class _OtpScreenState extends State<OtpScreen> {
                           onPressed: state is AuthLoading
                               ? null
                               : () {
-                                  context.read<AuthCubit>().resendEmail(
-                                    widget.phone,
-                                  );
+                                  if (_isRegisterFlow) {
+                                    context.read<AuthCubit>().resendEmail(
+                                      widget.phone,
+                                    );
+                                  } else {
+                                    context
+                                        .read<AuthCubit>()
+                                        .resendResetPasswordOtp(widget.phone);
+                                  }
                                   _startTimer();
                                 },
                           icon: const Icon(
@@ -190,7 +223,7 @@ class _OtpScreenState extends State<OtpScreen> {
                             color: AppColors.primary,
                           ),
                           label: Text(
-                            'إعادة إرسال الرمز',
+                            context.tr('إعادة إرسال الرمز', 'Resend Code'),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: AppColors.primary,
@@ -211,7 +244,10 @@ class _OtpScreenState extends State<OtpScreen> {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               Text(
-                                'إعادة إرسال الرمز خلال ${_formatTime(_secondsLeft)}',
+                                context.tr(
+                                  'إعادة إرسال الرمز خلال ${_formatTime(_secondsLeft)}',
+                                  'Resend code in ${_formatTime(_secondsLeft)}',
+                                ),
                                 style: Theme.of(context).textTheme.bodySmall
                                     ?.copyWith(color: AppColors.textSecondary),
                               ),
@@ -236,8 +272,13 @@ class _OtpScreenState extends State<OtpScreen> {
                               final otp = _otpCode;
                               if (otp.length < 4) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('أدخل الرمز كاملاً'),
+                                  SnackBar(
+                                    content: Text(
+                                      context.tr(
+                                        'أدخل الرمز كاملاً',
+                                        'Enter the full code',
+                                      ),
+                                    ),
                                   ),
                                 );
                                 return;
@@ -248,8 +289,9 @@ class _OtpScreenState extends State<OtpScreen> {
                                   otp,
                                 );
                               } else {
+                                final email = Uri.encodeComponent(widget.phone);
                                 context.push(
-                                  '${AppRoutes.resetPassword}?otp=$otp&email=${widget.phone}',
+                                  '${AppRoutes.resetPassword}?otp=$otp&email=$email',
                                 );
                               }
                             },
@@ -265,9 +307,9 @@ class _OtpScreenState extends State<OtpScreen> {
                           ? const CircularProgressIndicator(
                               color: AppColors.textPrimary,
                             )
-                          : const Text(
-                              'تأكيد الرمز',
-                              style: TextStyle(
+                          : Text(
+                              context.tr('تأكيد الرمز', 'Confirm Code'),
+                              style: const TextStyle(
                                 fontWeight: FontWeight.w800,
                                 fontSize: 16,
                               ),

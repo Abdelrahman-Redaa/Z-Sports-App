@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/booking_model.dart';
@@ -70,13 +71,18 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
 
   IconData _iconForCategory(String category) {
     final c = category.toLowerCase();
-    if (c.contains('كرة قدم') || c.contains('football') || c.contains('soccer'))
+    if (c.contains('كرة قدم') ||
+        c.contains('football') ||
+        c.contains('soccer')) {
       return Icons.sports_soccer;
-    if (c.contains('كرة سلة') || c.contains('basket'))
+    }
+    if (c.contains('كرة سلة') || c.contains('basket')) {
       return Icons.sports_basketball;
+    }
     if (c.contains('تنس') || c.contains('tennis')) return Icons.sports_tennis;
-    if (c.contains('كرة طائرة') || c.contains('volley'))
+    if (c.contains('كرة طائرة') || c.contains('volley')) {
       return Icons.sports_volleyball;
+    }
     if (c.contains('باد') || c.contains('padel')) return Icons.sports_tennis;
     return Icons.sports;
   }
@@ -99,7 +105,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                     builder: (context, state) {
                       final name = state is ProfileLoaded
                           ? state.user.displayName.split(' ').first
-                          : 'مستخدم';
+                          : context.tr('مستخدم', 'User');
                       final avatar = state is ProfileLoaded
                           ? (state.user.profilePictureUrl ?? '')
                           : '';
@@ -109,7 +115,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
                               Text(
-                                'مرحباً، $name',
+                                context.tr('مرحباً، $name', 'Hello, $name'),
                                 style: const TextStyle(
                                   color: _textSecondary,
                                   fontSize: 13,
@@ -144,12 +150,12 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               ),
             ),
             const SizedBox(height: 28),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'حجوزاتي',
-                textAlign: TextAlign.right,
-                style: TextStyle(
+                context.tr('حجوزاتي', 'My Bookings'),
+                textAlign: context.isEnglish ? TextAlign.left : TextAlign.right,
+                style: const TextStyle(
                   color: _textPrimary,
                   fontWeight: FontWeight.w800,
                   fontSize: 28,
@@ -157,12 +163,15 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
               ),
             ),
             const SizedBox(height: 4),
-            const Padding(
-              padding: EdgeInsets.symmetric(horizontal: 20),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Text(
-                'إدارة نشاطاتك الرياضية القادمة',
-                textAlign: TextAlign.right,
-                style: TextStyle(color: _textSecondary, fontSize: 14),
+                context.tr(
+                  'إدارة نشاطاتك الرياضية القادمة',
+                  'Manage your upcoming sports activities',
+                ),
+                textAlign: context.isEnglish ? TextAlign.left : TextAlign.right,
+                style: const TextStyle(color: _textSecondary, fontSize: 14),
               ),
             ),
             const SizedBox(height: 20),
@@ -201,7 +210,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                               backgroundColor: _primary,
                               foregroundColor: _bg,
                             ),
-                            child: const Text('إعادة المحاولة'),
+                            child: Text(context.tr('إعادة المحاولة', 'Retry')),
                           ),
                         ],
                       ),
@@ -224,28 +233,34 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                         children: [
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.6,
-                            child: const Center(
+                            child: Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(
+                                  const Icon(
                                     Icons.sports_soccer,
                                     color: _textSecondary,
                                     size: 80,
                                   ),
-                                  SizedBox(height: 16),
+                                  const SizedBox(height: 16),
                                   Text(
-                                    'لا توجد حجوزات حتى الآن',
-                                    style: TextStyle(
+                                    context.tr(
+                                      'لا توجد حجوزات حتى الآن',
+                                      'No bookings yet',
+                                    ),
+                                    style: const TextStyle(
                                       color: _textSecondary,
                                       fontSize: 18,
                                       fontWeight: FontWeight.w700,
                                     ),
                                   ),
-                                  SizedBox(height: 8),
+                                  const SizedBox(height: 8),
                                   Text(
-                                    'احجز ملعبك المفضل الآن!',
-                                    style: TextStyle(
+                                    context.tr(
+                                      'احجز ملعبك المفضل الآن!',
+                                      'Book your favorite field now!',
+                                    ),
+                                    style: const TextStyle(
                                       color: _textSecondary,
                                       fontSize: 14,
                                     ),
@@ -270,7 +285,7 @@ class _MyBookingsScreenState extends State<MyBookingsScreen> {
                         vertical: 4,
                       ),
                       itemCount: bookings.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 14),
+                      separatorBuilder: (_, _) => const SizedBox(height: 14),
                       itemBuilder: (ctx, index) {
                         final booking = bookings[index];
                         return _BookingCard(

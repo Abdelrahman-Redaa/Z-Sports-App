@@ -2,6 +2,10 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/booking_model.dart';
 import 'package:z_sports_booking/features/my_bookings/presentation/cubit/my_bookings_cubit.dart';
@@ -34,10 +38,14 @@ class BookingDetailScreen extends StatelessWidget {
   final String bookingId;
   final String status;
 
-  String get _statusLabel {
-    if (status == BookingStatus.completed.name) return 'مكتمل';
-    if (status == BookingStatus.cancelled.name) return 'ملغي';
-    return 'مؤكد';
+  String _statusLabel(BuildContext context) {
+    if (status == BookingStatus.completed.name) {
+      return context.tr('مكتمل', 'Completed');
+    }
+    if (status == BookingStatus.cancelled.name) {
+      return context.tr('ملغي', 'Cancelled');
+    }
+    return context.tr('مؤكد', 'Confirmed');
   }
 
   Color get _statusColor {
@@ -51,28 +59,74 @@ class BookingDetailScreen extends StatelessWidget {
       status == BookingStatus.pendingPayment.name ||
       status == '';
 
+  Future<void> _shareBooking(BuildContext context) async {
+    final displayPitchName = pitchName.isNotEmpty
+        ? pitchName
+        : context.tr('ملعب رياضي', 'Sports Field');
+    final displayPrice = price.trim().isNotEmpty ? price : '0';
+    final shareText = context.tr(
+      'تفاصيل حجزي في Z Sports Booking\n\n'
+          'الملعب: $displayPitchName\n'
+          'رقم الحجز: #$bookingId\n'
+          'التاريخ: $date\n'
+          'الوقت: $time\n'
+          'التكلفة: $displayPrice ج.م\n'
+          'الحالة: ${_statusLabel(context)}',
+      'My booking details on Z Sports Booking\n\n'
+          'Field: $displayPitchName\n'
+          'Booking No.: #$bookingId\n'
+          'Date: $date\n'
+          'Time: $time\n'
+          'Cost: EGP $displayPrice\n'
+          'Status: ${_statusLabel(context)}',
+    );
+
+    try {
+      await SharePlus.instance.share(ShareParams(text: shareText));
+    } catch (_) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr(
+              'تعذر فتح المشاركة، حاول مرة أخرى.',
+              'Could not open sharing, please try again.',
+            ),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
+  }
+
   void _showCancelConfirmation(BuildContext context) {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: _surface,
-        title: const Text(
-          'إلغاء الحجز',
-          style: TextStyle(
+        title: Text(
+          context.tr('إلغاء الحجز', 'Cancel Booking'),
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
           textAlign: TextAlign.right,
         ),
-        content: const Text(
-          'هل أنت متأكد من إلغاء هذا الحجز؟',
-          style: TextStyle(color: _textSecondary),
+        content: Text(
+          context.tr(
+            'هل أنت متأكد من إلغاء هذا الحجز؟',
+            'Are you sure you want to cancel this booking?',
+          ),
+          style: const TextStyle(color: _textSecondary),
           textAlign: TextAlign.right,
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('تراجع', style: TextStyle(color: _textSecondary)),
+            child: Text(
+              context.tr('تراجع', 'Back'),
+              style: const TextStyle(color: _textSecondary),
+            ),
           ),
           TextButton(
             onPressed: () {
@@ -81,9 +135,9 @@ class BookingDetailScreen extends StatelessWidget {
                 int.tryParse(bookingId) ?? 0,
               );
             },
-            child: const Text(
-              'نعم، إلغاء',
-              style: TextStyle(
+            child: Text(
+              context.tr('نعم، إلغاء', 'Yes, Cancel'),
+              style: const TextStyle(
                 color: Color(0xFFD66A65),
                 fontWeight: FontWeight.bold,
               ),
@@ -100,8 +154,13 @@ class BookingDetailScreen extends StatelessWidget {
       listener: (context, state) {
         if (state is BookingCancelSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('تم إلغاء الحجز بنجاح'),
+            SnackBar(
+              content: Text(
+                context.tr(
+                  'تم إلغاء الحجز بنجاح',
+                  'Booking cancelled successfully',
+                ),
+              ),
               backgroundColor: Colors.green,
             ),
           );
@@ -118,9 +177,9 @@ class BookingDetailScreen extends StatelessWidget {
           backgroundColor: _bg,
           elevation: 0,
           centerTitle: true,
-          title: const Text(
-            'تفاصيل الحجز',
-            style: TextStyle(
+          title: Text(
+            context.tr('تفاصيل الحجز', 'Booking Details'),
+            style: const TextStyle(
               color: _textPrimary,
               fontWeight: FontWeight.w800,
               fontSize: 20,
@@ -135,7 +194,7 @@ class BookingDetailScreen extends StatelessWidget {
               ),
               child: IconButton(
                 icon: const Icon(Icons.share, color: _textPrimary, size: 20),
-                onPressed: () {},
+                onPressed: () => _shareBooking(context),
               ),
             ),
           ),
@@ -153,7 +212,7 @@ class BookingDetailScreen extends StatelessWidget {
                     color: _textPrimary,
                     size: 20,
                   ),
-                  onPressed: () => context.pop(),
+                  onPressed: () => popOrGo(context, AppRoutes.bookings),
                 ),
               ),
             ),
@@ -175,7 +234,7 @@ class BookingDetailScreen extends StatelessWidget {
                         height: 210,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => _buildPlaceholderImage(),
+                        errorWidget: (_, _, _) => _buildPlaceholderImage(),
                       )
                     else
                       _buildPlaceholderImage(),
@@ -199,7 +258,9 @@ class BookingDetailScreen extends StatelessWidget {
                       bottom: 16,
                       right: 16,
                       child: Text(
-                        pitchName.isNotEmpty ? pitchName : 'ملعب رياضي',
+                        pitchName.isNotEmpty
+                            ? pitchName
+                            : context.tr('ملعب رياضي', 'Sports Field'),
                         style: const TextStyle(
                           color: AppColors.textPrimary,
                           fontWeight: FontWeight.w900,
@@ -228,7 +289,7 @@ class BookingDetailScreen extends StatelessWidget {
                         child: Row(
                           children: [
                             Text(
-                              _statusLabel,
+                              _statusLabel(context),
                               style: const TextStyle(
                                 color: AppColors.textPrimary,
                                 fontWeight: FontWeight.w700,
@@ -267,9 +328,9 @@ class BookingDetailScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          const Text(
-                            'التكلفة',
-                            style: TextStyle(
+                          Text(
+                            context.tr('التكلفة', 'Cost'),
+                            style: const TextStyle(
                               color: _textSecondary,
                               fontSize: 13,
                             ),
@@ -298,9 +359,9 @@ class BookingDetailScreen extends StatelessWidget {
                       ),
                       child: Column(
                         children: [
-                          const Text(
-                            'رقم الحجز',
-                            style: TextStyle(
+                          Text(
+                            context.tr('رقم الحجز', 'Booking No.'),
+                            style: const TextStyle(
                               color: _textSecondary,
                               fontSize: 13,
                             ),
@@ -339,9 +400,9 @@ class BookingDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text(
-                                'التاريخ',
-                                style: TextStyle(
+                              Text(
+                                context.tr('التاريخ', 'Date'),
+                                style: const TextStyle(
                                   color: _textSecondary,
                                   fontSize: 14,
                                 ),
@@ -383,9 +444,9 @@ class BookingDetailScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              const Text(
-                                'الوقت',
-                                style: TextStyle(
+                              Text(
+                                context.tr('الوقت', 'Time'),
+                                style: const TextStyle(
                                   color: _textSecondary,
                                   fontSize: 14,
                                 ),
@@ -451,28 +512,31 @@ class BookingDetailScreen extends StatelessWidget {
                                 strokeWidth: 2.5,
                               ),
                             )
-                          : const Row(
+                          : Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'إلغاء الحجز',
-                                  style: TextStyle(
+                                  context.tr('إلغاء الحجز', 'Cancel Booking'),
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.w800,
                                     fontSize: 16,
                                   ),
                                 ),
-                                SizedBox(width: 10),
-                                Icon(Icons.cancel_outlined, size: 20),
+                                const SizedBox(width: 10),
+                                const Icon(Icons.cancel_outlined, size: 20),
                               ],
                             ),
                     );
                   },
                 ),
                 const SizedBox(height: 16),
-                const Text(
-                  'تطبق سياسة الإلغاء. الإلغاء بعد مرور 24 ساعة من تاريخ الحجز اكثر من ثلاث مرات قد يعرضك لرسوم اضافية للحجز مره اخري .',
+                Text(
+                  context.tr(
+                    'تطبق سياسة الإلغاء. الإلغاء بعد مرور 24 ساعة من تاريخ الحجز اكثر من ثلاث مرات قد يعرضك لرسوم اضافية للحجز مره اخري .',
+                    'Cancellation policy applies. Repeated late cancellations may add extra fees to future bookings.',
+                  ),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Color(0xFFD66A65),
                     fontSize: 12,
                     height: 1.5,

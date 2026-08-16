@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/user_model.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
@@ -60,7 +63,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('فشل اختيار الصورة: $e'),
+            content: Text(
+              context.tr('فشل اختيار الصورة: $e', 'Failed to select image: $e'),
+            ),
             backgroundColor: Colors.red,
           ),
         );
@@ -72,9 +77,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     final name = _nameController.text.trim();
     final phone = _phoneController.text.trim();
     if (name.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('الاسم مطلوب')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(context.tr('الاسم مطلوب', 'Name is required'))),
+      );
       return;
     }
     context.read<ProfileCubit>().updateProfile(
@@ -116,9 +121,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             backgroundColor: _bg,
             elevation: 0,
             centerTitle: true,
-            title: const Text(
-              'تعديل الملف الشخصي',
-              style: TextStyle(
+            title: Text(
+              context.tr('تعديل الملف الشخصي', 'Edit Profile'),
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -129,7 +134,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 Icons.arrow_forward,
                 color: AppColors.textPrimary,
               ),
-              onPressed: () => context.pop(),
+              onPressed: () => popOrGo(context, AppRoutes.profile),
             ),
           ),
           body: SingleChildScrollView(
@@ -163,7 +168,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     ? CachedNetworkImage(
                                         imageUrl: user.profilePictureUrl!,
                                         fit: BoxFit.cover,
-                                        errorWidget: (_, __, ___) => const Icon(
+                                        errorWidget: (_, _, _) => const Icon(
                                           Icons.person,
                                           color: _primary,
                                           size: 48,
@@ -190,7 +195,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  user?.displayName ?? 'المستخدم',
+                  user?.displayName ?? context.tr('المستخدم', 'User'),
                   style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontWeight: FontWeight.w800,
@@ -198,9 +203,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   ),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  'لاعب متميز',
-                  style: TextStyle(
+                Text(
+                  context.tr('لاعب متميز', 'Featured Player'),
+                  style: const TextStyle(
                     color: _primary,
                     fontWeight: FontWeight.w700,
                     fontSize: 14,
@@ -208,14 +213,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 const SizedBox(height: 32),
                 _EditableField(
-                  label: 'الاسم الكامل',
+                  label: context.tr('الاسم الكامل', 'Full Name'),
                   controller: _nameController,
                   icon: Icons.person_outline,
                   keyboardType: TextInputType.name,
                 ),
                 const SizedBox(height: 16),
                 _EditableField(
-                  label: 'رقم الهاتف',
+                  label: context.tr('رقم الهاتف', 'Phone Number'),
                   controller: _phoneController,
                   icon: Icons.phone_outlined,
                   keyboardType: TextInputType.phone,
@@ -238,9 +243,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ? const CircularProgressIndicator(
                             color: AppColors.background,
                           )
-                        : const Text(
-                            'حفظ التغييرات',
-                            style: TextStyle(
+                        : Text(
+                            context.tr('حفظ التغييرات', 'Save Changes'),
+                            style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 16,
                             ),

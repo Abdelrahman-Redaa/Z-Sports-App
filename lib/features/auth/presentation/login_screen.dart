@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/core/widgets/labeled_field.dart';
 import 'package:z_sports_booking/core/widgets/primary_button.dart';
@@ -50,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
             title: const Text(AppStrings.appName),
             leading: IconButton(
               icon: const Icon(Icons.arrow_forward),
-              onPressed: () {},
+              onPressed: () => popOrGo(context, AppRoutes.welcome),
             ),
           ),
           body: SafeArea(
@@ -63,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: [
                     const SizedBox(height: 8),
                     Text(
-                      AppStrings.login,
+                      context.tr('تسجيل الدخول', 'Login'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.displayLarge?.copyWith(
                         fontWeight: FontWeight.w800,
@@ -71,7 +73,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 10),
                     Text(
-                      AppStrings.loginWelcome,
+                      context.tr(
+                        'مرحباً بك مجدداً في منصة Z Sports لحجز الملاعب',
+                        'Welcome back to Z Sports Booking',
+                      ),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
@@ -81,11 +86,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     const SizedBox(height: 30),
                     WhiteLabeledField(
                       controller: _emailController,
-                      label: AppStrings.email,
+                      label: context.tr('البريد الإلكتروني', 'Email'),
                       hint: 'example@domain.com',
                       keyboardType: TextInputType.emailAddress,
                       validator: (v) => v == null || v.isEmpty
-                          ? 'أدخل البريد الإلكتروني'
+                          ? context.tr('أدخل البريد الإلكتروني', 'Enter email')
                           : null,
                     ),
                     const SizedBox(height: 18),
@@ -109,12 +114,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           () => _obscurePassword = !_obscurePassword,
                         ),
                       ),
-                      validator: (v) =>
-                          v == null || v.isEmpty ? 'أدخل كلمة المرور' : null,
+                      validator: (v) => v == null || v.isEmpty
+                          ? context.tr('أدخل كلمة المرور', 'Enter password')
+                          : null,
                     ),
                     const SizedBox(height: 26),
                     PrimaryButton(
-                      label: AppStrings.login,
+                      label: context.tr('تسجيل الدخول', 'Login'),
                       icon: Icons.login,
                       isLoading: state is AuthLoading,
                       onPressed: () {
@@ -128,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     const SizedBox(height: 28),
                     Text(
-                      AppStrings.orVia,
+                      context.tr('أو عبر', 'Or via'),
                       textAlign: TextAlign.center,
                       style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                         color: AppColors.textSecondary,
@@ -177,14 +183,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          AppStrings.noAccount,
+                          context.tr('ليس لديك حساب؟', 'No account?'),
                           style: Theme.of(context).textTheme.bodyMedium
                               ?.copyWith(color: AppColors.textSecondary),
                         ),
                         TextButton(
                           onPressed: () => context.push(AppRoutes.register),
                           child: Text(
-                            AppStrings.register,
+                            context.tr('إنشاء حساب', 'Create Account'),
                             style: Theme.of(context).textTheme.bodyMedium
                                 ?.copyWith(
                                   color: AppColors.primary,

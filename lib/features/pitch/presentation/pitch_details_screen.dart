@@ -5,6 +5,8 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'package:z_sports_booking/core/constants/app_strings.dart';
 import 'package:z_sports_booking/core/di.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/booking/presentation/cubit/booking_cubit.dart';
@@ -132,7 +134,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                         height: 260,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        errorWidget: (_, __, ___) => Container(
+                        errorWidget: (_, _, _) => Container(
                           height: 260,
                           color: AppColors.surfaceLight,
                         ),
@@ -166,7 +168,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   right: 16,
                   child: _CircleIconButton(
                     icon: Icons.arrow_forward,
-                    onTap: () => context.pop(),
+                    onTap: () => popOrGo(context, AppRoutes.home),
                   ),
                 ),
                 Positioned(
@@ -174,13 +176,16 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                   left: 16,
                   child: BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, state) {
-                      // Read FROM STATE so BlocBuilder triggers rebuild on change
                       final isFav = state.isFavorite(pitch.id);
                       return _CircleIconButton(
                         icon: isFav ? Icons.favorite : Icons.favorite_border,
-                        iconColor: isFav ? const Color(0xFFEF4444) : AppColors.textPrimary,
+                        iconColor: isFav
+                            ? const Color(0xFFEF4444)
+                            : AppColors.textPrimary,
                         onTap: () {
-                          context.read<FavoritesCubit>().toggleFavorite(pitch.id);
+                          context.read<FavoritesCubit>().toggleFavorite(
+                            pitch.id,
+                          );
                         },
                       );
                     },
@@ -385,8 +390,7 @@ class _PitchDetailsScreenState extends State<PitchDetailsScreen> {
                           scrollDirection: Axis.horizontal,
                           reverse: true,
                           itemCount: apiSlots.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 10),
+                          separatorBuilder: (_, _) => const SizedBox(width: 10),
                           itemBuilder: (_, index) {
                             final rawTime = apiSlots[index];
                             final formattedTime = _formatApiTimeForGrid(

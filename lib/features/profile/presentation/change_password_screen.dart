@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_cubit.dart';
 import 'package:z_sports_booking/features/profile/presentation/cubit/profile_state.dart';
@@ -41,15 +44,26 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
     final confirmPassword = _confirmPasswordController.text.trim();
 
     if (oldPassword.isEmpty || newPassword.isEmpty || confirmPassword.isEmpty) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('الرجاء تعبئة جميع الحقول')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            context.tr('الرجاء تعبئة جميع الحقول', 'Please fill all fields'),
+          ),
+        ),
+      );
       return;
     }
 
     if (newPassword != confirmPassword) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('كلمة المرور الجديدة غير متطابقة')),
+        SnackBar(
+          content: Text(
+            context.tr(
+              'كلمة المرور الجديدة غير متطابقة',
+              'New password does not match',
+            ),
+          ),
+        ),
       );
       return;
     }
@@ -87,9 +101,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
             backgroundColor: _bg,
             elevation: 0,
             centerTitle: true,
-            title: const Text(
-              'تغيير كلمة المرور',
-              style: TextStyle(
+            title: Text(
+              context.tr('تغيير كلمة المرور', 'Change Password'),
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontWeight: FontWeight.w700,
                 fontSize: 18,
@@ -100,7 +114,7 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                 Icons.arrow_forward,
                 color: AppColors.textPrimary,
               ),
-              onPressed: () => context.pop(),
+              onPressed: () => popOrGo(context, AppRoutes.profile),
             ),
           ),
           body: SingleChildScrollView(
@@ -109,21 +123,24 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 _PasswordField(
-                  label: 'كلمة المرور الحالية',
+                  label: context.tr('كلمة المرور الحالية', 'Current Password'),
                   controller: _oldPasswordController,
                   obscureText: _obscureOld,
                   onToggle: () => setState(() => _obscureOld = !_obscureOld),
                 ),
                 const SizedBox(height: 16),
                 _PasswordField(
-                  label: 'كلمة المرور الجديدة',
+                  label: context.tr('كلمة المرور الجديدة', 'New Password'),
                   controller: _newPasswordController,
                   obscureText: _obscureNew,
                   onToggle: () => setState(() => _obscureNew = !_obscureNew),
                 ),
                 const SizedBox(height: 16),
                 _PasswordField(
-                  label: 'تأكيد كلمة المرور الجديدة',
+                  label: context.tr(
+                    'تأكيد كلمة المرور الجديدة',
+                    'Confirm New Password',
+                  ),
                   controller: _confirmPasswordController,
                   obscureText: _obscureConfirm,
                   onToggle: () =>
@@ -147,9 +164,9 @@ class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
                         ? const CircularProgressIndicator(
                             color: AppColors.background,
                           )
-                        : const Text(
-                            'تغيير كلمة المرور',
-                            style: TextStyle(
+                        : Text(
+                            context.tr('تغيير كلمة المرور', 'Change Password'),
+                            style: const TextStyle(
                               fontWeight: FontWeight.w800,
                               fontSize: 16,
                             ),

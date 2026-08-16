@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:z_sports_booking/core/constants/app_strings.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
+import 'package:z_sports_booking/core/router/app_router.dart';
+import 'package:z_sports_booking/core/router/navigation_helper.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/mock/mock_data.dart';
 
@@ -11,16 +12,16 @@ class NotificationsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(AppStrings.notifications),
+        title: Text(context.tr('الإشعارات', 'Notifications')),
         leading: IconButton(
           icon: const Icon(Icons.arrow_forward),
-          onPressed: () => context.pop(),
+          onPressed: () => popOrGo(context, AppRoutes.home),
         ),
       ),
       body: ListView.separated(
         padding: const EdgeInsets.all(20),
         itemCount: MockData.notifications.length,
-        separatorBuilder: (_, __) => const SizedBox(height: 8),
+        separatorBuilder: (_, _) => const SizedBox(height: 8),
         itemBuilder: (_, index) {
           final notification = MockData.notifications[index];
 

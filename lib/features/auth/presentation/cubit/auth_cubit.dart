@@ -69,6 +69,21 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> resendResetPasswordOtp(String email) async {
+    emit(AuthLoading());
+    try {
+      final success = await _authRepository.forgetPassword(email);
+      if (success) {
+        _pendingEmail = email;
+        emit(const AuthSuccess(message: 'تم إرسال رمز التحقق بنجاح'));
+      } else {
+        emit(const AuthError('فشل إرسال الرمز، يرجى المحاولة مرة أخرى.'));
+      }
+    } catch (e) {
+      emit(AuthError(e.toString().replaceAll('Exception: ', '')));
+    }
+  }
+
   Future<void> forgetPassword(String email) async {
     emit(AuthLoading());
     try {

@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:z_sports_booking/core/network/api_client.dart';
 import 'package:z_sports_booking/core/network/api_endpoints.dart';
+import 'package:z_sports_booking/core/network/error_message_mapper.dart';
 import 'package:z_sports_booking/data/models/category_model.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 
@@ -13,7 +14,9 @@ class StadiumRepository {
     try {
       final response = await _apiClient.dio.get(ApiEndpoints.getAllStadiums);
       final List<dynamic> data = response.data as List<dynamic>;
-      return data.map((item) => PitchModel.fromJson(item as Map<String, dynamic>)).toList();
+      return data
+          .map((item) => PitchModel.fromJson(item as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw Exception(_handleError(e));
     }
@@ -35,7 +38,9 @@ class StadiumRepository {
         queryParameters: categoryId != null ? {'CategoryId': categoryId} : null,
       );
       final List<dynamic> data = response.data as List<dynamic>;
-      return data.map((item) => PitchModel.fromJson(item as Map<String, dynamic>)).toList();
+      return data
+          .map((item) => PitchModel.fromJson(item as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw Exception(_handleError(e));
     }
@@ -45,18 +50,15 @@ class StadiumRepository {
     try {
       final response = await _apiClient.dio.get(ApiEndpoints.categories);
       final List<dynamic> data = response.data as List<dynamic>;
-      return data.map((item) => CategoryModel.fromJson(item as Map<String, dynamic>)).toList();
+      return data
+          .map((item) => CategoryModel.fromJson(item as Map<String, dynamic>))
+          .toList();
     } on DioException catch (e) {
       throw Exception(_handleError(e));
     }
   }
 
   String _handleError(DioException error) {
-    if (error.response != null) {
-      final data = error.response?.data;
-      if (data is Map && data['message'] != null) return data['message'];
-      return 'خطأ في الخادم: ${error.response?.statusCode}';
-    }
-    return 'لا يوجد اتصال بالإنترنت';
+    return friendlyDioError(error, fallbackMessage: 'تعذر تحميل البيانات.');
   }
 }

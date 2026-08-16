@@ -41,7 +41,7 @@ class PitchCard extends StatelessWidget {
                         height: compact ? 120 : 160,
                         width: double.infinity,
                         fit: BoxFit.cover,
-                        placeholder: (_, __) => Container(
+                        placeholder: (_, _) => Container(
                           color: AppColors.surfaceLight,
                           child: const Center(
                             child: Icon(
@@ -50,7 +50,7 @@ class PitchCard extends StatelessWidget {
                             ),
                           ),
                         ),
-                        errorWidget: (_, __, ___) => Container(
+                        errorWidget: (_, _, _) => Container(
                           color: AppColors.surfaceLight,
                           child: const Center(
                             child: Icon(
@@ -113,14 +113,14 @@ class PitchCard extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: isFav
                                 ? const Color(0x33EF4444)
-                                : const Color(0xAA182540),
+                                : AppColors.backgroundOverlay,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
                             isFav ? Icons.favorite : Icons.favorite_border,
                             color: isFav
-                                ? const Color(0xFFEF4444)
-                                : Colors.white,
+                                ? AppColors.favorite
+                                : AppColors.textPrimary,
                             size: 20,
                           ),
                         ),

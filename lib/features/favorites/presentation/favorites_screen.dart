@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:z_sports_booking/core/localization/language_cubit.dart';
 import 'package:z_sports_booking/core/theme/app_colors.dart';
 import 'package:z_sports_booking/data/models/pitch_model.dart';
 import 'package:z_sports_booking/features/favorites/presentation/cubit/favorites_cubit.dart';
@@ -18,7 +19,6 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
   @override
   void initState() {
     super.initState();
-    // Always refresh when screen is shown
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<FavoritesCubit>().loadFavorites();
     });
@@ -32,15 +32,14 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            // Header
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 20, 20, 0),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    'الملاعب المفضلة',
-                    style: TextStyle(
+                  Text(
+                    context.tr('الملاعب المفضلة', 'Favorite Fields'),
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w800,
                       fontSize: 24,
@@ -48,16 +47,19 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                   ),
                   BlocBuilder<FavoritesCubit, FavoritesState>(
                     builder: (context, state) {
-                      if (state is FavoritesLoaded) {
+                      final count = state.favoriteIds.length;
+                      if (count > 0) {
                         return Container(
                           padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 4),
+                            horizontal: 10,
+                            vertical: 4,
+                          ),
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.15),
+                            color: AppColors.primary.withValues(alpha: 0.15),
                             borderRadius: BorderRadius.circular(12),
                           ),
                           child: Text(
-                            '${state.favorites.length} ملعب',
+                            context.tr('$count ملعب', '$count fields'),
                             style: const TextStyle(
                               color: AppColors.primary,
                               fontWeight: FontWeight.w600,
@@ -78,17 +80,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             Expanded(
               child: BlocBuilder<FavoritesCubit, FavoritesState>(
                 builder: (context, state) {
-                  // ignore: avoid_print
-                  print('🎯 [FavoritesScreen] BlocBuilder called. state type: ${state.runtimeType}');
+                  final favorites = state.favoriteList;
 
-                  // Loading
-                  if (state is FavoritesLoading) {
+                  if (state is FavoritesLoading && favorites == null) {
                     return const Center(
-                      child: CircularProgressIndicator(color: AppColors.primary),
+                      child: CircularProgressIndicator(
+                        color: AppColors.primary,
+                      ),
                     );
                   }
 
-                  // Error
                   if (state is FavoritesError) {
                     return Center(
                       child: Padding(
@@ -96,21 +97,29 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(Icons.error_outline,
-                                color: Colors.red, size: 56),
+                            const Icon(
+                              Icons.error_outline,
+                              color: Colors.red,
+                              size: 56,
+                            ),
                             const SizedBox(height: 16),
                             Text(
                               state.message,
                               style: const TextStyle(
-                                  color: Colors.red, fontSize: 15),
+                                color: Colors.red,
+                                fontSize: 15,
+                              ),
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 20),
                             ElevatedButton.icon(
-                              onPressed: () =>
-                                  context.read<FavoritesCubit>().loadFavorites(),
+                              onPressed: () => context
+                                  .read<FavoritesCubit>()
+                                  .loadFavorites(),
                               icon: const Icon(Icons.refresh),
-                              label: const Text('إعادة المحاولة'),
+                              label: Text(
+                                context.tr('إعادة المحاولة', 'Retry'),
+                              ),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.primary,
                                 foregroundColor: AppColors.background,
@@ -122,12 +131,8 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                     );
                   }
 
-                  // Loaded with items
-                  if (state is FavoritesLoaded) {
-                    // ignore: avoid_print
-                    print('🎯 [FavoritesScreen] FavoritesLoaded with ${state.favorites.length} items');
-
-                    if (state.favorites.isEmpty) {
+                  if (favorites != null) {
+                    if (favorites.isEmpty) {
                       return _buildEmpty(context);
                     }
 
@@ -138,31 +143,16 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
                       backgroundColor: AppColors.surface,
                       child: ListView.separated(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 20, vertical: 8),
+                          horizontal: 20,
+                          vertical: 8,
+                        ),
                         physics: const AlwaysScrollableScrollPhysics(),
-                        itemCount: state.favorites.length,
-                        separatorBuilder: (_, __) =>
-                            const SizedBox(height: 16),
+                        itemCount: favorites.length,
+                        separatorBuilder: (_, _) => const SizedBox(height: 16),
                         itemBuilder: (context, index) {
-                          return _FavoritePitchCard(
-                              pitch: state.favorites[index]);
+                          return _FavoritePitchCard(pitch: favorites[index]);
                         },
                       ),
-                    );
-                  }
-
-                  // Optimistic/Initial state
-                  final optimisticList = state.favoriteList;
-                  if (optimisticList != null && optimisticList.isNotEmpty) {
-                    return ListView.separated(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 8),
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      itemCount: optimisticList.length,
-                      separatorBuilder: (_, __) => const SizedBox(height: 16),
-                      itemBuilder: (context, index) {
-                        return _FavoritePitchCard(pitch: optimisticList[index]);
-                      },
                     );
                   }
 
@@ -184,24 +174,35 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(
+          width: double.infinity,
           height: MediaQuery.of(context).size.height * 0.6,
-          child: const Column(
+          child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Icon(Icons.favorite_border, color: AppColors.textMuted, size: 72),
-              SizedBox(height: 20),
+              const Icon(
+                Icons.favorite_border,
+                color: AppColors.textMuted,
+                size: 72,
+              ),
+              const SizedBox(height: 20),
               Text(
-                'لا توجد ملاعب مفضلة',
-                style: TextStyle(
+                context.tr('لا توجد ملاعب مفضلة', 'No Favorite Fields'),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                 ),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
-                'اضغط على ❤️ في أي ملعب لإضافته',
-                style: TextStyle(
+                context.tr(
+                  'اضغط على ❤️ في أي ملعب لإضافته',
+                  'Tap the heart on any field to add it',
+                ),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
                   color: AppColors.textMuted,
                   fontSize: 14,
                 ),
@@ -245,8 +246,8 @@ class _FavoritePitchCard extends StatelessWidget {
                       ? CachedNetworkImage(
                           imageUrl: pitch.imageUrl,
                           fit: BoxFit.cover,
-                          errorWidget: (_, __, ___) => _imagePlaceholder(),
-                          placeholder: (_, __) => _imagePlaceholder(),
+                          errorWidget: (_, _, _) => _imagePlaceholder(),
+                          placeholder: (_, _) => _imagePlaceholder(),
                         )
                       : _imagePlaceholder(),
 
@@ -256,9 +257,7 @@ class _FavoritePitchCard extends StatelessWidget {
                     left: 12,
                     child: GestureDetector(
                       onTap: () {
-                        context
-                            .read<FavoritesCubit>()
-                            .toggleFavorite(pitch.id);
+                        context.read<FavoritesCubit>().toggleFavorite(pitch.id);
                       },
                       child: Container(
                         padding: const EdgeInsets.all(8),
@@ -292,8 +291,11 @@ class _FavoritePitchCard extends StatelessWidget {
                       children: [
                         Row(
                           children: [
-                            const Icon(Icons.star,
-                                color: AppColors.warning, size: 16),
+                            const Icon(
+                              Icons.star,
+                              color: AppColors.warning,
+                              size: 16,
+                            ),
                             const SizedBox(width: 4),
                             Text(
                               pitch.rating.toStringAsFixed(1),
@@ -314,8 +316,9 @@ class _FavoritePitchCard extends StatelessWidget {
                               backgroundColor: AppColors.primary,
                               foregroundColor: AppColors.background,
                               elevation: 0,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(20),
                               ),
@@ -395,8 +398,11 @@ class _FavoritePitchCard extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 4),
-                              const Icon(Icons.location_on_outlined,
-                                  color: AppColors.textSecondary, size: 13),
+                              const Icon(
+                                Icons.location_on_outlined,
+                                color: AppColors.textSecondary,
+                                size: 13,
+                              ),
                             ],
                           ),
                         ],
